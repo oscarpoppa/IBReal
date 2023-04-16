@@ -12,9 +12,9 @@ raw: ascii real number in decimal notation OR tuple (integer, offset), where int
 prec: precision   
 fast_ivs: exclude text generation overhead. SB faster for extended calculation.
 
->>> one = IBReal('1')
->>> one
-1.0
+    >>> one = IBReal('1')
+    >>> one
+    1.0
 >>> small = IBReal('0.0000000000000000000000000000000000000000000000000000000000000000000055')
 >>> small
 0.0000000000000000000000000000000000000000000000000000000000000000000055
