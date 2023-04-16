@@ -73,7 +73,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         ival = (siv[0]*oiv[0], siv[1]+oiv[1])
-        return IBReal(ival, fast_ivs=self.fast_ivs)
+        return IBReal(ival, prec=self.prec, fast_ivs=self.fast_ivs)
 
     def __imul__(self, other):
         oiv = other.ival
@@ -84,7 +84,7 @@ class IBReal:
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]+oiv[0], siv[1])
-        return IBReal(ival, fast_ivs=self.fast_ivs)
+        return IBReal(ival, prec=self.prec, fast_ivs=self.fast_ivs)
 
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -94,7 +94,7 @@ class IBReal:
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]-oiv[0], siv[1])
-        return IBReal(ival, fast_ivs=self.fast_ivs)
+        return IBReal(ival, prec=self.prec, fast_ivs=self.fast_ivs)
 
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
