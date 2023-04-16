@@ -36,7 +36,7 @@ class IBReal:
             tval = str(self._ival[0])
             tlen = len(tval)
             if tlen > offs:
-                self._tval = '{}.{}'.format(tval[:tlen-offs], tval[tlen-offs:])
+                self._tval = '{}.{}'.format(tval[:tlen-offs], tval[tlen-offs:] or '0')
             else:
                 self._tval = '0.{}{}'.format('0'*(offs-tlen), tval)
             self._tval = self._tval[:self.prec] #trim
@@ -104,15 +104,21 @@ class IBReal:
     def __pow__(self, oint): #integer power only
         tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
         if type(oint) == int:
-            for i in range(1, oint):
-                tmp *= self
+            if oint ==0:
+                tmp.ival = (1,0)
+            else:
+                for i in range(1, oint):
+                    tmp *= self
         return tmp 
         
     def __ipow__(self, oint): #integer power only
         tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
         if type(oint) == int:
-            for i in range(1, oint):
-                self *= tmp
+            if oint ==0:
+                self.ival = (1,0)
+            else:
+                for i in range(1, oint):
+                    self *= tmp
         return self 
         
     def __str__(self):
