@@ -35,7 +35,10 @@ class IBReal:
         if dot == 0: #no zero
             self._tval = '0{}'.format(self._tval)
         elif dot == -1: #no point
-            self._tval = '{}.0'.format(self._tval)
+            if self._tval[0] == '0': #leading zero
+                self._tval = '0.{}'.format(self._tval)
+            else:
+                self._tval = '{}.0'.format(self._tval)
         offset = len(self._tval) - self._tval.find('.') - 1
         ival = int(self._tval.replace('.',''))
         self._ival = (ival, offset)
