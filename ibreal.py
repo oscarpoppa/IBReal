@@ -73,7 +73,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         ival = (siv[0]*oiv[0], siv[1]+oiv[1])
-        return IBReal(ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        return type(self)(ival, prec=self.prec, fast_ivs=self.fast_ivs)
 
     def __imul__(self, other):
         oiv = other.ival
@@ -84,7 +84,7 @@ class IBReal:
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]+oiv[0], siv[1])
-        return IBReal(ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        return type(self)(ival, prec=self.prec, fast_ivs=self.fast_ivs)
 
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -94,13 +94,27 @@ class IBReal:
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]-oiv[0], siv[1])
-        return IBReal(ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        return type(self)(ival, prec=self.prec, fast_ivs=self.fast_ivs)
 
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = (siv[0]-oiv[0], siv[1])
         return self
 
+    def __pow__(self, oint): #integer power only
+        tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        if type(oint) == int:
+            for i in range(1, oint):
+                tmp *= self
+        return tmp 
+        
+    def __ipow__(self, oint): #integer power only
+        tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        if type(oint) == int:
+            for i in range(1, oint):
+                self *= tmp
+        return self 
+        
     def __str__(self):
         return '<FAST:{}>'.format(self.ival) if self.fast_ivs else self.tval
 
