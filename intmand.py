@@ -41,12 +41,10 @@ class IBReal:
     def _align(self, siv, oiv):
         if siv[1] > oiv[1]:
             pad = 10 ** (siv[1]-oiv[1])
-            nuival = pad * oiv[0]
-            oiv = (nuival, siv[1])
+            oiv = (pad * oiv[0], siv[1])
         else:
             pad = 10 ** (oiv[1]-siv[1])
-            nuival = pad * siv[0]
-            siv = (nuival, oiv[1])
+            siv = (pad * siv[0], oiv[1])
         return (siv, oiv)
 
     def __mul__(self, other):
