@@ -32,8 +32,10 @@ class IBReal:
     def tval(self, val):
         self._tval = val[:self.prec] #trim
         dot = self._tval.find('.')
-        if dot == -1: #no point
-            self._tval += '.0'
+        if dot == 0: #no zero
+            self._tval = '0{}'.format(self._tval)
+        elif dot == -1: #no point
+            self._tval = '{}.0'.format(self._tval)
         offset = len(self._tval) - self._tval.find('.') - 1
         ival = int(self._tval.replace('.',''))
         self._ival = (ival, offset)
