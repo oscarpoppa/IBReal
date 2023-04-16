@@ -104,7 +104,7 @@ class IBReal:
     def __pow__(self, oint): #integer power only
         tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
         if type(oint) == int:
-            if oint ==0:
+            if oint == 0:
                 tmp.ival = (1,0)
             else:
                 for i in range(1, oint):
@@ -114,7 +114,7 @@ class IBReal:
     def __ipow__(self, oint): #integer power only
         tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
         if type(oint) == int:
-            if oint ==0:
+            if oint == 0:
                 self.ival = (1,0)
             else:
                 for i in range(1, oint):
