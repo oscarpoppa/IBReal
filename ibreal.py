@@ -1,7 +1,23 @@
 #!/usr/bin/env python
 
 class IBReal:
-    def __init__(self, raw, prec=500):
+    """
+    IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
+    It offers addition, subtraction, and multiplication only, which is OK for iteration exploration, albeit
+    probably slow. All math operations are available in in-line mode (i.e. +=).
+
+    Usage:
+    realnum = IBReal(raw, prec, fast_ivs)
+
+    raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
+         number by 10^offset.
+
+    prec: precision   
+
+    fast_ivs: exclude text generation overhead. SB faster for extended calculation.
+    """
+    def __init__(self, raw, prec=500, fast_ivs=False):
+        self.fast_ivs = fast_ivs
         self.prec = prec
         if type(raw) == str:
             self.tval = raw
@@ -15,14 +31,15 @@ class IBReal:
     @ival.setter
     def ival(self, val): #val SB a tuple
         self._ival = val
-        tval = str(self._ival[0])
-        tlen = len(tval)
-        offs = self._ival[1]
-        if tlen > offs:
-            self._tval = '{}.{}'.format(tval[:tlen-offs], tval[tlen-offs:])
-        else:
-            self._tval = '0.{}{}'.format('0'*(offs-tlen), tval)
-        self._tval = self._tval[:self.prec] #trim
+        if not self.fast_ivs:
+            offs = self._ival[1]
+            tval = str(self._ival[0])
+            tlen = len(tval)
+            if tlen > offs:
+                self._tval = '{}.{}'.format(tval[:tlen-offs], tval[tlen-offs:])
+            else:
+                self._tval = '0.{}{}'.format('0'*(offs-tlen), tval)
+            self._tval = self._tval[:self.prec] #trim
         
     @property
     def tval(self):
@@ -56,7 +73,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         ival = (siv[0]*oiv[0], siv[1]+oiv[1])
-        return IBReal(ival)
+        return IBReal(ival, fast_ivs=self.fast_ivs)
 
     def __imul__(self, other):
         oiv = other.ival
@@ -67,7 +84,7 @@ class IBReal:
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]+oiv[0], siv[1])
-        return IBReal(ival)
+        return IBReal(ival, fast_ivs=self.fast_ivs)
 
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -77,7 +94,7 @@ class IBReal:
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]-oiv[0], siv[1])
-        return IBReal(ival)
+        return IBReal(ival, fast_ivs=self.fast_ivs)
 
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -85,8 +102,8 @@ class IBReal:
         return self
 
     def __str__(self):
-        return self.tval
+        return '<FAST:{}>'.format(self.ival) if self.fast_ivs else self.tval
 
     def __repr__(self):
-        return self.tval
+        return '<FAST:{}>'.format(self.ival) if self.fast_ivs else self.tval
 
