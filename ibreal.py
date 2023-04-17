@@ -1,3 +1,7 @@
+from collections import namedtuple
+
+Ival = namedtuple('Ival', 'num off')
+
 class IBReal:
     """
     IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
@@ -5,9 +9,9 @@ class IBReal:
     probably slow. All math operations are available in in-line mode (i.e. +=).
 
     Usage:
-    realnum = IBReal(raw)
+    realnum = IBReal(raw, prec)
 
-    raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
+    raw: Ival object, ascii real number in decimal notation or tuple (integer, offset), where integer is the integer after multiplying the real
          number by 10^offset.
 
     prec: precision -- length limit of digits to right of decimal
@@ -15,28 +19,28 @@ class IBReal:
     """
     def __init__(self, raw, prec=300):
         self.prec = prec
-        self.ival = self._from_txt(raw) if type(raw) == str else raw
+        self.ival = raw if type(raw) == Ival else Ival(*raw) if type(raw) == tuple else self._from_txt(raw)
         self.trim()
 
     @property
     def tval(self):
-        neg = '-' if self.ival[0] < 0 else ''
-        txt = str(abs(self.ival[0]))
-        if len(txt) > self.ival[1]:
-            return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival[1]], txt[len(txt)-self.ival[1]:] or '0')
+        neg = '-' if self.ival.num < 0 else ''
+        txt = str(abs(self.ival.num))
+        if len(txt) > self.ival.off:
+            return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival.off], txt[len(txt)-self.ival.off:] or '0')
         else:
-            return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival[1]-len(txt)+1)
+            return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
 
     def trim(self, prec=None):
         prec = self.prec if not prec else prec
-        if self.ival[1] > prec:
-            tval = str(self.ival[0])
+        if self.ival.off > prec:
+            tval = str(self.ival.num)
             tlen = len(tval)
             if prec < tlen:
-                self.ival = (int(tval[:prec]), self.ival[1] - tlen + prec)
+                self.ival = Ival(int(tval[:prec]), self.ival.off - tlen + prec)
         return self
             
-    def _from_txt(self, val):
+    def _from_txt(self, val): #text input needs to be in decimal -- not scientific
         neg = 1
         if val[0] == '-':
             neg = -1
@@ -46,7 +50,7 @@ class IBReal:
             dot = len(val)
         val = val[:dot] + val[dot+1:]
         off = len(val) - dot
-        return (neg*int(val), off)
+        return Ival(neg*int(val), off)
         
     def _align(self, siv, oiv):
         if siv[1] > oiv[1]:
@@ -55,48 +59,48 @@ class IBReal:
         else:
             pad = 10 ** (oiv[1]-siv[1])
             siv = (pad * siv[0], oiv[1])
-        return (siv, oiv)
+        return Ival(siv, oiv)
 
     def __float__(self):
-        return self.ival[0]/10**self.ival[1]
+        return self.ival.num/10**self.ival.off
 
     def __mul__(self, other):
         oiv = other.ival
         siv = self.ival
-        ival = (siv[0]*oiv[0], siv[1]+oiv[1])
+        ival = Ival(siv[0]*oiv[0], siv[1]+oiv[1])
         return type(self)(ival, self.prec)
 
     def __imul__(self, other):
         oiv = other.ival
         siv = self.ival
-        self.ival = (siv[0]*oiv[0], siv[1]+oiv[1])
+        self.ival = Ival(siv[0]*oiv[0], siv[1]+oiv[1])
         return self.trim()
 
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        ival = (siv[0]+oiv[0], siv[1])
+        ival = Ival(siv[0]+oiv[0], siv[1])
         return type(self)(ival, self.prec)
 
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        self.ival = (siv[0]+oiv[0], siv[1])
+        self.ival = Ival(siv[0]+oiv[0], siv[1])
         return self.trim()
 
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        ival = (siv[0]-oiv[0], siv[1])
+        ival = Ival(siv[0]-oiv[0], siv[1])
         return type(self)(ival, self.prec)
 
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        self.ival = (siv[0]-oiv[0], siv[1])
+        self.ival = Ival(siv[0]-oiv[0], siv[1])
         return self.trim()
 
     def __pow__(self, oint): #integer power only
         tmp = type(self)(self.ival, self.prec)
         if type(oint) == int:
             if oint <= 0:
-                tmp.ival = (1,0)
+                tmp.ival = Ival(1,0)
             else:
                 for i in range(1, oint):
                     tmp *= self
@@ -106,7 +110,7 @@ class IBReal:
         tmp = type(self)(self.ival, self.prec)
         if type(oint) == int:
             if oint <= 0:
-                self.ival = (1,0)
+                self.ival = Ival(1,0)
             else:
                 for i in range(1, oint):
                     self *= tmp
