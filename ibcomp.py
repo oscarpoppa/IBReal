@@ -3,7 +3,7 @@ from math import sqrt
 
 class IBComp:
     def __init__(self, rcomp, icomp):
-        #string, tuple of IBReal
+        #string, tuple or IBReal
         self.rcomp = IBReal(rcomp) if type(rcomp) != IBReal else rcomp
         self.icomp = IBReal(icomp) if type(icomp) != IBReal else icomp
 
