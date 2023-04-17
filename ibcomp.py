@@ -31,19 +31,19 @@ class IBComp:
         tmp = type(self)(self.rcomp, self.icomp)
         if type(oint) == int:
             if oint == 0:
-                tmp.rcomp = (1,0)
-                tmp.icomp = (0,0)
+                tmp.rcomp = IBReal((1,0))
+                tmp.icomp = IBReal((0,0))
             else: 
                 for i in range(1, oint):
                     tmp *= self 
         return tmp 
 
-    def __ipow__(self, other):
+    def __ipow__(self, oint):
         tmp = type(self)(self.rcomp, self.icomp)
         if type(oint) == int:
             if oint == 0:
-                self.rcomp = (1,0)
-                self.icomp = (0,0)
+                self.rcomp = IBReal((1,0))
+                self.icomp = IBReal((0,0))
             else: 
                 for i in range(1, oint):
                     self *= tmp 
