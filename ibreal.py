@@ -10,10 +10,10 @@ class IBReal:
     raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
          number by 10^offset.
 
-    prec: precision (bit_length) assumed to be roughly 3 times char length
+    prec: precision -- length limit of digits to right of decimal
 
     """
-    def __init__(self, raw, prec=3000):
+    def __init__(self, raw, prec=300):
         self.prec = prec
         self.ival = self._from_txt(raw) if type(raw) == str else raw
         self.trim()
@@ -25,15 +25,15 @@ class IBReal:
         if len(txt) > self.ival[1]:
             return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival[1]], txt[len(txt)-self.ival[1]:] or '0')
         else:
-            return '{}0.{}{}'.format(neg, '0'*(self.ival[1]-len(txt)), txt)
+            return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:], self.ival[1]-len(txt)+1)
 
-    def trim(self):
-        if self.ival[0].bit_length() > self.prec:
+    def trim(self, prec=None):
+        prec = self.prec if not prec else prec
+        if self.ival[1] > prec:
             tval = str(self.ival[0])
             tlen = len(tval)
-            cprec = int(self.prec/3) #need to check out bl vs cl
-            if cprec < tlen:
-                self.ival = (int(tval[:cprec]), self.ival[1] - tlen + cprec)
+            if prec < tlen:
+                self.ival = (int(tval[:prec]), self.ival[1] - tlen + prec)
         return self
             
     def _from_txt(self, val):
