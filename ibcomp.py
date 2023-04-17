@@ -3,8 +3,9 @@ from math import sqrt
 
 class IBComp:
     def __init__(self, rcomp, icomp):
-        self.rcomp = IBReal(str(rcomp)) if type(rcomp) != IBReal else rcomp
-        self.icomp = IBReal(str(icomp)) if type(icomp) != IBReal else icomp
+        #string, tuple of IBReal
+        self.rcomp = IBReal(rcomp) if type(rcomp) != IBReal else rcomp
+        self.icomp = IBReal(icomp) if type(icomp) != IBReal else icomp
 
     @property
     def length(self):
