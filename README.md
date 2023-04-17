@@ -7,11 +7,13 @@ it to be fast. All math operations (**,+,-,*) are also available in in-line mode
 
 Usage:
 
-realnum = IBReal(raw, prec, fast_ivs)
+realnum = IBReal(raw, prec=300)
+
 raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
      number by 10^offset.
-prec: precision   
-fast_ivs: exclude text generation overhead. SB faster for extended calculation.
+     
+prec: precision
+
 
     >>> one = IBReal('1')
     >>> one
