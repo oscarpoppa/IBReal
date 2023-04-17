@@ -1,0 +1,57 @@
+from ibreal import IBReal
+from math import sqrt
+
+class IBComp:
+    def __init__(self, rcomp, icomp):
+        self.rcomp = IBReal(str(rcomp)) if type(rcomp) != IBReal else rcomp
+        self.icomp = IBReal(str(icomp)) if type(icomp) != IBReal else icomp
+
+    @property
+    def length(self):
+        slen = self.rcomp**2 + self.icomp**2
+        return sqrt(float(slen))
+
+    def __mul__(self, other):
+        return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
+
+    def __imul__(self, other):
+        self.rcomp = self.rcomp*other.rcomp-self.icomp*other.icomp
+        self.icomp = self.rcomp*other.icomp+self.icomp*other.rcomp
+        return self
+
+    def __add__(self,other):
+        return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
+
+    def __iadd__(self,other):
+        self.rcomp = self.rcomp+other.rcomp
+        self.icomp = self.icomp+other.icomp
+        return self
+
+    def __pow__(self, oint):
+        tmp = type(self)(self.rcomp, self.icomp)
+        if type(oint) == int:
+            if oint == 0:
+                tmp.rcomp = (1,0)
+                tmp.icomp = (0,0)
+            else: 
+                for i in range(1, oint):
+                    tmp *= self 
+        return tmp 
+
+    def __ipow__(self, other):
+        tmp = type(self)(self.rcomp, self.icomp)
+        if type(oint) == int:
+            if oint == 0:
+                self.rcomp = (1,0)
+                self.icomp = (0,0)
+            else: 
+                for i in range(1, oint):
+                    self *= tmp 
+        return self 
+
+    def __str__(self):
+        return '{} + {}i'.format(self.rcomp, self.icomp)
+
+    def __repr__(self):
+        return '{} + {}i'.format(self.rcomp, self.icomp)
+
