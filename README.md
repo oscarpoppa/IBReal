@@ -6,6 +6,7 @@ It offers addition, subtraction, powers (integer), and multiplication only, whic
 it to be fast. All math operations (**,+,-,*) are also available in in-line mode (i.e. +=).
 
 Usage:
+
 realnum = IBReal(raw, prec, fast_ivs)
 raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
      number by 10^offset.
