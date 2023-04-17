@@ -53,13 +53,13 @@ class IBReal:
         return Ival(neg*int(val), off)
         
     def _align(self, siv, oiv):
-        if siv[1] > oiv[1]:
-            pad = 10 ** (siv[1]-oiv[1])
-            oiv = (pad * oiv[0], siv[1])
+        if siv.off > oiv.off:
+            pad = 10 ** (siv.off-oiv.off)
+            oiv = Ival(pad * oiv.num, siv.off)
         else:
-            pad = 10 ** (oiv[1]-siv[1])
-            siv = (pad * siv[0], oiv[1])
-        return Ival(siv, oiv)
+            pad = 10 ** (oiv.off-siv.off)
+            siv = Ival(pad * siv.num, oiv.off)
+        return (siv, oiv)
 
     def __float__(self):
         return self.ival.num/10**self.ival.off
@@ -67,33 +67,33 @@ class IBReal:
     def __mul__(self, other):
         oiv = other.ival
         siv = self.ival
-        ival = Ival(siv[0]*oiv[0], siv[1]+oiv[1])
+        ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
         return type(self)(ival, self.prec)
 
     def __imul__(self, other):
         oiv = other.ival
         siv = self.ival
-        self.ival = Ival(siv[0]*oiv[0], siv[1]+oiv[1])
+        self.ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
         return self.trim()
 
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        ival = Ival(siv[0]+oiv[0], siv[1])
+        ival = Ival(siv.num+oiv.num, siv.off)
         return type(self)(ival, self.prec)
 
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        self.ival = Ival(siv[0]+oiv[0], siv[1])
+        self.ival = Ival(siv.num+oiv.num, siv.off)
         return self.trim()
 
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        ival = Ival(siv[0]-oiv[0], siv[1])
+        ival = Ival(siv.num-oiv.num, siv.off)
         return type(self)(ival, self.prec)
 
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
-        self.ival = Ival(siv[0]-oiv[0], siv[1])
+        self.ival = Ival(siv.num-oiv.num, siv.off)
         return self.trim()
 
     def __pow__(self, oint): #integer power only
