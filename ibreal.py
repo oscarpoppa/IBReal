@@ -7,58 +7,38 @@ class IBReal:
     probably slow. All math operations are available in in-line mode (i.e. +=).
 
     Usage:
-    realnum = IBReal(raw, prec, fast_ivs)
+    realnum = IBReal(raw)
 
     raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
          number by 10^offset.
 
-    prec: precision   
-
-    fast_ivs: exclude text generation overhead. SB faster for extended calculation.
     """
-    def __init__(self, raw, prec=500, fast_ivs=False):
-        self.fast_ivs = fast_ivs
-        self.prec = prec
+    def __init__(self, raw):
         if type(raw) == str:
-            self.tval = raw
+            self._from_txt(raw)
         else:
             self.ival = raw #tuple
 
     @property
-    def ival(self):
-        return self._ival
-
-    @ival.setter
-    def ival(self, val): #val SB a tuple
-        self._ival = val
-        if not self.fast_ivs:
-            offs = self._ival[1]
-            tval = str(self._ival[0])
-            tlen = len(tval)
-            if tlen > offs:
-                self._tval = '{}.{}'.format(tval[:tlen-offs], tval[tlen-offs:] or '0')
-            else:
-                self._tval = '0.{}{}'.format('0'*(offs-tlen), tval)
-            self._tval = self._tval[:self.prec] #trim
-        
-    @property
     def tval(self):
-        return self._tval
+        neg = '-' if self.ival[0] < 0 else ''
+        txt = str(abs(self.ival[0]))
+        if len(txt) > self.ival[1]:
+            return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival[1]], txt[len(txt)-self.ival[1]:] or '0')
+        else:
+            return '{}0.{}{}'.format(neg, '0'*(self.ival[1]-len(txt)), txt)
 
-    @tval.setter
-    def tval(self, val):
-        self._tval = val[:self.prec] #trim
-        dot = self._tval.find('.')
-        if dot == 0: #no zero
-            self._tval = '0{}'.format(self._tval)
-        elif dot == -1: #no point
-            if self._tval[0] == '0': #leading zero
-                self._tval = '0.{}'.format(self._tval)
-            else:
-                self._tval = '{}.0'.format(self._tval)
-        offset = len(self._tval) - self._tval.find('.') - 1
-        ival = int(self._tval.replace('.',''))
-        self._ival = (ival, offset)
+    def _from_txt(self, val):
+        neg = 1
+        if val[0] == '-':
+            neg = -1
+            val = val[1:]
+        dot = val.find('.')
+        if dot == -1:
+            dot = len(val)
+        val = val[:dot] + val[dot+1:]
+        off = len(val) - dot
+        self.ival = (neg*int(val), off)
         
     def _align(self, siv, oiv):
         if siv[1] > oiv[1]:
@@ -76,7 +56,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         ival = (siv[0]*oiv[0], siv[1]+oiv[1])
-        return type(self)(ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        return type(self)(ival)
 
     def __imul__(self, other):
         oiv = other.ival
@@ -87,7 +67,7 @@ class IBReal:
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]+oiv[0], siv[1])
-        return type(self)(ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        return type(self)(ival)
 
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -97,7 +77,7 @@ class IBReal:
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]-oiv[0], siv[1])
-        return type(self)(ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        return type(self)(ival)
 
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -105,7 +85,7 @@ class IBReal:
         return self
 
     def __pow__(self, oint): #integer power only
-        tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        tmp = type(self)(self.ival)
         if type(oint) == int:
             if oint == 0:
                 tmp.ival = (1,0)
@@ -115,7 +95,7 @@ class IBReal:
         return tmp 
         
     def __ipow__(self, oint): #integer power only
-        tmp = type(self)(self.ival, prec=self.prec, fast_ivs=self.fast_ivs)
+        tmp = type(self)(self.ival)
         if type(oint) == int:
             if oint == 0:
                 self.ival = (1,0)
@@ -125,8 +105,8 @@ class IBReal:
         return self 
         
     def __str__(self):
-        return '<FAST:{}>'.format(self.ival) if self.fast_ivs else self.tval
+        return self.tval
 
     def __repr__(self):
-        return '<FAST:{}>'.format(self.ival) if self.fast_ivs else self.tval
+        return self.tval
 
