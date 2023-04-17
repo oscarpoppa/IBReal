@@ -28,13 +28,12 @@ class IBReal:
             return '{}0.{}{}'.format(neg, '0'*(self.ival[1]-len(txt)), txt)
 
     def trim(self):
-        if self.ival[0].bit_length() < self.prec:
-            return
-        tval = str(self.ival[0])
-        tlen = len(tval)
-        cprec = int(self.prec/3)
-        if cprec < tlen:
-            self.ival = (int(tval[:cprec]), self.ival[1] - tlen + cprec)
+        if self.ival[0].bit_length() > self.prec:
+            tval = str(self.ival[0])
+            tlen = len(tval)
+            cprec = int(self.prec/3) #need to check out bl vs cl
+            if cprec < tlen:
+                self.ival = (int(tval[:cprec]), self.ival[1] - tlen + cprec)
         return self
             
     def _from_txt(self, val):
@@ -71,8 +70,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         self.ival = (siv[0]*oiv[0], siv[1]+oiv[1])
-        self.trim()
-        return self
+        return self.trim()
 
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -82,8 +80,7 @@ class IBReal:
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = (siv[0]+oiv[0], siv[1])
-        self.trim()
-        return self
+        return self.trim()
 
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -93,8 +90,7 @@ class IBReal:
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = (siv[0]-oiv[0], siv[1])
-        self.trim()
-        return self
+        return self.trim()
 
     def __pow__(self, oint): #integer power only
         tmp = type(self)(self.ival, self.prec)
@@ -114,14 +110,11 @@ class IBReal:
             else:
                 for i in range(1, oint):
                     self *= tmp
-        self.trim()
-        return self 
+        return self.trim()
         
     def __str__(self):
-        self.trim()
-        return self.tval
+        return self.trim().tval
 
     def __repr__(self):
-        self.trim()
-        return self.tval
+        return self.trim().tval
 
