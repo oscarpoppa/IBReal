@@ -36,6 +36,18 @@ class IBComp:
         self.icomp = self.icomp+other.icomp
         return self
 
+    def __sub__(self, other):
+        if type(other) == IBReal:
+            other = type(self)(other, IBReal((0,0)))
+        return type(self)(self.rcomp-other.rcomp, self.icomp-other.icomp)
+
+    def __isub__(self, other):
+        if type(other) == IBReal:
+            other = type(self)(other, IBReal((0,0)))
+        self.rcomp = self.rcomp-other.rcomp
+        self.icomp = self.icomp-other.icomp
+        return self
+
     def __pow__(self, oint):
         tmp = type(self)(self.rcomp, self.icomp)
         if type(oint) == int:
