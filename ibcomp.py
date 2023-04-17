@@ -20,45 +20,38 @@ class IBComp:
         slen = self.rcomp**2 + self.icomp**2
         return sqrt(float(slen))
 
-    def trim(self, prec):
-        for ibr in (self.rcomp, self.icomp):
-            tval = str(ibr.ival[0])
-            tlen = len(tval)
-            if prec < tlen:
-                ibr.ival = (int(tval[:prec]), ibr.ival[1] - tlen + prec)
-
     def __mul__(self, other):
         if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0)))
+            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
 
     def __imul__(self, other):
         if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0)))
+            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp*other.rcomp-self.icomp*other.icomp
         self.icomp = self.rcomp*other.icomp+self.icomp*other.rcomp
         return self
 
     def __add__(self, other):
         if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0)))
+            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
 
     def __iadd__(self, other):
         if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0)))
+            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp+other.rcomp
         self.icomp = self.icomp+other.icomp
         return self
 
     def __sub__(self, other):
         if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0)))
+            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp-other.rcomp, self.icomp-other.icomp)
 
     def __isub__(self, other):
         if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0)))
+            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp-other.rcomp
         self.icomp = self.icomp-other.icomp
         return self
@@ -67,8 +60,8 @@ class IBComp:
         tmp = type(self)(self.rcomp, self.icomp)
         if type(oint) == int:
             if oint == 0:
-                tmp.rcomp = IBReal((1,0))
-                tmp.icomp = IBReal((0,0))
+                tmp.rcomp = IBReal((1,0), prec=self.rcomp.prec)
+                tmp.icomp = IBReal((0,0), prec=self.rcomp.prec)
             else: 
                 for i in range(1, oint):
                     tmp *= self 
@@ -78,18 +71,16 @@ class IBComp:
         tmp = type(self)(self.rcomp, self.icomp)
         if type(oint) == int:
             if oint == 0:
-                self.rcomp = IBReal((1,0))
-                self.icomp = IBReal((0,0))
+                self.rcomp = IBReal((1,0), prec=self.rcomp.prec)
+                self.icomp = IBReal((0,0), prec=self.rcomp.prec)
             else: 
                 for i in range(1, oint):
                     self *= tmp 
         return self 
 
     def __str__(self):
-        self.trim(self.rcomp.prec)
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
     def __repr__(self):
-        self.trim(self.rcomp.prec)
         return '{} + {}i'.format(self.rcomp, self.icomp)
 

@@ -10,16 +10,16 @@ class IBReal:
     raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
          number by 10^offset.
 
-    prec: precision
+    prec: precision (bit_length) assumed to be roughly 3 times char length
 
     """
-    def __init__(self, raw, prec=300):
+    def __init__(self, raw, prec=3000):
         self.prec = prec
         if type(raw) == str:
             self._from_txt(raw)
         else:
             self.ival = raw #tuple
-            self.trim(self.prec)
+            self.trim()
 
     @property
     def tval(self):
@@ -30,11 +30,14 @@ class IBReal:
         else:
             return '{}0.{}{}'.format(neg, '0'*(self.ival[1]-len(txt)), txt)
 
-    def trim(self, prec): #called by client
+    def trim(self):
+        if self.ival[0].bit_length() < self.prec:
+            return
         tval = str(self.ival[0])
         tlen = len(tval)
-        if prec < tlen:
-            self.ival = (int(tval[:prec]), self.ival[1] - tlen + prec)
+        cprec = int(self.prec/3)
+        if cprec < tlen:
+            self.ival = (int(tval[:cprec]), self.ival[1] - tlen + cprec)
             
     def _from_txt(self, val):
         neg = 1
@@ -70,6 +73,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         self.ival = (siv[0]*oiv[0], siv[1]+oiv[1])
+        self.trim()
         return self
 
     def __add__(self, other):
@@ -80,6 +84,7 @@ class IBReal:
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = (siv[0]+oiv[0], siv[1])
+        self.trim()
         return self
 
     def __sub__(self, other):
@@ -90,6 +95,7 @@ class IBReal:
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = (siv[0]-oiv[0], siv[1])
+        self.trim()
         return self
 
     def __pow__(self, oint): #integer power only
@@ -110,13 +116,14 @@ class IBReal:
             else:
                 for i in range(1, oint):
                     self *= tmp
+        self.trim()
         return self 
         
     def __str__(self):
-        self.trim(self.prec)
+        self.trim()
         return self.tval
 
     def __repr__(self):
-        self.trim(self.prec)
+        self.trim()
         return self.tval
 
