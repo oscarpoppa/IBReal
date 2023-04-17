@@ -69,6 +69,9 @@ class IBReal:
             siv = (pad * siv[0], oiv[1])
         return (siv, oiv)
 
+    def __float__(self):
+        return self.ival[0]/10**self.ival[1]
+
     def __mul__(self, other):
         oiv = other.ival
         siv = self.ival
