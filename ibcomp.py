@@ -13,17 +13,25 @@ class IBComp:
         return sqrt(float(slen))
 
     def __mul__(self, other):
+        if type(other) == IBReal:
+            other = type(self)(other, IBReal((0,0)))
         return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
 
     def __imul__(self, other):
+        if type(other) == IBReal:
+            other = type(self)(other, IBReal((0,0)))
         self.rcomp = self.rcomp*other.rcomp-self.icomp*other.icomp
         self.icomp = self.rcomp*other.icomp+self.icomp*other.rcomp
         return self
 
-    def __add__(self,other):
+    def __add__(self, other):
+        if type(other) == IBReal:
+            other = type(self)(other, IBReal((0,0)))
         return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
 
-    def __iadd__(self,other):
+    def __iadd__(self, other):
+        if type(other) == IBReal:
+            other = type(self)(other, IBReal((0,0)))
         self.rcomp = self.rcomp+other.rcomp
         self.icomp = self.icomp+other.icomp
         return self
