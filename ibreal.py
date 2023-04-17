@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 class IBReal:
     """
     IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
