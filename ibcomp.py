@@ -2,6 +2,14 @@ from ibreal import IBReal
 from math import sqrt
 
 class IBComp:
+    """
+    IBComp is a complex number that uses the precision of IBReal numbers. The math interface offers the same ioperations as IBReal offers.
+  
+    Usage:
+    comp = IBComp(rcomp, icomp)
+
+    rcomp & icomp: IBReal object, string, or tuple(IBReal style)
+    """
     def __init__(self, rcomp, icomp):
         #string, tuple or IBReal
         self.rcomp = IBReal(rcomp) if type(rcomp) != IBReal else rcomp
