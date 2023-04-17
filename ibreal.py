@@ -15,11 +15,8 @@ class IBReal:
     """
     def __init__(self, raw, prec=3000):
         self.prec = prec
-        if type(raw) == str:
-            self._from_txt(raw)
-        else:
-            self.ival = raw #tuple
-            self.trim()
+        self.ival = self._from_txt(raw) if type(raw) == str else raw
+        self.trim()
 
     @property
     def tval(self):
@@ -38,6 +35,7 @@ class IBReal:
         cprec = int(self.prec/3)
         if cprec < tlen:
             self.ival = (int(tval[:cprec]), self.ival[1] - tlen + cprec)
+        return self
             
     def _from_txt(self, val):
         neg = 1
@@ -49,7 +47,7 @@ class IBReal:
             dot = len(val)
         val = val[:dot] + val[dot+1:]
         off = len(val) - dot
-        self.ival = (neg*int(val), off)
+        return (neg*int(val), off)
         
     def _align(self, siv, oiv):
         if siv[1] > oiv[1]:
