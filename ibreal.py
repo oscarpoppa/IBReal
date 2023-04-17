@@ -25,7 +25,7 @@ class IBReal:
         if len(txt) > self.ival[1]:
             return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival[1]], txt[len(txt)-self.ival[1]:] or '0')
         else:
-            return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:], self.ival[1]-len(txt)+1)
+            return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival[1]-len(txt)+1)
 
     def trim(self, prec=None):
         prec = self.prec if not prec else prec
