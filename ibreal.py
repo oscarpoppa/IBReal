@@ -26,6 +26,12 @@ class IBReal:
         else:
             return '{}0.{}{}'.format(neg, '0'*(self.ival[1]-len(txt)), txt)
 
+    def trim(self, val): #called by client
+        tval = str(self.ival[0])
+        tlen = len(tval)
+        if val < tlen:
+            self.ival = (int(tval[:val]), self.ival[1] - tlen + val)
+            
     def _from_txt(self, val):
         neg = 1
         if val[0] == '-':
