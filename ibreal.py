@@ -10,12 +10,16 @@ class IBReal:
     raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
          number by 10^offset.
 
+    prec: precision
+
     """
-    def __init__(self, raw):
+    def __init__(self, raw, prec=300):
+        self.prec = prec
         if type(raw) == str:
             self._from_txt(raw)
         else:
             self.ival = raw #tuple
+            self.trim(self.prec)
 
     @property
     def tval(self):
@@ -26,11 +30,11 @@ class IBReal:
         else:
             return '{}0.{}{}'.format(neg, '0'*(self.ival[1]-len(txt)), txt)
 
-    def trim(self, val): #called by client
+    def trim(self, prec): #called by client
         tval = str(self.ival[0])
         tlen = len(tval)
-        if val < tlen:
-            self.ival = (int(tval[:val]), self.ival[1] - tlen + val)
+        if prec < tlen:
+            self.ival = (int(tval[:prec]), self.ival[1] - tlen + prec)
             
     def _from_txt(self, val):
         neg = 1
@@ -60,7 +64,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         ival = (siv[0]*oiv[0], siv[1]+oiv[1])
-        return type(self)(ival)
+        return type(self)(ival, self.prec)
 
     def __imul__(self, other):
         oiv = other.ival
@@ -71,7 +75,7 @@ class IBReal:
     def __add__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]+oiv[0], siv[1])
-        return type(self)(ival)
+        return type(self)(ival, self.prec)
 
     def __iadd__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -81,7 +85,7 @@ class IBReal:
     def __sub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = (siv[0]-oiv[0], siv[1])
-        return type(self)(ival)
+        return type(self)(ival, self.prec)
 
     def __isub__(self, other):
         (siv, oiv) = self._align(self.ival, other.ival)
@@ -89,7 +93,7 @@ class IBReal:
         return self
 
     def __pow__(self, oint): #integer power only
-        tmp = type(self)(self.ival)
+        tmp = type(self)(self.ival, self.prec)
         if type(oint) == int:
             if oint == 0:
                 tmp.ival = (1,0)
@@ -99,7 +103,7 @@ class IBReal:
         return tmp 
         
     def __ipow__(self, oint): #integer power only
-        tmp = type(self)(self.ival)
+        tmp = type(self)(self.ival, self.prec)
         if type(oint) == int:
             if oint == 0:
                 self.ival = (1,0)
@@ -109,8 +113,10 @@ class IBReal:
         return self 
         
     def __str__(self):
+        self.trim(self.prec)
         return self.tval
 
     def __repr__(self):
+        self.trim(self.prec)
         return self.tval
 

@@ -20,6 +20,13 @@ class IBComp:
         slen = self.rcomp**2 + self.icomp**2
         return sqrt(float(slen))
 
+    def trim(self, prec):
+        for ibr in (self.rcomp, self.icomp):
+            tval = str(ibr.ival[0])
+            tlen = len(tval)
+            if prec < tlen:
+                ibr.ival = (int(tval[:prec]), ibr.ival[1] - tlen + prec)
+
     def __mul__(self, other):
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0)))
@@ -79,8 +86,10 @@ class IBComp:
         return self 
 
     def __str__(self):
+        self.trim(self.rcomp.prec)
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
     def __repr__(self):
+        self.trim(self.rcomp.prec)
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
