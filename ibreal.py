@@ -32,7 +32,7 @@ class IBReal:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
 
     def trim(self, prec=None):
-        prec = self.prec if not prec else prec
+        prec = self.prec if not prec else abs(prec)
         if self.ival.off > prec:
             tval = str(self.ival.num)
             tlen = len(tval)
