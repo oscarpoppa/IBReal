@@ -9,8 +9,8 @@ Usage:
 
 realnum = IBReal(raw, prec=300)
 
-raw: ascii real number in decimal notation OR tuple (integer, offset), where integer is the integer after multiplying the real
-     number by 10^offset.
+raw: Ival instance (defined in same file), ascii real number in decimal notation or tuple (integer, offset), 
+where integer is the integer after multiplying the real number by 10^offset.
      
 prec: precision
 
