@@ -40,7 +40,7 @@ class IBReal:
                 self.ival = Ival(int(tval[:prec]), self.ival.off - tlen + prec)
         return self
             
-    def _from_txt(self, val): #text input needs to be in decimal -- not scientific
+    def _from_txt(self, val):
         neg = 1
         if val[0] == '-':
             neg = -1
@@ -48,8 +48,14 @@ class IBReal:
         dot = val.find('.')
         if dot == -1:
             dot = len(val)
-        val = val[:dot] + val[dot+1:]
-        off = len(val) - dot
+        exp = val.find('e-')
+        if exp == -1:
+            exp = None
+            ev = 0
+        else:
+            ev = int(val[exp+2:])
+        val = val[:dot] + val[dot+1:exp]
+        off = len(val) - dot + ev
         return Ival(neg*int(val), off)
         
     def _align(self, siv, oiv):
