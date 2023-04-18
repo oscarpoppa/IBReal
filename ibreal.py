@@ -132,7 +132,34 @@ class IBReal:
 
     def __neg__(self):
         return type(self)(Ival(-self.ival.num, self.ival.off), self.prec)
+
+    def __abs__(self):
+        return type(self)(Ival(abs(self.ival.num), self.ival.off), self.prec)
         
+    def __eq__(self, other): #won't differentiate between (100,2) and (1000, 3)
+        (siv, oiv) = self._align(self.ival, other.ival)
+        return siv.num == oiv.num
+
+    def __lt__(self, other):
+        (siv, oiv) = self._align(self.ival, other.ival)
+        return siv.num < oiv.num
+
+    def __gt__(self, other):
+        (siv, oiv) = self._align(self.ival, other.ival)
+        return siv.num > oiv.num
+
+    def __le__(self, other):
+        (siv, oiv) = self._align(self.ival, other.ival)
+        return siv.num <= oiv.num
+    
+    def __ge__(self, other):
+        (siv, oiv) = self._align(self.ival, other.ival)
+        return siv.num >= oiv.num
+
+    def __ne__(self, other):
+        (siv, oiv) = self._align(self.ival, other.ival)
+        return siv.num != oiv.num
+
     def __str__(self):
         return self.trim().tval
 
