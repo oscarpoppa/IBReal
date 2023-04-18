@@ -16,7 +16,11 @@ class IBComp:
         self.rcomp = IBReal(rcomp) if type(rcomp) != IBReal else rcomp
         self.icomp = IBReal(icomp) if type(icomp) != IBReal else icomp
 
-    @property
+    @property #still within our precision space. May be helpful for comparisons.
+    def lengthsq(self):
+        return self.rcomp**2 + self.icomp**2
+
+    @property #Chops off to fit float precision
     def length(self):
         slen = self.rcomp**2 + self.icomp**2
         return sqrt(float(slen))

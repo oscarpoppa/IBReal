@@ -76,9 +76,6 @@ class IBReal:
             siv = Ival(pad*siv.num, oiv.off)
         return (siv, oiv)
 
-    def __float__(self):
-        return self.ival.num/10**self.ival.off
-
     def __mul__(self, other):
         oiv = other.ival
         siv = self.ival
@@ -130,6 +127,9 @@ class IBReal:
                 for i in range(1, oint):
                     self *= tmp
         return self.trim()
+
+    def __float__(self):
+        return self.ival.num/10**self.ival.off
 
     def __neg__(self):
         return type(self)(Ival(-self.ival.num, self.ival.off), self.prec)
