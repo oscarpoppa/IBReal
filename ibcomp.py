@@ -25,6 +25,9 @@ class IBComp:
         self.rcomp.trim(val)
         self.icomp.trim(val)
 
+    def conj(self):
+        return type(self)(self.rcomp, -self.icomp)
+
     def __mul__(self, other):
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
