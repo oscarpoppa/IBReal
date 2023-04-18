@@ -19,7 +19,15 @@ class IBReal:
     """
     def __init__(self, raw, prec=300):
         self.prec = prec
-        self.ival = raw if type(raw) == Ival else Ival(*raw) if type(raw) == tuple else self._from_txt(raw)
+        tp = type(raw)
+        if tp == Ival:
+            self.ival = raw
+        elif tp == tuple:
+            self.ival = Ival(*raw)
+        elif tp == type(self):
+            self.ival = raw.ival
+        else: #assume text
+            self.ival = self._from_txt(raw)
         self.trim()
 
     @property
@@ -45,15 +53,15 @@ class IBReal:
         if val[0] == '-':
             neg = -1
             val = val[1:]
-        dot = val.find('.')
-        if dot == -1:
-            dot = len(val)
         exp = val.find('e-')
         if exp == -1:
             exp = None
             ev = 0
         else:
             ev = int(val[exp+2:])
+        dot = val.find('.')
+        if dot == -1:
+            dot = len(val[:exp])
         val = val[:dot] + val[dot+1:exp]
         off = len(val) - dot + ev
         return Ival(neg*int(val), off)
