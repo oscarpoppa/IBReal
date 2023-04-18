@@ -49,10 +49,11 @@ class IBReal:
         return self
             
     def _from_txt(self, val):
-        neg = 1
         if val[0] == '-':
             neg = -1
             val = val[1:]
+        else:
+            neg = 1
         exp = val.find('e-')
         if exp == -1:
             exp = None
