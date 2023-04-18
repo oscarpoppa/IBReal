@@ -78,6 +78,9 @@ class IBComp:
                     self *= tmp 
         return self 
 
+    def __neg__(self):
+        return type(self)(-self.rcomp, -self.icomp)
+
     def __str__(self):
         return '{} + {}i'.format(self.rcomp, self.icomp)
 

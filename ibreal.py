@@ -121,6 +121,9 @@ class IBReal:
                 for i in range(1, oint):
                     self *= tmp
         return self.trim()
+
+    def __neg__(self):
+        return type(self)(Ival(-self.ival.num, self.ival.off), self.prec)
         
     def __str__(self):
         return self.trim().tval
