@@ -11,8 +11,8 @@ class IBReal:
     Usage:
     realnum = IBReal(raw, prec)
 
-    raw: Ival object, ascii real number in decimal notation or tuple (integer, offset), where integer is the integer 
-         after multiplying the real number by 10^offset.
+    raw: IBReal object, Ival object, ascii repr of a real number, or tuple (integer, offset) -- where integer 
+         is the integer after multiplying the real number by 10^offset.
 
     prec: precision -- length limit of digits to right of decimal
 
