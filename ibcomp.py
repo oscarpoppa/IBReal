@@ -86,6 +86,9 @@ class IBComp:
                     self *= tmp 
         return self 
 
+    def __eq__(self, other):
+        return self.rcomp == other.rcomp and self.icomp == other.icomp
+
     def __neg__(self):
         return type(self)(-self.rcomp, -self.icomp)
 
