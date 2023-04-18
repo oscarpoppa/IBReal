@@ -37,7 +37,7 @@ class IBReal:
             tval = str(self.ival.num)
             tlen = len(tval)
             if prec < tlen:
-                self.ival = Ival(int(tval[:prec]), self.ival.off - tlen + prec)
+                self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
         return self
             
     def _from_txt(self, val):
@@ -61,10 +61,10 @@ class IBReal:
     def _align(self, siv, oiv):
         if siv.off > oiv.off:
             pad = 10 ** (siv.off-oiv.off)
-            oiv = Ival(pad * oiv.num, siv.off)
+            oiv = Ival(pad*oiv.num, siv.off)
         else:
             pad = 10 ** (oiv.off-siv.off)
-            siv = Ival(pad * siv.num, oiv.off)
+            siv = Ival(pad*siv.num, oiv.off)
         return (siv, oiv)
 
     def __float__(self):
