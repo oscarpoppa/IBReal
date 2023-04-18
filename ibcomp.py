@@ -21,6 +21,10 @@ class IBComp:
         slen = self.rcomp**2 + self.icomp**2
         return sqrt(float(slen))
 
+    def trim(self, val):
+        self.rcomp.trim(val)
+        self.icomp.trim(val)
+
     def __mul__(self, other):
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
