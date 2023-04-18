@@ -8,7 +8,7 @@ class IBComp:
     Usage:
     comp = IBComp(rcomp, icomp)
 
-    rcomp & icomp: IBReal object, string, or tuple(IBReal style)
+    rcomp & icomp: IBReal object, Ival object, string, or 2-tuple
     """
     def __init__(self, rcomp, icomp):
         #string, tuple or IBReal
