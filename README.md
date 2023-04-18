@@ -14,6 +14,8 @@ where integer is the integer after multiplying the real number by 10^offset.
      
 prec: precision
 
+    >>> from ibreal import IBReal,Ival
+    >>>
     >>> st = IBReal('-1.778243238')
     >>> st
     -1.778243238
@@ -22,7 +24,6 @@ prec: precision
     >>> tu
     1.23
     >>> 
-    >>> from ibreal import Ival
     >>> iv = Ival(40889978788,17)
     >>> iv
     Ival(num=40889978788, off=17)
