@@ -14,12 +14,16 @@ where integer is the integer after multiplying the real number by 10^offset.
      
 prec: precision
 
-    >>> from ibreal import IBReal,Ival
+    >>> from ibreal import IBReal, Ival
     >>>
     >>> st = IBReal('-1.778243238')
     >>> st
     -1.778243238
     >>> 
+    >>> sc = IBReal('-1.23123e-12')
+    >>> sc
+    -1.23123e-12
+    >>>
     >>> tu = IBReal((123,2))
     >>> tu
     1.23
