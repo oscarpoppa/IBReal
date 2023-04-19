@@ -115,7 +115,7 @@ class IBReal:
             if oint <= 0:
                 tmp.ival = Ival(1,0)
             else:
-                for i in range(1, oint):
+                for _ in range(1, oint):
                     tmp *= self
         return tmp 
         
@@ -125,7 +125,7 @@ class IBReal:
             if oint <= 0:
                 self.ival = Ival(1,0)
             else:
-                for i in range(1, oint):
+                for _ in range(1, oint):
                     self *= tmp
         return self.trim()
 
