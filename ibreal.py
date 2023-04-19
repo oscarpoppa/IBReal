@@ -12,7 +12,8 @@ class IBReal:
     realnum = IBReal(raw, prec)
 
     raw: IBReal object, Ival object, ascii repr of a real number, or tuple (integer, offset) -- where integer 
-         is the integer after multiplying the real number by 10^offset.
+         is the integer after multiplying the real number by 10^offset. If using an IBReal instance, the precision
+         will always be inherited from the object argument in spite of passing a prec val.
 
     prec: precision -- length limit of internal integer (self.ival.num)
 
@@ -26,6 +27,7 @@ class IBReal:
             self.ival = Ival(*raw)
         elif tp == type(self):
             self.ival = raw.ival
+            self.prec = raw.prec #override arg
         else: #assume text
             self.ival = self._from_txt(raw)
         self.trim()
