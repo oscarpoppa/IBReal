@@ -14,7 +14,7 @@ class IBReal:
     raw: IBReal object, Ival object, ascii repr of a real number, or tuple (integer, offset) -- where integer 
          is the integer after multiplying the real number by 10^offset.
 
-    prec: precision -- length limit of digits to right of decimal
+    prec: precision -- length limit of internal integer (self.ival.num)
 
     """
     def __init__(self, raw, prec=300):
@@ -41,11 +41,10 @@ class IBReal:
 
     def trim(self, prec=None):
         prec = self.prec if not prec else abs(prec)
-        if self.ival.off > prec:
+        if self.ival.num > 10**(prec+1): #+1 gives high end
             tval = str(self.ival.num)
             tlen = len(tval)
-            if prec < tlen:
-                self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
+            self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
         return self
             
     def _from_txt(self, val):
