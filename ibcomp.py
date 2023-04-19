@@ -75,7 +75,7 @@ class IBComp:
                 tmp.rcomp = IBReal((1,0), prec=self.rcomp.prec)
                 tmp.icomp = IBReal((0,0), prec=self.rcomp.prec)
             else: 
-                for i in range(1, oint):
+                for _ in range(1, oint):
                     tmp *= self 
         return tmp 
 
@@ -86,7 +86,7 @@ class IBComp:
                 self.rcomp = IBReal((1,0), prec=self.rcomp.prec)
                 self.icomp = IBReal((0,0), prec=self.rcomp.prec)
             else: 
-                for i in range(1, oint):
+                for _ in range(1, oint):
                     self *= tmp 
         return self 
 
