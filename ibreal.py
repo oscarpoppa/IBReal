@@ -34,9 +34,7 @@ class IBReal:
 
     def trim(self, prec=None):
         prec = self.prec if not prec else prec
-        if type(prec) != int:
-            raise ValueError('Only positive integers allowed')
-        if prec <= 0:
+        if type(prec) != int or prec <= 0:
             raise ValueError('Only positive integers allowed')
         if self.ival.num > 10**(prec+10): #+10 gives some wiggle room--change if too much trimming
             tval = str(self.ival.num)
@@ -128,9 +126,7 @@ class IBReal:
         return self.trim()
 
     def __pow__(self, oint):
-        if type(oint) != int:
-            raise ValueError('Only non-negative integers allowed')
-        if oint < 0:
+        if type(oint) != int or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, self.prec)
         if oint == 0:
@@ -141,9 +137,7 @@ class IBReal:
         return tmp 
         
     def __ipow__(self, oint):
-        if type(oint) != int:
-            raise ValueError('Only non-negative integers allowed')
-        if oint < 0:
+        if type(oint) != int or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, self.prec)
         if oint == 0:

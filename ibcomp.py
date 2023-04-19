@@ -26,9 +26,7 @@ class IBComp:
         return sqrt(float(slen))
 
     def trim(self, prec):
-        if type(prec) != int:
-            raise ValueError('Only positive integers allowed')
-        if prec <= 0:
+        if type(prec) != int or prec <= 0:
             raise ValueError('Only positive integers allowed')
         self.rcomp.trim(prec)
         self.icomp.trim(prec)
@@ -85,9 +83,7 @@ class IBComp:
         return self
 
     def __pow__(self, oint):
-        if type(oint) != int:
-            raise ValueError('Only non-negative integers allowed')
-        if oint < 0:
+        if type(oint) != int or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
         if oint == 0:
@@ -99,9 +95,7 @@ class IBComp:
         return tmp 
 
     def __ipow__(self, oint):
-        if type(oint) != int:
-            raise ValueError('Only non-negative integers allowed')
-        if oint < 0:
+        if type(oint) != int or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
         if oint == 0:
