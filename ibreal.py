@@ -30,15 +30,6 @@ class IBReal:
             self.ival = self._from_txt(raw)
         self.trim()
 
-    @property
-    def tval(self):
-        neg = '-' if self.ival.num < 0 else ''
-        txt = str(abs(self.ival.num))
-        if len(txt) > self.ival.off:
-            return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival.off], txt[len(txt)-self.ival.off:] or '0')
-        else:
-            return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
-
     def trim(self, prec=None):
         prec = self.prec if not prec else abs(prec)
         if self.ival.num > 10**(prec+10): #+10 gives some wiggle room--change if too much trimming
@@ -46,6 +37,15 @@ class IBReal:
             tlen = len(tval)
             self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
         return self
+
+    @property
+    def _repr(self):
+        neg = '-' if self.ival.num < 0 else ''
+        txt = str(abs(self.ival.num))
+        if len(txt) > self.ival.off:
+            return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival.off], txt[len(txt)-self.ival.off:] or '0')
+        else:
+            return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
             
     def _from_txt(self, val):
         if val[0] == '-':
@@ -161,8 +161,8 @@ class IBReal:
         return siv.num != oiv.num
 
     def __str__(self):
-        return self.trim().tval
+        return self.trim()._repr
 
     def __repr__(self):
-        return self.trim().tval
+        return self.trim()._repr
 
