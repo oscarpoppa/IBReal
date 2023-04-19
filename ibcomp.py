@@ -41,6 +41,9 @@ class IBComp:
             other = type(self)(rcmp, icmp)
         return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
 
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
     def __imul__(self, other):
         if type(other) != type(self):
             rcmp = IBReal(other, **self.rcomp.kwargs)
@@ -57,6 +60,9 @@ class IBComp:
             other = type(self)(rcmp, icmp)
         return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
 
+    def __radd__(self, other):
+        return self.__add__(other)
+
     def __iadd__(self, other):
         if type(other) != type(self):
             rcmp = IBReal(other, **self.rcomp.kwargs)
@@ -72,6 +78,9 @@ class IBComp:
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         return type(self)(self.rcomp-other.rcomp, self.icomp-other.icomp)
+
+    def __rsub__(self, other):
+        return -self.__sub__(other)
 
     def __isub__(self, other):
         if type(other) != type(self):

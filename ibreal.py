@@ -102,6 +102,9 @@ class IBReal:
         ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
         return type(self)(ival, prec=self.prec)
 
+    def __rmul__(self, other):
+        return self.__mul__(other) 
+
     def __imul__(self, other):
         if type(other) != type(self):
             other = type(self)(other, **self.kwargs) 
@@ -117,6 +120,9 @@ class IBReal:
         ival = Ival(siv.num+oiv.num, siv.off)
         return type(self)(ival, prec=self.prec)
 
+    def __radd__(self, other):
+        return self.__add__(other)
+
     def __iadd__(self, other):
         if type(other) != type(self):
             other = type(self)(other, **self.kwargs)
@@ -130,6 +136,9 @@ class IBReal:
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num-oiv.num, siv.off)
         return type(self)(ival, prec=self.prec)
+
+    def __rsub__(self, other):
+        return -self.__sub__(other)
 
     def __isub__(self, other):
         if type(other) != type(self):
