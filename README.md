@@ -16,50 +16,47 @@ prec: precision -- length limit of internal integer (self.ival.num)
 
 
     >>> from ibreal import IBReal, Ival
+    >>> 
+    >>> ## Instantiate in several ways
     >>>
-    >>> sa = IBReal('-1.778243238')
+    >>> sa = IBReal('-1.778243238') #string
     >>> sa
     -1.778243238
     >>>
-    >>> st = IBReal(-1.778243238)
+    >>> st = IBReal(-1.778243238) #raw number
     >>> st
     -1.778243238
-    >>> 
-    >>> sc = IBReal('-1.23123e-12')
-    >>> sc
-    -1.23123e-12
     >>>
-    >>> tu = IBReal((123,2))
+    >>> tu = IBReal((123,2)) #2-tuple
     >>> tu
     1.23
-    >>> tu * 3
-    3.69
-    >>> tu == 1.23
-    True
-    >>> tu < 1
-    False
-    >>>
-    >>> iv = Ival(40889978788,17)
-    >>> iv
-    Ival(num=40889978788, off=17)
-    >>> ivr = IBReal(iv)
-    >>> ivr
-    4.0889978788e-7
     >>> 
-    >>> ivr + tu
-    1.57000040889978788
+    >>> tu = IBReal(Ival(123,2)) #Ival instance
+    >>> tu
+    1.23
     >>> 
-    >>> ivr+=5
-    >>> ivr
-    5.00000040889978788
-    >>> ivr**2
-    25.0000040889980459990365283089948944
+    >>> cp = IBReal(tu) #another IBReal instance
+    >>> cp
+    1.23
+    >>> 
+    >>> ## watch out for implicit truncation. When in doubt, use quotes
+    >>> 
+    >>> lf = IBReal(1.13322288732987384930949090349093477378764e-43) #float literal gets truncated before passage
+    >>> sf = IBReal('1.13322288732987384930949090349093477378764e-43')
+    >>> lf
+    1.1332228873298739e-43
+    >>> sf
+    1.13322288732987384930949090349093477378764e-43
+    >>> lf == sf
+    False 
     >>>
     >>> small = IBReal((16757657654, 78))
     >>> small
     1.6757657654e-68
     >>> small**2
     2.80819090048664783716e-136
+    >>>
+    >>> ## IBComp is the complex extension of IBReal
     >>>
     >>> from ibcomp import IBComp
     >>> cm = IBComp(-1.1, 1.1008789e-12)
@@ -77,4 +74,5 @@ prec: precision -- length limit of internal integer (self.ival.num)
     >>> 
     >>> cm * 0.00000000000000000000000000000000000000000012212
     -1.34332e-43 + 1.34439331268e-55i
-    >>> 
+    >>>
+
