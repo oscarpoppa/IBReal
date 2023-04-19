@@ -33,7 +33,11 @@ class IBReal:
         self.trim()
 
     def trim(self, prec=None):
-        prec = self.prec if not prec else abs(prec)
+        prec = self.prec if not prec else prec
+        if type(prec) != int:
+            raise ValueError('Only positive integers allowed')
+        if prec <= 0:
+            raise ValueError('Only positive integers allowed')
         if self.ival.num > 10**(prec+10): #+10 gives some wiggle room--change if too much trimming
             tval = str(self.ival.num)
             tlen = len(tval)
@@ -50,6 +54,8 @@ class IBReal:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
             
     def _from_txt(self, val):
+        if type(val) != str:
+            raise ValueError('Only strings allowed')
         if val[0] == '-':
             neg = -1
             val = val[1:]
@@ -78,55 +84,73 @@ class IBReal:
         return (siv, oiv)
 
     def __mul__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         oiv = other.ival
         siv = self.ival
         ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
         return type(self)(ival, self.prec)
 
     def __imul__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         oiv = other.ival
         siv = self.ival
         self.ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
         return self.trim()
 
     def __add__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num+oiv.num, siv.off)
         return type(self)(ival, self.prec)
 
     def __iadd__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = Ival(siv.num+oiv.num, siv.off)
         return self.trim()
 
     def __sub__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num-oiv.num, siv.off)
         return type(self)(ival, self.prec)
 
     def __isub__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = Ival(siv.num-oiv.num, siv.off)
         return self.trim()
 
-    def __pow__(self, oint): #integer power only
+    def __pow__(self, oint):
+        if type(oint) != int:
+            raise ValueError('Only non-negative integers allowed')
+        if oint < 0:
+            raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, self.prec)
-        if type(oint) == int:
-            if oint <= 0:
-                tmp.ival = Ival(1,0)
-            else:
-                for _ in range(1, oint):
-                    tmp *= self
+        if oint == 0:
+            tmp.ival = Ival(1,0)
+        else:
+            for _ in range(1, oint):
+                tmp *= self
         return tmp 
         
-    def __ipow__(self, oint): #integer power only
+    def __ipow__(self, oint):
+        if type(oint) != int:
+            raise ValueError('Only non-negative integers allowed')
+        if oint < 0:
+            raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, self.prec)
-        if type(oint) == int:
-            if oint <= 0:
-                self.ival = Ival(1,0)
-            else:
-                for _ in range(1, oint):
-                    self *= tmp
+        if oint == 0:
+            self.ival = Ival(1,0)
+        else:
+            for _ in range(1, oint):
+                self *= tmp
         return self.trim()
 
     def __float__(self):
@@ -138,27 +162,39 @@ class IBReal:
     def __abs__(self):
         return type(self)(Ival(abs(self.ival.num), self.ival.off), self.prec)
         
-    def __eq__(self, other): #won't differentiate between (100,2) and (1000, 3)
+    def __eq__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num == oiv.num
 
     def __lt__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num < oiv.num
 
     def __gt__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num > oiv.num
 
     def __le__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num <= oiv.num
     
     def __ge__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num >= oiv.num
 
     def __ne__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num != oiv.num
 

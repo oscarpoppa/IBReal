@@ -25,19 +25,27 @@ class IBComp:
         slen = self.rcomp**2 + self.icomp**2
         return sqrt(float(slen))
 
-    def trim(self, val):
-        self.rcomp.trim(val)
-        self.icomp.trim(val)
+    def trim(self, prec):
+        if type(prec) != int:
+            raise ValueError('Only positive integers allowed')
+        if prec <= 0:
+            raise ValueError('Only positive integers allowed')
+        self.rcomp.trim(prec)
+        self.icomp.trim(prec)
 
     def conj(self):
         return type(self)(self.rcomp, -self.icomp)
 
     def __mul__(self, other):
+        if type(other) not in (type(self), IBReal):
+            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
 
     def __imul__(self, other):
+        if type(other) not in (type(self), type(self.rcomp)):
+            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp*other.rcomp-self.icomp*other.icomp
@@ -45,11 +53,15 @@ class IBComp:
         return self
 
     def __add__(self, other):
+        if type(other) not in (type(self), type(self.rcomp)):
+            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
 
     def __iadd__(self, other):
+        if type(other) not in (type(self), type(self.rcomp)):
+            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp+other.rcomp
@@ -57,11 +69,15 @@ class IBComp:
         return self
 
     def __sub__(self, other):
+        if type(other) not in (type(self), type(self.rcomp)):
+            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp-other.rcomp, self.icomp-other.icomp)
 
     def __isub__(self, other):
+        if type(other) not in (type(self), type(self.rcomp)):
+            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp-other.rcomp
@@ -69,28 +85,36 @@ class IBComp:
         return self
 
     def __pow__(self, oint):
+        if type(oint) != int:
+            raise ValueError('Only non-negative integers allowed')
+        if oint < 0:
+            raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
-        if type(oint) == int:
-            if oint == 0:
-                tmp.rcomp = IBReal((1,0), prec=self.rcomp.prec)
-                tmp.icomp = IBReal((0,0), prec=self.rcomp.prec)
-            else: 
-                for _ in range(1, oint):
-                    tmp *= self 
+        if oint == 0:
+            tmp.rcomp = IBReal((1,0), prec=self.rcomp.prec)
+            tmp.icomp = IBReal((0,0), prec=self.rcomp.prec)
+        else: 
+            for _ in range(1, oint):
+                tmp *= self 
         return tmp 
 
     def __ipow__(self, oint):
+        if type(oint) != int:
+            raise ValueError('Only non-negative integers allowed')
+        if oint < 0:
+            raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
-        if type(oint) == int:
-            if oint == 0:
-                self.rcomp = IBReal((1,0), prec=self.rcomp.prec)
-                self.icomp = IBReal((0,0), prec=self.rcomp.prec)
-            else: 
-                for _ in range(1, oint):
-                    self *= tmp 
+        if oint == 0:
+            self.rcomp = IBReal((1,0), prec=self.rcomp.prec)
+            self.icomp = IBReal((0,0), prec=self.rcomp.prec)
+        else: 
+            for _ in range(1, oint):
+                self *= tmp 
         return self 
 
     def __eq__(self, other):
+        if type(other) != type(self):
+            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
         return self.rcomp == other.rcomp and self.icomp == other.icomp
 
     def __neg__(self):
