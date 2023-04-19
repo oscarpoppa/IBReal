@@ -105,28 +105,28 @@ class IBReal:
 
     def __add__(self, other):
         if type(other) != type(self):
-            other = type(self)(other,  **self.kwargs)
+            other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num+oiv.num, siv.off)
         return type(self)(ival, prec=self.prec)
 
     def __iadd__(self, other):
         if type(other) != type(self):
-            other = type(self)(other,  **self.kwargs)
+            other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = Ival(siv.num+oiv.num, siv.off)
         return self.trim()
 
     def __sub__(self, other):
         if type(other) != type(self):
-            other = type(self)(other,  **self.kwargs)
+            other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num-oiv.num, siv.off)
         return type(self)(ival, prec=self.prec)
 
     def __isub__(self, other):
         if type(other) != type(self):
-            other = type(self)(other,  **self.kwargs)
+            other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = Ival(siv.num-oiv.num, siv.off)
         return self.trim()
