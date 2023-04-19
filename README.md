@@ -1,18 +1,19 @@
 # IBReal
 Messing with extended precision using Python integers.
 
-IBReal represents a memory-only-limited, arbitrary precision, integer-based implementation of a real number.
-It offers addition, subtraction, powers (integer), and multiplication only, which is OK for iteration exploration. I'm not expecting
-it to be fast. All math operations (**,+,-,*) are also available in in-line mode (i.e. +=).
+IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
+It offers addition, subtraction, powers, and multiplication only, which is OK for iteration exploration, albeit
+probably slow. All math operations are available in in-line mode (i.e. +=).
 
 Usage:
+realnum = IBReal(raw, prec)
 
-realnum = IBReal(raw, prec=300)
+raw: IBReal object, number, Ival object, ascii repr of a real number, or tuple (integer, offset) -- where integer 
+     is the integer after multiplying the real number by 10^offset. If using an IBReal instance, the precision
+     will always be inherited from the object argument in spite of passing a prec val.
 
-raw: Ival instance (defined in same file), ascii real number in decimal notation or tuple (integer, offset), 
-where integer is the integer after multiplying the real number by 10^offset.
-     
-prec: precision
+prec: precision -- length limit of internal integer (self.ival.num)
+
 
     >>> from ibreal import IBReal, Ival
     >>>
