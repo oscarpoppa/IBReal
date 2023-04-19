@@ -42,7 +42,7 @@ class IBComp:
         return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
 
     def __imul__(self, other):
-        if type(other) not in (type(self), type(self.rcomp)):
+        if type(other) not in (type(self), IBReal):
             raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
@@ -51,14 +51,14 @@ class IBComp:
         return self
 
     def __add__(self, other):
-        if type(other) not in (type(self), type(self.rcomp)):
+        if type(other) not in (type(self), IBReal):
             raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
 
     def __iadd__(self, other):
-        if type(other) not in (type(self), type(self.rcomp)):
+        if type(other) not in (type(self), IBReal):
             raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
@@ -67,14 +67,14 @@ class IBComp:
         return self
 
     def __sub__(self, other):
-        if type(other) not in (type(self), type(self.rcomp)):
+        if type(other) not in (type(self), IBReal):
             raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp-other.rcomp, self.icomp-other.icomp)
 
     def __isub__(self, other):
-        if type(other) not in (type(self), type(self.rcomp)):
+        if type(other) not in (type(self), IBReal):
             raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
         if type(other) == IBReal:
             other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
