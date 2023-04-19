@@ -30,7 +30,7 @@ class IBReal:
             self.prec = raw.prec #override arg
         elif tp == int:
             self.ival = Ival(raw, 0)
-        else: #textify
+        else: #textify any numbers
             self.ival = self._from_txt(str(raw))
         self.trim()
 
@@ -54,8 +54,6 @@ class IBReal:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
             
     def _from_txt(self, val):
-        if type(val) != str:
-            raise ValueError('Only strings allowed')
         if val[0] == '-':
             neg = -1
             val = val[1:]
