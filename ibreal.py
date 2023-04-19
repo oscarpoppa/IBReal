@@ -41,7 +41,7 @@ class IBReal:
 
     def trim(self, prec=None):
         prec = self.prec if not prec else abs(prec)
-        if self.ival.num > 10**(prec+1): #+1 gives high end
+        if self.ival.num > 10**(prec+10): #+10 gives some wiggle room--change if too much trimming
             tval = str(self.ival.num)
             tlen = len(tval)
             self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
