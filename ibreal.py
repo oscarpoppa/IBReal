@@ -38,7 +38,7 @@ class IBReal:
         prec = self.prec if not prec else prec
         if type(prec) != int or prec <= 0:
             raise ValueError('Only positive integers allowed')
-        if self.ival.num > 10**(prec+10): #+10 gives some wiggle room--change if too much trimming
+        if abs(self.ival.num) > 10**prec+3:
             tval = str(self.ival.num)
             tlen = len(tval)
             self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
