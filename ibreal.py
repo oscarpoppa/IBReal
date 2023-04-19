@@ -44,9 +44,13 @@ class IBReal:
         if type(prec) != int or prec <= 0:
             raise ValueError('Only positive integers allowed')
         if abs(self.ival.num) > 10**prec:
+            neg = 1
             tval = str(self.ival.num)
+            if tval[0] == '-':
+                tval = tval[1:]
+                neg = -1
             tlen = len(tval)
-            self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
+            self.ival = Ival(neg*int(tval[:prec]), self.ival.off-tlen+prec)
         return self
 
     @property
