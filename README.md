@@ -30,7 +30,11 @@ prec: precision -- length limit of internal integer (self.ival.num)
     1.23
     >>> tu * 3
     3.69
-    >>> 
+    >>> tu == 1.23
+    True
+    >>> tu < 1
+    False
+    >>>
     >>> iv = Ival(40889978788,17)
     >>> iv
     Ival(num=40889978788, off=17)
