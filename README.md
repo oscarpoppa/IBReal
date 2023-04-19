@@ -17,11 +17,15 @@ prec: precision -- length limit of internal integer (self.ival.num)
 
     >>> from ibreal import IBReal, Ival
     >>>
+    >>> sa = IBReal('-1.778243238')
+    >>> sa
+    -1.778243238
+    >>>
     >>> st = IBReal(-1.778243238)
     >>> st
     -1.778243238
     >>> 
-    >>> sc = IBReal(-1.23123e-12)
+    >>> sc = IBReal('-1.23123e-12')
     >>> sc
     -1.23123e-12
     >>>

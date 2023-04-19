@@ -9,7 +9,7 @@ class IBReal:
     probably slow. All math operations are available in in-line mode (i.e. +=).
 
     Usage:
-    realnum = IBReal(raw, prec)
+    realnum = IBReal(raw, prec=300, trim_on=True)
 
     raw: IBReal object, number, Ival object, ascii repr of a real number, or tuple (integer, offset) -- where integer 
          is the integer after multiplying the real number by 10^offset. If using an IBReal instance, the precision
@@ -17,8 +17,11 @@ class IBReal:
 
     prec: precision -- length limit of internal integer (self.ival.num)
 
+    trim_on: allow trimming or not
+
     """
-    def __init__(self, raw, prec=300):
+    def __init__(self, raw, prec=300, trim_on=True):
+        self.trim_on = trim_on
         self.prec = prec
         tp = type(raw)
         if tp == Ival:
@@ -35,6 +38,8 @@ class IBReal:
         self.trim()
 
     def trim(self, prec=None):
+        if not self.trim_on:
+            return self 
         prec = self.prec if not prec else prec
         if type(prec) != int or prec <= 0:
             raise ValueError('Only positive integers allowed')
