@@ -17,17 +17,19 @@ prec: precision -- length limit of internal integer (self.ival.num)
 
     >>> from ibreal import IBReal, Ival
     >>>
-    >>> st = IBReal('-1.778243238')
+    >>> st = IBReal(-1.778243238)
     >>> st
     -1.778243238
     >>> 
-    >>> sc = IBReal('-1.23123e-12')
+    >>> sc = IBReal(-1.23123e-12)
     >>> sc
     -1.23123e-12
     >>>
     >>> tu = IBReal((123,2))
     >>> tu
     1.23
+    >>> tu * 3
+    3.69
     >>> 
     >>> iv = Ival(40889978788,17)
     >>> iv
@@ -39,10 +41,7 @@ prec: precision -- length limit of internal integer (self.ival.num)
     >>> ivr + tu
     1.57000040889978788
     >>> 
-    >>> five = IBReal('5')
-    >>> five
-    5.0
-    >>> ivr+=five
+    >>> ivr+=5
     >>> ivr
     5.00000040889978788
     >>> ivr**2
