@@ -35,49 +35,37 @@ class IBComp:
         return type(self)(self.rcomp, -self.icomp)
 
     def __mul__(self, other):
-        if type(other) not in (type(self), IBReal):
-            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
-        if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
+        if type(other) != type(self):
+            other = type(self)(IBReal(other,prec=self.rcomp.prec), IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
 
     def __imul__(self, other):
-        if type(other) not in (type(self), IBReal):
-            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
-        if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
+        if type(other) != type(self):
+            other = type(self)(IBReal(other,prec=self.rcomp.prec), IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp*other.rcomp-self.icomp*other.icomp
         self.icomp = self.rcomp*other.icomp+self.icomp*other.rcomp
         return self
 
     def __add__(self, other):
-        if type(other) not in (type(self), IBReal):
-            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
-        if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
+        if type(other) != type(self):
+            other = type(self)(IBReal(other, self.rcomp.prec), IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
 
     def __iadd__(self, other):
-        if type(other) not in (type(self), IBReal):
-            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
-        if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
+        if type(other) != type(self):
+            other = type(self)(IBReal(other, self.rcomp.prec), IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp+other.rcomp
         self.icomp = self.icomp+other.icomp
         return self
 
     def __sub__(self, other):
-        if type(other) not in (type(self), IBReal):
-            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
-        if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
+        if type(other) != type(self):
+            other = type(self)(IBReal(other, self.rcomp.prec), IBReal((0,0), prec=self.rcomp.prec))
         return type(self)(self.rcomp-other.rcomp, self.icomp-other.icomp)
 
     def __isub__(self, other):
-        if type(other) not in (type(self), IBReal):
-            raise ValueError('Only {} and IBReal instances allowed'.format(type(self).__name__))
-        if type(other) == IBReal:
-            other = type(self)(other, IBReal((0,0), prec=self.rcomp.prec))
+        if type(other) != type(self):
+            other = type(self)(IBReal(other, self.rcomp.prec), IBReal((0,0), prec=self.rcomp.prec))
         self.rcomp = self.rcomp-other.rcomp
         self.icomp = self.icomp-other.icomp
         return self
@@ -108,7 +96,7 @@ class IBComp:
 
     def __eq__(self, other):
         if type(other) != type(self):
-            raise ValueError('Only {} instances allowed'.format(type(self).__name__))
+            other = type(self)(IBReal(other, self.rcomp.prec), IBReal((0,0), prec=self.rcomp.prec))
         return self.rcomp == other.rcomp and self.icomp == other.icomp
 
     def __neg__(self):
