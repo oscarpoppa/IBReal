@@ -23,7 +23,6 @@ class IBReal:
     def __init__(self, raw, prec=300, trim_on=True):
         self.trim_on = trim_on
         self.prec = prec
-        self.kwargs = {'prec':self.prec, 'trim_on':self.trim_on}
         tp = type(raw)
         if tp == Ival:
             self.ival = raw
@@ -49,6 +48,10 @@ class IBReal:
             tlen = len(tval)
             self.ival = Ival(int(tval[:prec]), self.ival.off-tlen+prec)
         return self
+
+    @property
+    def kwargs(self): #read-only kwargs
+        return {'prec':self.prec, 'trim_on':self.trim_on}
 
     @property
     def _repr(self):
