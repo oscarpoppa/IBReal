@@ -31,6 +31,7 @@ class IBReal:
         elif tp == type(self):
             self.ival = raw.ival
             self.prec = raw.prec #override arg
+            self.trim_on = raw.trim_on
         elif tp == int:
             self.ival = Ival(raw, 0)
         else: #textify any numbers
