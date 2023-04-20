@@ -18,6 +18,9 @@ class IBComp:
         elif isinstance(raw, type(self)):
             self.rcomp = raw.rcomp
             self.icomp = raw.icomp
+        elif isinstance(raw, IBReal):
+            self.rcomp = raw
+            self.icomp = IBReal((0, 0), **raw.kwargs)
         else:
             raise ValueError('Only tuples and {} allowed'.format(type(self)))
 
