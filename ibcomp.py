@@ -25,14 +25,15 @@ class IBComp:
         slen = self.rcomp**2 + self.icomp**2
         return sqrt(float(slen))
 
+    @property
+    def conj(self):
+        return type(self)(self.rcomp, -self.icomp)
+
     def trim(self, prec):
         if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
         self.rcomp.trim(prec)
         self.icomp.trim(prec)
-
-    def conj(self):
-        return type(self)(self.rcomp, -self.icomp)
 
     def __mul__(self, other):
         if not isinstance(other, type(self)):
