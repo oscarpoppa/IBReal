@@ -23,18 +23,17 @@ class IBReal:
     def __init__(self, raw, prec=300, trim_on=True):
         self.trim_on = trim_on
         self.prec = prec
-        tp = type(raw)
-        if tp == Ival:
+        if isinstance(raw, Ival):
             self.ival = raw
-        elif tp == tuple:
+        elif isinstance(raw, tuple):
             self.ival = Ival(*raw)
-        elif tp == type(self):
+        elif isinstance(raw, type(self)):
             self.ival = raw.ival
             self.prec = raw.prec #override arg
             self.trim_on = raw.trim_on
-        elif tp == int:
+        elif isinstance(raw, int):
             self.ival = Ival(raw, 0)
-        else: #textify any numbers
+        else: # coerce text or numbers to IBReal
             self.ival = self._from_txt(str(raw))
         self.trim()
 
