@@ -42,6 +42,7 @@ class IBComp:
             raise ValueError('Only positive integers allowed')
         self.rcomp.trim(prec)
         self.icomp.trim(prec)
+        return self
 
     def _from_txt(self, val): #looking for a+bi
         plus = val.find('+')
