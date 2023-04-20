@@ -153,7 +153,7 @@ class IBReal:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, **self.kwargs)
         if oint == 0:
-            tmp.ival = Ival(1,0)
+            tmp.ival = Ival(1, 0)
         else:
             for _ in range(1, oint):
                 tmp *= self
@@ -164,7 +164,7 @@ class IBReal:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, **self.kwargs)
         if oint == 0:
-            self.ival = Ival(1,0)
+            self.ival = Ival(1, 0)
         else:
             for _ in range(1, oint):
                 self *= tmp
