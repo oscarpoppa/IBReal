@@ -41,8 +41,8 @@ class IBReal:
     def trim(self, prec=None):
         if not self.trim_on:
             return self 
-        prec = self.prec if not prec else prec
-        if type(prec) != int or prec <= 0:
+        prec = self.prec if prec is None else prec
+        if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
         if abs(self.ival.num) > 10**prec:
             neg = 1
@@ -96,7 +96,7 @@ class IBReal:
         return (siv, oiv)
 
     def __mul__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         oiv = other.ival
         siv = self.ival
@@ -107,7 +107,7 @@ class IBReal:
         return self.__mul__(other) 
 
     def __imul__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs) 
         oiv = other.ival
         siv = self.ival
@@ -115,7 +115,7 @@ class IBReal:
         return self.trim()
 
     def __add__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num+oiv.num, siv.off)
@@ -125,14 +125,14 @@ class IBReal:
         return self.__add__(other)
 
     def __iadd__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = Ival(siv.num+oiv.num, siv.off)
         return self.trim()
 
     def __sub__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num-oiv.num, siv.off)
@@ -142,14 +142,14 @@ class IBReal:
         return -self.__sub__(other)
 
     def __isub__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         self.ival = Ival(siv.num-oiv.num, siv.off)
         return self.trim()
 
     def __pow__(self, oint):
-        if type(oint) != int or oint < 0:
+        if not isinstance(oint, int) or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, **self.kwargs)
         if oint == 0:
@@ -160,7 +160,7 @@ class IBReal:
         return tmp 
         
     def __ipow__(self, oint):
-        if type(oint) != int or oint < 0:
+        if not isinstance(oint, int) or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.ival, **self.kwargs)
         if oint == 0:
@@ -180,37 +180,37 @@ class IBReal:
         return type(self)(Ival(abs(self.ival.num), self.ival.off), **self.kwargs)
         
     def __eq__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num == oiv.num
 
     def __lt__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num < oiv.num
 
     def __gt__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num > oiv.num
 
     def __le__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num <= oiv.num
     
     def __ge__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num >= oiv.num
 
     def __ne__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num != oiv.num

@@ -26,7 +26,7 @@ class IBComp:
         return sqrt(float(slen))
 
     def trim(self, prec):
-        if type(prec) != int or prec <= 0:
+        if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
         self.rcomp.trim(prec)
         self.icomp.trim(prec)
@@ -35,7 +35,7 @@ class IBComp:
         return type(self)(self.rcomp, -self.icomp)
 
     def __mul__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
@@ -45,7 +45,7 @@ class IBComp:
         return self.__mul__(other)
 
     def __imul__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
@@ -54,7 +54,7 @@ class IBComp:
         return self
 
     def __add__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
@@ -64,7 +64,7 @@ class IBComp:
         return self.__add__(other)
 
     def __iadd__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
@@ -73,7 +73,7 @@ class IBComp:
         return self
 
     def __sub__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
@@ -83,7 +83,7 @@ class IBComp:
         return -self.__sub__(other)
 
     def __isub__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
@@ -92,7 +92,7 @@ class IBComp:
         return self
 
     def __pow__(self, oint):
-        if type(oint) != int or oint < 0:
+        if not isinstance(oint, int) or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
         if oint == 0:
@@ -104,7 +104,7 @@ class IBComp:
         return tmp 
 
     def __ipow__(self, oint):
-        if type(oint) != int or oint < 0:
+        if not isinstance(oint, int) or oint < 0:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
         if oint == 0:
@@ -116,7 +116,7 @@ class IBComp:
         return self 
 
     def __eq__(self, other):
-        if type(other) != type(self):
+        if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
