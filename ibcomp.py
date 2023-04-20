@@ -50,8 +50,9 @@ class IBComp:
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
-        self.rcomp = self.rcomp*other.rcomp-self.icomp*other.icomp
-        self.icomp = self.rcomp*other.icomp+self.icomp*other.rcomp
+        nurcomp = IBReal(self.rcomp*other.rcomp-self.icomp*other.icomp, **self.rcomp.kwargs)
+        nuicomp = IBReal(self.rcomp*other.icomp+self.icomp*other.rcomp, **self.icomp.kwargs)
+        (self.rcomp, self.icomp) = (nurcomp, nuicomp)
         return self
 
     def __add__(self, other):
