@@ -38,7 +38,7 @@ class IBComp:
     def __mul__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0,0), **self.icomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         rcmp = IBReal(self.rcomp*other.rcomp-self.icomp*other.icomp, **self.rcomp.kwargs)
         icmp = IBReal(self.rcomp*other.icomp+self.icomp*other.rcomp, **self.icomp.kwargs)
@@ -50,7 +50,7 @@ class IBComp:
     def __imul__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0,0), **self.icomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         rcmp = IBReal(self.rcomp*other.rcomp-self.icomp*other.icomp, **self.rcomp.kwargs)
         icmp = IBReal(self.rcomp*other.icomp+self.icomp*other.rcomp, **self.icomp.kwargs)
@@ -60,7 +60,7 @@ class IBComp:
     def __add__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0,0), **self.icomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         return type(self)(self.rcomp+other.rcomp, self.icomp+other.icomp)
 
@@ -70,7 +70,7 @@ class IBComp:
     def __iadd__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0,0), **self.icomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         self.rcomp = self.rcomp+other.rcomp
         self.icomp = self.icomp+other.icomp
@@ -79,7 +79,7 @@ class IBComp:
     def __sub__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0,0), **self.icomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         return type(self)(self.rcomp-other.rcomp, self.icomp-other.icomp)
 
@@ -89,7 +89,7 @@ class IBComp:
     def __isub__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0,0), **self.icomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         self.rcomp = self.rcomp-other.rcomp
         self.icomp = self.icomp-other.icomp
@@ -100,8 +100,8 @@ class IBComp:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
         if oint == 0:
-            tmp.rcomp = IBReal((1,0), **self.rcomp.kwargs)
-            tmp.icomp = IBReal((0,0), **self.icomp.kwargs)
+            tmp.rcomp = IBReal((1, 0), **self.rcomp.kwargs)
+            tmp.icomp = IBReal((0, 0), **self.icomp.kwargs)
         else: 
             for _ in range(1, oint):
                 tmp *= self 
@@ -112,8 +112,8 @@ class IBComp:
             raise ValueError('Only non-negative integers allowed')
         tmp = type(self)(self.rcomp, self.icomp)
         if oint == 0:
-            self.rcomp = IBReal((1,0), **self.rcomp.kwargs)
-            self.icomp = IBReal((0,0), **self.icomp.kwargs)
+            self.rcomp = IBReal((1, 0), **self.rcomp.kwargs)
+            self.icomp = IBReal((0, 0), **self.icomp.kwargs)
         else: 
             for _ in range(1, oint):
                 self *= tmp 
@@ -122,7 +122,7 @@ class IBComp:
     def __eq__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0,0), **self.icomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
         return self.rcomp == other.rcomp and self.icomp == other.icomp
 
