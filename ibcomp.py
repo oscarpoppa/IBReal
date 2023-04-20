@@ -51,7 +51,10 @@ class IBComp:
         if plus == -1 and eye == -1: #real number
             return (IBReal(val), IBReal((0, 0)))
         elif plus == -1 and eye != -1: #imag number
-            val = val[:eye]
+            if val in ('i', '-i'):
+                val = val.replace('i', '1')
+            else:
+                val = val[:eye]
             return (IBReal((0, 0)), IBReal(val))
         elif plus != -1 and eye != -1: #comp number
             return (IBReal(val[:plus]), IBReal(val[plus+1:eye]))
