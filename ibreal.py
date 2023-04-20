@@ -67,6 +67,7 @@ class IBReal:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
             
     def _from_txt(self, val):
+        val = val.replace(' ', '')
         if val[0] == '-':
             neg = -1
             val = val[1:]

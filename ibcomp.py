@@ -45,6 +45,7 @@ class IBComp:
         return self
 
     def _from_txt(self, val): #looking for a+bi
+        val = val.replace(' ', '')
         plus = val.find('+')
         eye = val.find('i')
         if plus == -1 and eye == -1: #real number
