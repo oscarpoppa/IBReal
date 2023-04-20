@@ -51,7 +51,7 @@ class IBComp:
         if plus == -1 and eye == -1: #real number
             return (IBReal(val), IBReal((0, 0)))
         elif plus == -1 and eye != -1: #imag number
-            if val in ('i', '-i'):
+            if val in ('i', '-i'): #allow bare-i notation
                 val = val.replace('i', '1')
             else:
                 val = val[:eye]
