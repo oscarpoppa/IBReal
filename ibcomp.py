@@ -13,8 +13,8 @@ class IBComp:
     """
     def __init__(self, rcomp, icomp):
         #string, tuple or IBReal
-        self.rcomp = IBReal(rcomp) if type(rcomp) != IBReal else rcomp
-        self.icomp = IBReal(icomp) if type(icomp) != IBReal else icomp
+        self.rcomp = IBReal(rcomp) if not isinstance(rcomp, IBReal) else rcomp
+        self.icomp = IBReal(icomp) if not isinstance(icomp, IBReal) else icomp
 
     @property #still within our precision space. May be helpful for comparisons.
     def lengthsq(self):
