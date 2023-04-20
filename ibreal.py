@@ -23,22 +23,22 @@ class IBReal:
     def __init__(self, raw, prec=300, trim_on=True):
         self.trim_on = trim_on
         self.prec = prec
-        if isinstance(raw, Ival):
-            self.ival = raw
-        elif isinstance(raw, tuple):
-            self.ival = Ival(*raw)
-        elif isinstance(raw, type(self)):
-            self.ival = raw.ival
-            self.prec = raw.prec #override arg
-            self.trim_on = raw.trim_on
-        elif isinstance(raw, int):
-            self.ival = Ival(raw, 0)
-        else: # coerce text or numbers to IBReal
-            try:
+        try:
+            if isinstance(raw, Ival):
+                self.ival = raw
+            elif isinstance(raw, tuple):
+                self.ival = Ival(*raw)
+            elif isinstance(raw, type(self)):
+                self.ival = raw.ival
+                self.prec = raw.prec #override arg
+                self.trim_on = raw.trim_on
+            elif isinstance(raw, int):
+                self.ival = Ival(raw, 0)
+            else: # coerce text or numbers to IBReal
                 self.ival = self._from_txt(str(raw))
-            except Exception as e:
-                raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
-        self.trim()
+            self.trim()
+        except Exception as e:
+            raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
 
     def trim(self, prec=None):
         if not self.trim_on:

@@ -12,21 +12,20 @@ class IBComp:
     rcomp & icomp: IBReal object, Ival object, number, string, or 2-tuple
     """
     def __init__(self, raw):
-        if isinstance(raw, tuple):
-            self.rcomp = raw[0] if isinstance(raw[0], IBReal) else IBReal(raw[0])
-            self.icomp = raw[1] if isinstance(raw[1], IBReal) else IBReal(raw[1])
-        elif isinstance(raw, type(self)):
-            self.rcomp = raw.rcomp
-            self.icomp = raw.icomp
-        elif isinstance(raw, IBReal):
-            self.rcomp = raw
-            self.icomp = IBReal((0, 0), **raw.kwargs)
-        else:
-            try:
+        try:
+            if isinstance(raw, tuple):
+                self.rcomp = raw[0] if isinstance(raw[0], IBReal) else IBReal(raw[0])
+                self.icomp = raw[1] if isinstance(raw[1], IBReal) else IBReal(raw[1])
+            elif isinstance(raw, type(self)):
+                self.rcomp = raw.rcomp
+                self.icomp = raw.icomp
+            elif isinstance(raw, IBReal):
+                self.rcomp = raw
+                self.icomp = IBReal((0, 0), **raw.kwargs)
+            else:
                 (self.rcomp, self.icomp) = self._from_txt(str(raw))
-            except Exception as e:
-                raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
-
+        except Exception as e:
+            raise ValueError('Failed to coerce {}:{} to IBReal pair'.format(type(raw), raw)) from e 
 
     @property #still within our precision space. May be helpful for comparisons.
     def lengthsq(self):
