@@ -22,7 +22,7 @@ class IBComp:
             self.rcomp = raw
             self.icomp = IBReal((0, 0), **raw.kwargs)
         else:
-            raise ValueError('Only tuples and {} allowed'.format(type(self)))
+            (self.rcomp, self.icomp) = self._from_txt(str(raw))
 
     @property #still within our precision space. May be helpful for comparisons.
     def lengthsq(self):
@@ -42,6 +42,17 @@ class IBComp:
             raise ValueError('Only positive integers allowed')
         self.rcomp.trim(prec)
         self.icomp.trim(prec)
+
+    def _from_txt(self, val): #looking for a+bi
+        plus = val.find('+')
+        eye = val.find('i')
+        if plus == -1 and eye == -1: #real number
+            return (IBReal(val), IBReal((0, 0)))
+        elif plus == -1 and eye != -1: #imag number
+            val = val[:eye]
+            return (IBReal((0, 0)), IBReal(val))
+        elif plus != -1 and eye != -1: #comp number
+            return (IBReal(val[:plus]), IBReal(val[plus+1:eye]))
 
     def __mul__(self, other):
         if not isinstance(other, type(self)):
