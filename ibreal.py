@@ -34,7 +34,10 @@ class IBReal:
         elif isinstance(raw, int):
             self.ival = Ival(raw, 0)
         else: # coerce text or numbers to IBReal
-            self.ival = self._from_txt(str(raw))
+            try:
+                self.ival = self._from_txt(str(raw))
+            except Exception as e:
+                raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
         self.trim()
 
     def trim(self, prec=None):

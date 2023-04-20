@@ -22,7 +22,11 @@ class IBComp:
             self.rcomp = raw
             self.icomp = IBReal((0, 0), **raw.kwargs)
         else:
-            (self.rcomp, self.icomp) = self._from_txt(str(raw))
+            try:
+                (self.rcomp, self.icomp) = self._from_txt(str(raw))
+            except Exception as e:
+                raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
+
 
     @property #still within our precision space. May be helpful for comparisons.
     def lengthsq(self):
