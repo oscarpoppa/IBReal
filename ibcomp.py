@@ -40,7 +40,9 @@ class IBComp:
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0,0), **self.icomp.kwargs)
             other = type(self)(rcmp, icmp)
-        return type(self)(self.rcomp*other.rcomp-self.icomp*other.icomp, self.rcomp*other.icomp+self.icomp*other.rcomp)
+        nurcomp = IBReal(self.rcomp*other.rcomp-self.icomp*other.icomp, **self.rcomp.kwargs)
+        nuicomp = IBReal(self.rcomp*other.icomp+self.icomp*other.rcomp, **self.icomp.kwargs)
+        return type(self)(nurcomp, nuicomp)
 
     def __rmul__(self, other):
         return self.__mul__(other)
