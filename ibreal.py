@@ -5,8 +5,7 @@ Ival = namedtuple('Ival', 'num off')
 class IBReal:
     """
     IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
-    It offers addition, subtraction, powers, and multiplication only, which is OK for iteration exploration, albeit
-    probably slow. All math operations are available in in-line mode (i.e. +=).
+    it is probably slow. All math operations are available in in-line mode (i.e. +=).
 
     Usage:
     realnum = IBReal(raw, prec=300, trim_on=True)
@@ -110,11 +109,30 @@ class IBReal:
         return self.__mul__(other) 
 
     def __imul__(self, other):
+        self.ival = self.__mul__(other).ival
+        return self.trim()
+
+    def __truediv__(self, other):
         if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs) 
+            other = type(self)(other, **self.kwargs)
         oiv = other.ival
         siv = self.ival
-        self.ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
+        num = siv.num*(10**(self.prec-siv.off)) // oiv.num
+        off = self.prec - oiv.off
+        rem = siv.num*(10**(self.prec-siv.off)) % oiv.num
+        if rem:
+            flt = rem/oiv.num #less than zero
+            flt *= 10**18
+            num *= 10**18
+            num += int(flt)
+            off += 18
+        return type(self)(Ival(num, off), **self.kwargs)
+
+    def __rtruediv__(self, other):
+        return type(self)(1)/self.__truediv__(other)
+
+    def __itruediv__(self, other):
+        self.ival = self.__truediv__(other).ival
         return self.trim()
 
     def __add__(self, other):
@@ -128,10 +146,7 @@ class IBReal:
         return self.__add__(other)
 
     def __iadd__(self, other):
-        if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs)
-        (siv, oiv) = self._align(self.ival, other.ival)
-        self.ival = Ival(siv.num+oiv.num, siv.off)
+        self.ival = self.__add__(other).ival
         return self.trim()
 
     def __sub__(self, other):
@@ -145,10 +160,7 @@ class IBReal:
         return -self.__sub__(other)
 
     def __isub__(self, other):
-        if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs)
-        (siv, oiv) = self._align(self.ival, other.ival)
-        self.ival = Ival(siv.num-oiv.num, siv.off)
+        self.ival = self.__sub__(other).ival
         return self.trim()
 
     def __pow__(self, oint):
@@ -163,14 +175,7 @@ class IBReal:
         return tmp 
         
     def __ipow__(self, oint):
-        if not isinstance(oint, int) or oint < 0:
-            raise ValueError('Only non-negative integers allowed')
-        tmp = type(self)(self.ival, **self.kwargs)
-        if oint == 0:
-            self.ival = Ival(1, 0)
-        else:
-            for _ in range(1, oint):
-                self *= tmp
+        self.ival = self.__pow__(oint).ival
         return self.trim()
 
     def __float__(self):

@@ -2,8 +2,7 @@
 Messing with extended precision using Python integers.
 
 IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
-It offers addition, subtraction, powers, and multiplication only, which is OK for iteration exploration, albeit
-probably slow. All math operations are available in in-line mode (i.e. +=).
+It is probably slow. All math operations are available in in-line mode (i.e. +=).
 
 Usage:
 realnum = IBReal(raw, prec)
