@@ -117,9 +117,9 @@ class IBReal:
             other = type(self)(other, **self.kwargs)
         oiv = other.ival
         siv = self.ival
-        num = siv.num*(10**(self.prec-siv.off)) // oiv.num
-        off = self.prec - oiv.off
-        rem = siv.num*(10**(self.prec-siv.off)) % oiv.num
+        num = siv.num*(10**(self.prec-siv.off-18)) // oiv.num
+        off = self.prec - oiv.off - 18
+        rem = siv.num*(10**(self.prec-siv.off-18)) % oiv.num
         if rem:
             flt = rem/oiv.num #less than zero
             flt *= 10**18
