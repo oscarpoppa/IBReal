@@ -130,9 +130,9 @@ class IBReal:
         rem = siv.num * mult % oiv.num
         off = mlen + siv.off - oiv.off
         if rem:
-            flt = rem/oiv.num #less than one
-            flt *= 10**FLOAT_PREC #digits in float result
-            num *= 10**FLOAT_PREC
+            flt = rem / oiv.num #less than one
+            flt *= 10 ** FLOAT_PREC #digits in float result
+            num *= 10 ** FLOAT_PREC
             num += int(flt)
             off += FLOAT_PREC
         return type(self)(Ival(num, off), **self.kwargs)
