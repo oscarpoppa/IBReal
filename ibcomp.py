@@ -19,6 +19,9 @@ class IBComp:
             elif isinstance(raw, type(self)):
                 self.rcomp = raw.rcomp
                 self.icomp = raw.icomp
+            elif isinstance(raw, int):
+                self.rcomp = IBReal(raw)
+                self.icomp = IBReal((0, 0))
             elif isinstance(raw, IBReal):
                 self.rcomp = raw
                 self.icomp = IBReal((0, 0), **raw.kwargs)
@@ -34,7 +37,7 @@ class IBComp:
     @property #Chops off to fit float precision
     def length(self):
         slen = self.rcomp**2 + self.icomp**2
-        return sqrt(float(slen))
+        return IBReal(str(sqrt(float(slen))))
 
     @property
     def conj(self):
