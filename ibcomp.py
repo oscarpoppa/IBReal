@@ -75,14 +75,32 @@ class IBComp:
         return self.__mul__(other)
 
     def __imul__(self, other):
+        other = self.__mul__(other)
+        (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
+        return self
+
+    def __truediv__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp))
-        rcmp = IBReal(self.rcomp*other.rcomp-self.icomp*other.icomp, **self.rcomp.kwargs)
-        icmp = IBReal(self.rcomp*other.icomp+self.icomp*other.rcomp, **self.icomp.kwargs)
-        (self.rcomp, self.icomp) = (rcmp, icmp)
+        numer = self * other.conj
+        denom = (other * other.conj).rcomp
+        rcmp = numer.rcomp / denom
+        icmp = numer.icomp / denom
+        return type(self)((rcmp, icmp))
+
+    def __itruediv__(self, other):
+        other = self.__truediv__(other)
+        (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
         return self
+
+    def __rtruediv__(self, other):
+        if not isinstance(other, type(self)):
+            rcmp = IBReal(other, **self.rcomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            other = type(self)((rcmp, icmp))
+        return other.__truediv__(self)
 
     def __add__(self, other):
         if not isinstance(other, type(self)):
@@ -95,12 +113,8 @@ class IBComp:
         return self.__add__(other)
 
     def __iadd__(self, other):
-        if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
-            other = type(self)((rcmp, icmp))
-        self.rcomp = self.rcomp+other.rcomp
-        self.icomp = self.icomp+other.icomp
+        other = self.__add__(other)
+        (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
         return self
 
     def __sub__(self, other):
@@ -111,15 +125,15 @@ class IBComp:
         return type(self)((self.rcomp-other.rcomp, self.icomp-other.icomp))
 
     def __rsub__(self, other):
-        return -self.__sub__(other)
-
-    def __isub__(self, other):
         if not isinstance(other, type(self)):
             rcmp = IBReal(other, **self.rcomp.kwargs)
             icmp = IBReal((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp))
-        self.rcomp = self.rcomp-other.rcomp
-        self.icomp = self.icomp-other.icomp
+        return other.__sub__(self)
+
+    def __isub__(self, other):
+        other = self.__sub__(other)
+        (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
         return self
 
     def __pow__(self, oint):
@@ -135,15 +149,8 @@ class IBComp:
         return tmp 
 
     def __ipow__(self, oint):
-        if not isinstance(oint, int) or oint < 0:
-            raise ValueError('Only non-negative integers allowed')
-        tmp = type(self)((self.rcomp, self.icomp))
-        if oint == 0:
-            self.rcomp = IBReal((1, 0), **self.rcomp.kwargs)
-            self.icomp = IBReal((0, 0), **self.icomp.kwargs)
-        else: 
-            for _ in range(1, oint):
-                self *= tmp 
+        other = self.__pow__(oint)
+        (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
         return self 
 
     def __eq__(self, other):
