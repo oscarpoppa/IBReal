@@ -34,7 +34,7 @@ class IBComp:
     @property #Chops off to fit float precision
     def length(self):
         slen = self.rcomp**2 + self.icomp**2
-        return IBReal(sqrt(float(slen)))
+        return sqrt(float(slen))
 
     @property
     def conj(self):
