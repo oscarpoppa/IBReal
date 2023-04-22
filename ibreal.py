@@ -46,7 +46,7 @@ class IBReal:
         prec = self.prec if prec is None else prec
         if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
-        if  self._intlength(self.ival.num) > prec:
+        if  self._ilength > prec:
             neg = 1
             tval = str(self.ival.num)
             if tval[0] == '-':
@@ -68,6 +68,10 @@ class IBReal:
             return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival.off], txt[len(txt)-self.ival.off:] or '0')
         else:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
+ 
+    @property
+    def _ilength(self):
+        return int(log(abs(self.ival.num), 10)) + 1
             
     def _from_txt(self, val):
         val = val.replace(' ', '')
@@ -88,9 +92,6 @@ class IBReal:
         val = val[:dot] + val[dot+1:exp]
         off = len(val) - dot + ev
         return Ival(neg*int(val), off)
- 
-    def _intlength(self, num):
-        return int(log(abs(num), 10)) + 1
         
     def _align(self, siv, oiv):
         if siv.off > oiv.off:
@@ -122,7 +123,7 @@ class IBReal:
         self.trim(self.prec-18) #make roomfor remainder
         oiv = other.ival
         siv = self.ival
-        mlen = self.prec - self._intlength(siv.num) - 18
+        mlen = self.prec - self._ilength - 18
         mult = 10 ** mlen
         num = siv.num * mult // oiv.num
         rem = siv.num * mult % oiv.num
