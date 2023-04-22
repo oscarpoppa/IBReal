@@ -121,7 +121,7 @@ class IBReal:
     def __truediv__(self, other):
         if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
-        self.trim(self.prec-FLOAT_PREC) #make roomfor remainder
+        self.trim(self.prec-FLOAT_PREC) #make room for remainder
         oiv = other.ival
         siv = self.ival
         mlen = self.prec - self._ilength - FLOAT_PREC
