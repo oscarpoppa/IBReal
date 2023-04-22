@@ -1,4 +1,5 @@
 from collections import namedtuple
+from math import log
 
 Ival = namedtuple('Ival', 'num off')
 
@@ -45,7 +46,7 @@ class IBReal:
         prec = self.prec if prec is None else prec
         if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
-        if abs(self.ival.num) > 10**prec:
+        if  self._intlength(self.ival.num) > prec:
             neg = 1
             tval = str(self.ival.num)
             if tval[0] == '-':
@@ -87,6 +88,9 @@ class IBReal:
         val = val[:dot] + val[dot+1:exp]
         off = len(val) - dot + ev
         return Ival(neg*int(val), off)
+ 
+    def _intlength(self, num):
+        return int(log(abs(num), 10)) + 1
         
     def _align(self, siv, oiv):
         if siv.off > oiv.off:
@@ -115,11 +119,14 @@ class IBReal:
     def __truediv__(self, other):
         if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
+        self.trim(self.prec-18) #make roomfor remainder
         oiv = other.ival
         siv = self.ival
-        num = siv.num*(10**(self.prec-siv.off-18)) // oiv.num
-        off = self.prec - oiv.off - 18
-        rem = siv.num*(10**(self.prec-siv.off-18)) % oiv.num
+        mlen = self.prec - self._intlength(siv.num) - 18
+        mult = 10 ** mlen
+        num = siv.num * mult // oiv.num
+        rem = siv.num * mult % oiv.num
+        off = mlen + siv.off - oiv.off
         if rem:
             flt = rem/oiv.num #less than zero
             flt *= 10**18
@@ -129,7 +136,9 @@ class IBReal:
         return type(self)(Ival(num, off), **self.kwargs)
 
     def __rtruediv__(self, other):
-        return type(self)(1)/self.__truediv__(other)
+        if not isinstance(other, type(self)):
+            other = type(self)(other, **self.kwargs)
+        return other.__truediv__(self)
 
     def __itruediv__(self, other):
         self.ival = self.__truediv__(other).ival
@@ -157,7 +166,9 @@ class IBReal:
         return type(self)(ival, **self.kwargs)
 
     def __rsub__(self, other):
-        return -self.__sub__(other)
+        if not isinstance(other, type(self)):
+            other = type(self)(other, **self.kwargs)
+        return other.__sub__(self)
 
     def __isub__(self, other):
         self.ival = self.__sub__(other).ival
