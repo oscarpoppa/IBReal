@@ -72,6 +72,8 @@ class IBReal:
  
     @property
     def _ilength(self):
+        if self.ival.num == 0:
+            return 1
         return int(log(abs(self.ival.num), 10)) + 1
             
     def _from_txt(self, val):
