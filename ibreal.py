@@ -106,23 +106,31 @@ class IBReal:
         return (siv, oiv)
 
     def __mul__(self, other):
-        if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs)
+        try:
+            if not isinstance(other, type(self)):
+                other = type(self)(other, **self.kwargs)
+        except Exception:
+            return other.__rmul__(self)
         oiv = other.ival
         siv = self.ival
         ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
         return type(self)(ival, **self.kwargs)
 
     def __rmul__(self, other):
-        return self.__mul__(other) 
+        if not isinstance(other, type(self)):
+            other = type(self)(other, **self.kwargs)
+        return other.__mul__(self) 
 
     def __imul__(self, other):
         self.ival = self.__mul__(other).ival
         return self.trim()
 
     def __truediv__(self, other):
-        if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs)
+        try:
+            if not isinstance(other, type(self)):
+                other = type(self)(other, **self.kwargs)
+        except Exception:
+            return other.__rtruediv__(self)
         self.trim(self.prec-FLOAT_PREC) #make room for remainder
         oiv = other.ival
         siv = self.ival
@@ -149,22 +157,30 @@ class IBReal:
         return self.trim()
 
     def __add__(self, other):
-        if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs)
+        try:
+            if not isinstance(other, type(self)):
+                other = type(self)(other, **self.kwargs)
+        except Exception:
+            return other.__radd__(self)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num+oiv.num, siv.off)
         return type(self)(ival, **self.kwargs)
 
     def __radd__(self, other):
-        return self.__add__(other)
+        if not isinstance(other, type(self)):
+            other = type(self)(other, **self.kwargs)
+        return other.__add__(self)
 
     def __iadd__(self, other):
         self.ival = self.__add__(other).ival
         return self.trim()
 
     def __sub__(self, other):
-        if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs)
+        try:
+            if not isinstance(other, type(self)):
+                other = type(self)(other, **self.kwargs)
+        except Exception:
+            return other.__rsub(self)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num-oiv.num, siv.off)
         return type(self)(ival, **self.kwargs)
