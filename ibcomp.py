@@ -26,7 +26,7 @@ class IBComp:
                 self.rcomp = raw
                 self.icomp = IBReal((0, 0), **raw.kwargs)
             else:
-                (self.rcomp, self.icomp) = self._from_txt(str(raw))
+                (self.rcomp, self.icomp) = self._from_raw(str(raw))
         except Exception as e:
             raise ValueError('Failed to coerce {}:{} to IBReal pair'.format(type(raw), raw)) from e 
 
@@ -50,7 +50,7 @@ class IBComp:
         self.icomp.trim(prec)
         return self
 
-    def _from_txt(self, val): #looking for a+bi
+    def _from_raw(self, val): #looking for a+bi
         val = val.replace(' ', '')
         plus = val.find('+')
         eye = val.find('i')

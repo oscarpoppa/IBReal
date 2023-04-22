@@ -36,7 +36,7 @@ class IBReal:
             elif isinstance(raw, int):
                 self.ival = Ival(raw, 0)
             else: # coerce text or numbers to IBReal
-                self.ival = self._from_txt(str(raw))
+                self.ival = self._from_raw(raw)
             self.trim()
         except Exception as e:
             raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
@@ -76,25 +76,28 @@ class IBReal:
             return 1
         return int(log(abs(self.ival.num), 10)) + 1
             
-    def _from_txt(self, val):
-        val = val.replace(' ', '')
-        if val[0] == '-':
+    def _from_raw(self, raw):
+        straw = str(raw)
+        if hasattr(raw, 'rcomp'):
+            straw = str(raw.rcomp)
+        straw = straw.replace(' ', '')
+        if straw[0] == '-':
             neg = -1
-            val = val[1:]
+            straw = straw[1:]
         else:
             neg = 1
-        exp = val.find('e-')
+        exp = straw.find('e-')
         if exp == -1:
             exp = None
             ev = 0
         else:
-            ev = int(val[exp+2:])
-        dot = val.find('.')
+            ev = int(straw[exp+2:])
+        dot = straw.find('.')
         if dot == -1:
-            dot = len(val[:exp])
-        val = val[:dot] + val[dot+1:exp]
-        off = len(val) - dot + ev
-        return Ival(neg*int(val), off)
+            dot = len(straw[:exp])
+        straw = straw[:dot] + straw[dot+1:exp]
+        off = len(straw) - dot + ev
+        return Ival(neg*int(straw), off)
         
     def _align(self, siv, oiv):
         if siv.off > oiv.off:
