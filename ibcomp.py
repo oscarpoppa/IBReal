@@ -75,7 +75,11 @@ class IBComp:
         return type(self)((rcmp, icmp))
 
     def __rmul__(self, other):
-        return self.__mul__(other)
+        if not isinstance(other, type(self)):
+            rcmp = IBReal(other, **self.rcomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            other = type(self)((rcmp, icmp))
+        return other.__mul__(self)
 
     def __imul__(self, other):
         other = self.__mul__(other)
@@ -113,7 +117,11 @@ class IBComp:
         return type(self)((self.rcomp+other.rcomp, self.icomp+other.icomp))
 
     def __radd__(self, other):
-        return self.__add__(other)
+        if not isinstance(other, type(self)):
+            rcmp = IBReal(other, **self.rcomp.kwargs)
+            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            other = type(self)((rcmp, icmp))
+        return other.__add__(self)
 
     def __iadd__(self, other):
         other = self.__add__(other)
