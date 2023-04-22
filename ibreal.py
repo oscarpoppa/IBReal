@@ -180,7 +180,7 @@ class IBReal:
             if not isinstance(other, type(self)):
                 other = type(self)(other, **self.kwargs)
         except Exception:
-            return other.__rsub(self)
+            return other.__rsub__(self)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num-oiv.num, siv.off)
         return type(self)(ival, **self.kwargs)
