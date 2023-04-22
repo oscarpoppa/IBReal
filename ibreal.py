@@ -128,7 +128,7 @@ class IBReal:
         rem = siv.num * mult % oiv.num
         off = mlen + siv.off - oiv.off
         if rem:
-            flt = rem/oiv.num #less than zero
+            flt = rem/oiv.num #less than one
             flt *= 10**18
             num *= 10**18
             num += int(flt)
