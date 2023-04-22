@@ -1,6 +1,7 @@
 from collections import namedtuple
 from math import log
 
+FLOAT_PREC = 16
 Ival = namedtuple('Ival', 'num off')
 
 class IBReal:
@@ -57,7 +58,7 @@ class IBReal:
         return self
 
     @property
-    def kwargs(self): #read-only kwargs
+    def kwargs(self):
         return {'prec':self.prec, 'trim_on':self.trim_on}
 
     @property
@@ -120,20 +121,20 @@ class IBReal:
     def __truediv__(self, other):
         if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
-        self.trim(self.prec-18) #make roomfor remainder
+        self.trim(self.prec-FLOAT_PREC) #make roomfor remainder
         oiv = other.ival
         siv = self.ival
-        mlen = self.prec - self._ilength - 18
+        mlen = self.prec - self._ilength - FLOAT_PREC
         mult = 10 ** mlen
         num = siv.num * mult // oiv.num
         rem = siv.num * mult % oiv.num
         off = mlen + siv.off - oiv.off
         if rem:
             flt = rem/oiv.num #less than one
-            flt *= 10**18
-            num *= 10**18
+            flt *= 10**FLOAT_PREC #digits in float result
+            num *= 10**FLOAT_PREC
             num += int(flt)
-            off += 18
+            off += FLOAT_PREC
         return type(self)(Ival(num, off), **self.kwargs)
 
     def __rtruediv__(self, other):
