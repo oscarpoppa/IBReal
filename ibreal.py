@@ -103,10 +103,10 @@ class IBReal:
 
     def _align(self, siv, oiv):
         if siv.off > oiv.off:
-            pad = 10 ** (siv.off-oiv.off)
+            pad = 10**(siv.off-oiv.off)
             oiv = Ival(pad*oiv.num, siv.off)
         else:
-            pad = 10 ** (oiv.off-siv.off)
+            pad = 10**(oiv.off-siv.off)
             siv = Ival(pad*siv.num, oiv.off)
         return (siv, oiv)
 
@@ -139,7 +139,7 @@ class IBReal:
         siv = self.ival
         oiv = other.ival
         mlen = self.prec + other._ilength - self._ilength
-        num = siv.num * 10 ** mlen  // oiv.num
+        num = siv.num * 10**mlen  // oiv.num
         off = mlen + siv.off - oiv.off
         return type(self)(Ival(num, off), **self.kwargs).trim()
 
