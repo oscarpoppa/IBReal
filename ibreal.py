@@ -137,7 +137,6 @@ class IBReal:
         oiv = other.ival
         mlen = self.prec + other._ilength - self._ilength
         num = siv.num * 10 ** mlen  // oiv.num
-        rem = siv.num * 10 ** mlen  % oiv.num
         off = mlen + siv.off - oiv.off
         return type(self)(Ival(num, off), **self.kwargs).trim()
 
