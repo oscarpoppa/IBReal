@@ -202,6 +202,9 @@ class IBReal:
         self.ival = self.__pow__(oint).ival
         return self.trim()
 
+    def __int__(self):
+        return int(self.__float__())
+
     def __float__(self):
         return self.ival.num/10**self.ival.off
 
