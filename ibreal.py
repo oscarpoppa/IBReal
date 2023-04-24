@@ -150,7 +150,7 @@ class IBReal:
             num *= 10 ** FLOAT_PREC
             num += int(flt)
             off += FLOAT_PREC
-        return type(self)(Ival(num, off), **self.kwargs)
+        return type(self)(Ival(num, off), **self.kwargs).trim()
 
     def __rtruediv__(self, other):
         print('r_rtruediv ')
