@@ -51,7 +51,7 @@ class IBComp:
         return type(self)((rcmp, icmp))
 
     def trim(self, prec):
-        trm = self.__dtrim__()
+        trm = self.dtrim(prec=prec)
         (self.rcomp, self.icomp) = (trm.rcomp, trm.icomp)
         return self
 
