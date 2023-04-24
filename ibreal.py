@@ -191,14 +191,16 @@ class IBReal:
         return self.trim()
 
     def __pow__(self, oint):
-        if not isinstance(oint, int) or oint < 0:
-            raise ValueError('Only non-negative integers allowed')
+        if not isinstance(oint, int):
+            raise ValueError('Only integers allowed')
         tmp = type(self)(self.ival, **self.kwargs)
         if oint == 0:
             tmp.ival = Ival(1, 0)
         else:
-            for _ in range(1, oint):
+            for _ in range(1, abs(oint)):
                 tmp *= self
+        if oint < 0:
+            return type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
         return tmp 
         
     def __ipow__(self, oint):
