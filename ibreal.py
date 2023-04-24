@@ -129,20 +129,16 @@ class IBReal:
         return self.trim()
 
     def __truediv__(self, other):
-        print('r_truediv ')
         try:
             if not isinstance(other, type(self)):
                 other = type(self)(other, **self.kwargs)
         except Exception:
             return other.__rtruediv__(self)
         siv = self.ival
-        slen = self._ilength
         oiv = other.ival
-        olen = other._ilength 
-        mlen = self.prec + olen - slen - FLOAT_PREC
-        mult = 10 ** mlen
-        num = siv.num * mult // oiv.num
-        rem = siv.num * mult % oiv.num
+        mlen = self.prec + other._ilength - self._ilength - FLOAT_PREC
+        num = siv.num * 10 ** mlen  // oiv.num
+        rem = siv.num * 10 ** mlen  % oiv.num
         off = mlen + siv.off - oiv.off
         if rem:
             flt = rem / oiv.num #less than one
@@ -153,7 +149,6 @@ class IBReal:
         return type(self)(Ival(num, off), **self.kwargs).trim()
 
     def __rtruediv__(self, other):
-        print('r_rtruediv ')
         if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
         return other.__truediv__(self)
