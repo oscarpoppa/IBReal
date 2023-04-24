@@ -40,9 +40,7 @@ class IBReal:
         except Exception as e:
             raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
 
-    def trim(self, prec=None):
-        if not self.trim_on:
-            return self 
+    def dtrim(self, prec=None):
         prec = self.prec if prec is None else prec
         if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
@@ -53,7 +51,14 @@ class IBReal:
                 tval = tval[1:]
                 neg = -1
             tlen = len(tval)
-            self.ival = Ival(neg*int(tval[:prec]), self.ival.off-tlen+prec)
+            return type(self)(Ival(neg*int(tval[:prec]), self.ival.off-tlen+prec))
+        return self
+
+    def trim(self, prec=None):
+        if not self.trim_on:
+            return self 
+        prec = self.prec if prec is None else prec
+        self.ival = self.dtrim(prec=prec).ival
         return self
 
     @property

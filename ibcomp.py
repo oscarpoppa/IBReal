@@ -43,11 +43,16 @@ class IBComp:
     def conj(self):
         return type(self)((self.rcomp, -self.icomp))
 
-    def trim(self, prec):
+    def dtrim(self, prec):
         if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
-        self.rcomp.trim(prec)
-        self.icomp.trim(prec)
+        rcmp = self.rcomp.dtrim(prec)
+        icmp = self.icomp.dtrim(prec)
+        return type(self)((rcmp, icmp))
+
+    def trim(self, prec):
+        trm = self.__dtrim__()
+        (self.rcomp, self.icomp) = (trm.rcomp, trm.icomp)
         return self
 
     def _from_raw(self, val): #looking for a+bi
