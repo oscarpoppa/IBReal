@@ -139,7 +139,7 @@ class IBReal:
         slen = self._ilength
         oiv = other.ival
         olen = other._ilength 
-        mlen = self.prec + olen - slen
+        mlen = self.prec + olen - slen - FLOAT_PREC
         mult = 10 ** mlen
         num = siv.num * mult // oiv.num
         rem = siv.num * mult % oiv.num
