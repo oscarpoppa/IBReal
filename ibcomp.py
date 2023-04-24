@@ -5,7 +5,7 @@ class IBComp:
     """
     IBComp is a complex number that uses the precision of IBReal numbers. The math interface offers the 
     same ioperations IBReal offers.
-  
+
     Usage:
     comp = IBComp(rcomp, icomp)
 
@@ -28,7 +28,7 @@ class IBComp:
             else:
                 (self.rcomp, self.icomp) = self._from_raw(str(raw))
         except Exception as e:
-            raise ValueError('Failed to coerce {}:{} to IBReal pair'.format(type(raw), raw)) from e 
+            raise ValueError('Failed to coerce {}:{} to IBReal pair'.format(type(raw), raw)) from e
 
     @property #still within our precision space. May be helpful for comparisons.
     def lengthsq(self):
@@ -159,15 +159,15 @@ class IBComp:
         if oint == 0:
             tmp.rcomp = IBReal((1, 0), **self.rcomp.kwargs)
             tmp.icomp = IBReal((0, 0), **self.icomp.kwargs)
-        else: 
+        else:
             for _ in range(1, oint):
-                tmp *= self 
-        return tmp 
+                tmp *= self
+        return tmp
 
     def __ipow__(self, oint):
         other = self.__pow__(oint)
         (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
-        return self 
+        return self
 
     def __eq__(self, other):
         if not isinstance(other, type(self)):

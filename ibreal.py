@@ -38,7 +38,7 @@ class IBReal:
                 self.ival = self._from_raw(raw)
             self.trim()
         except Exception as e:
-            raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e 
+            raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e
 
     def dtrim(self, prec=None):
         prec = self.prec if prec is None else prec
@@ -56,7 +56,7 @@ class IBReal:
 
     def trim(self, prec=None):
         if not self.trim_on:
-            return self 
+            return self
         prec = self.prec if prec is None else prec
         self.ival = self.dtrim(prec=prec).ival
         return self
@@ -73,13 +73,13 @@ class IBReal:
             return '{}{}.{}'.format(neg, txt[:len(txt)-self.ival.off], txt[len(txt)-self.ival.off:] or '0')
         else:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
- 
+
     @property
     def _ilength(self):
         if self.ival.num == 0:
             return 1
         return int(log(abs(self.ival.num), 10)) + 1
-            
+
     def _from_raw(self, raw):
         straw = str(raw.rcomp) if hasattr(raw, 'rcomp') else str(raw)
         straw = straw.replace(' ', '')
@@ -100,7 +100,7 @@ class IBReal:
         straw = straw[:dot] + straw[dot+1:exp]
         off = len(straw) - dot + ev
         return Ival(neg*int(straw), off)
-        
+
     def _align(self, siv, oiv):
         if siv.off > oiv.off:
             pad = 10 ** (siv.off-oiv.off)
@@ -124,7 +124,7 @@ class IBReal:
     def __rmul__(self, other):
         if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
-        return other.__mul__(self) 
+        return other.__mul__(self)
 
     def __imul__(self, other):
         self.ival = self.__mul__(other).ival
@@ -201,8 +201,8 @@ class IBReal:
                 tmp *= self
         if oint < 0:
             return type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
-        return tmp 
-        
+        return tmp
+
     def __ipow__(self, oint):
         self.ival = self.__pow__(oint).ival
         return self.trim()
@@ -218,7 +218,7 @@ class IBReal:
 
     def __abs__(self):
         return type(self)(Ival(abs(self.ival.num), self.ival.off), **self.kwargs)
-        
+
     def __eq__(self, other):
         if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
@@ -242,7 +242,7 @@ class IBReal:
             other = type(self)(other, **self.kwargs)
         (siv, oiv) = self._align(self.ival, other.ival)
         return siv.num <= oiv.num
-    
+
     def __ge__(self, other):
         if not isinstance(other, type(self)):
             other = type(self)(other, **self.kwargs)
