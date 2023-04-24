@@ -34,7 +34,7 @@ class IBReal:
                 self.trim_on = raw.trim_on
             elif isinstance(raw, int):
                 self.ival = Ival(raw, 0)
-            else: # coerce text or numbers to IBReal
+            else: # coerce text or floats to IBReal
                 self.ival = self._from_raw(raw)
             self.trim()
         except Exception as e:
@@ -81,9 +81,7 @@ class IBReal:
         return int(log(abs(self.ival.num), 10)) + 1
             
     def _from_raw(self, raw):
-        straw = str(raw)
-        if hasattr(raw, 'rcomp'):
-            straw = str(raw.rcomp)
+        straw = str(raw.rcomp) if hasattr(raw, 'rcomp') else str(raw)
         straw = straw.replace(' ', '')
         if straw[0] == '-':
             neg = -1
