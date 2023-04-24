@@ -140,12 +140,11 @@ class IBReal:
         num = siv.num * 10 ** mlen  // oiv.num
         rem = siv.num * 10 ** mlen  % oiv.num
         off = mlen + siv.off - oiv.off
-        if rem:
-            flt = rem / oiv.num #less than one
-            flt *= 10 ** FLOAT_PREC #digits in float result
-            num *= 10 ** FLOAT_PREC
-            num += int(flt)
-            off += FLOAT_PREC
+        flt = rem / oiv.num #less than one
+        flt *= 10 ** FLOAT_PREC #digits in float result
+        num *= 10 ** FLOAT_PREC
+        num += int(flt)
+        off += FLOAT_PREC
         return type(self)(Ival(num, off), **self.kwargs).trim()
 
     def __rtruediv__(self, other):
