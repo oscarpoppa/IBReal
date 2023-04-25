@@ -153,15 +153,19 @@ class IBComp:
         return self
 
     def __pow__(self, oint):
-        if not isinstance(oint, int) or oint < 0:
-            raise ValueError('Only non-negative integers allowed')
+        if not isinstance(oint, int):
+            raise ValueError('Only integers allowed')
         tmp = type(self)((self.rcomp, self.icomp))
         if oint == 0:
             tmp.rcomp = IBReal((1, 0), **self.rcomp.kwargs)
             tmp.icomp = IBReal((0, 0), **self.icomp.kwargs)
         else:
-            for _ in range(1, oint):
+            for _ in range(1, abs(oint)):
                 tmp *= self
+            if oint < 0:
+                rcmp = IBReal((1, 0), **self.rcomp.kwargs)
+                icmp = IBReal((0, 0), **self.icomp.kwargs)
+                return type(self)((rcmp, icmp)).__truediv__(tmp)
         return tmp
 
     def __ipow__(self, oint):

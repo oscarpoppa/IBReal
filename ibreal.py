@@ -191,17 +191,23 @@ class IBReal:
         return self.trim()
 
     def __pow__(self, oint):
-        if not isinstance(oint, int):
-            raise ValueError('Only integers allowed')
         tmp = type(self)(self.ival, **self.kwargs)
         if oint == 0:
             tmp.ival = Ival(1, 0)
-        else:
+        elif isinstance(oint, int):
             for _ in range(1, abs(oint)):
                 tmp *= self
-        if oint < 0:
-            return type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
-        return tmp
+            if oint < 0:
+                tmp = type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
+        else:
+            ltmp = iblog(self, prec=self.prec)
+            tmp = ibexp(ltmp*oint, prec=self.prec)
+        return tmp.trim(self.prec)
+
+    def __rpow__(self, oint):
+        if not isinstance(oint, type(self)):
+            oint = type(self)(oint)
+        return oint.__pow__(self)
 
     def __ipow__(self, oint):
         self.ival = self.__pow__(oint).ival
@@ -261,3 +267,4 @@ class IBReal:
     def __repr__(self):
         return self.trim()._repr
 
+from ibfuncs import ibexp, iblog
