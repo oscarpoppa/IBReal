@@ -1,6 +1,3 @@
-from ibreal import IBReal
-from math import sqrt
-
 class IBComp:
     """
     IBComp is a complex number that uses the precision of IBReal numbers. The math interface offers the 
@@ -30,14 +27,10 @@ class IBComp:
         except Exception as e:
             raise ValueError('Failed to coerce {}:{} to IBReal pair'.format(type(raw), raw)) from e
 
-    @property #still within our precision space. May be helpful for comparisons.
-    def lengthsq(self):
-        return self.rcomp**2 + self.icomp**2
-
     @property #Chops off to fit float precision
     def length(self):
         slen = self.rcomp**2 + self.icomp**2
-        return IBReal(str(sqrt(float(slen))))
+        return ibsqrt(slen)
 
     @property
     def conj(self):
@@ -189,3 +182,5 @@ class IBComp:
     def __repr__(self):
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
+from .ibreal import IBReal
+from .ibfuncs import ibsqrt

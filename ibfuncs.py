@@ -1,5 +1,3 @@
-from ibreal import IBReal as R
-
 def fact_gen():
     cnt = 0
     val = 1
@@ -11,11 +9,11 @@ def fact_gen():
 def ibexp(val, base='e', prec=None):
     if not isinstance(val, R):
         val = R(iblog(base)*val)
-    rsum = R((0,0))
+    rsum = R((0, 0))
     fac = fact_gen()
     one = R((1, 0))
     prec = prec if prec else val.prec
-    small = one / 10**prec
+    small = one / 10**(prec+1)
     idx = 0
     while True:
         term = val**idx / next(fac)
@@ -40,7 +38,7 @@ def iblog(val, prec=None):
         val = one / val
     val = one - val
     prec = prec if prec else val.prec
-    small = one / 10**prec
+    small = one / 10**(prec+1)
     idx = 1 
     while True:
         term = neg1 * (val)**idx / idx
@@ -50,3 +48,11 @@ def iblog(val, prec=None):
         idx += 1
     return neg * rsum
 
+def ibsqrt(val, prec=None):
+    lv = iblog(val, prec=prec)
+    half = R((5, 1))
+    return ibexp(half*lv)
+
+
+
+from .ibreal import IBReal as R

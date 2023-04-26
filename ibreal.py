@@ -267,4 +267,4 @@ class IBReal:
     def __repr__(self):
         return self.trim()._repr
 
-from ibfuncs import ibexp, iblog
+from .ibfuncs import ibexp, iblog
