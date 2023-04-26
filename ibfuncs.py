@@ -49,10 +49,14 @@ def iblog(val, prec=None):
     return neg * rsum
 
 def ibsqrt(val, prec=None):
+    if not isinstance(val, R):
+        val = R(val)
+    if val <= 0:
+        raise ValueError('Positive numbers only')
+    prec = prec if prec else val.prec
     lv = iblog(val, prec=prec)
     half = R((5, 1))
     return ibexp(half*lv)
 
-
-
 from .ibreal import IBReal as R
+
