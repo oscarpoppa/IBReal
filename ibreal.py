@@ -200,8 +200,8 @@ class IBReal:
             if oint < 0:
                 tmp = type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
         else:
-            ltmp = iblog(self, prec=self.prec)
-            tmp = ibexp(ltmp*oint, prec=self.prec)
+            ltmp = iblog(self)
+            tmp = ibexp(ltmp*oint)
         return tmp.trim(self.prec)
 
     def __rpow__(self, oint):

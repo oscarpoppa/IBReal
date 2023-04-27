@@ -51,7 +51,7 @@ def ibsqrt(val):
         val = R(val)
     if val <= 0:
         raise ValueError('Positive numbers only')
-    lv = iblog(val, **val.kwargs)
+    lv = iblog(val)
     half = R((5, 1), **val.kwargs)
     return ibexp(half*lv)
 
