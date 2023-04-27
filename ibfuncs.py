@@ -9,7 +9,7 @@ def fact_gen():
 def ibexp(val, prec=None):
     if not isinstance(val, R):
         val = R(val)
-    prec = prec if prec else val.prec
+    prec = val.prec if prec is None else prec
     rsum = R((0, 0), prec=prec)
     fac = fact_gen()
     one = R((1, 0), prec=prec)
@@ -29,7 +29,7 @@ def iblog(val, prec=None):
         val = R(val)
     if val <= 0:
         raise ValueError('Positive numbers only')
-    prec = prec if prec else val.prec
+    prec = val.prec if prec is None else prec
     one = R((1, 0), prec=prec)
     neg = R((1, 0), prec=prec)
     neg1 = R((-1,0), prec=prec)
@@ -53,7 +53,7 @@ def ibsqrt(val, prec=None):
         val = R(val)
     if val <= 0:
         raise ValueError('Positive numbers only')
-    prec = prec if prec else val.prec
+    prec = val.prec if prec is None else prec
     lv = iblog(val, prec=prec)
     half = R((5, 1), prec=prec)
     return ibexp(half*lv, prec=prec)
