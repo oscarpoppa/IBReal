@@ -6,14 +6,13 @@ def fact_gen():
         cnt += 1
         val *= cnt
     
-def ibexp(val, prec=None):
+def ibexp(val):
     if not isinstance(val, R):
         val = R(val)
-    prec = val.prec if prec is None else prec
-    rsum = R((0, 0), prec=prec)
+    rsum = R((0, 0), **val.kwargs)
     fac = fact_gen()
-    one = R((1, 0), prec=prec)
-    small = one / 10**(prec+1)
+    one = R((1, 0), **val.kwargs)
+    small = one / 10**(val.prec+1)
     idx = 0
     while True:
         term = val**idx / next(fac)
@@ -24,21 +23,20 @@ def ibexp(val, prec=None):
     fac.close()
     return rsum
 
-def iblog(val, prec=None):
+def iblog(val):
     if not isinstance(val, R):
         val = R(val)
     if val <= 0:
         raise ValueError('Positive numbers only')
-    prec = val.prec if prec is None else prec
-    one = R((1, 0), prec=prec)
-    neg = R((1, 0), prec=prec)
-    neg1 = R((-1,0), prec=prec)
-    rsum = R((0, 0), prec=prec)
+    one = R((1, 0), **val.kwargs)
+    neg = R((1, 0), **val.kwargs)
+    neg1 = R((-1, 0), **val.kwargs)
+    rsum = R((0, 0), **val.kwargs)
     if val > 1:
-        neg = R((-1, 0), prec=prec)
+        neg = R((-1, 0), **val.kwargs)
         val = one / val
     val = one - val
-    small = one / 10**(prec+1)
+    small = one / 10**(val.prec+1)
     idx = 1 
     while True:
         term = neg1 * (val)**idx / idx
@@ -48,15 +46,14 @@ def iblog(val, prec=None):
         idx += 1
     return neg * rsum
 
-def ibsqrt(val, prec=None):
+def ibsqrt(val):
     if not isinstance(val, R):
         val = R(val)
     if val <= 0:
         raise ValueError('Positive numbers only')
-    prec = val.prec if prec is None else prec
-    lv = iblog(val, prec=prec)
-    half = R((5, 1), prec=prec)
-    return ibexp(half*lv, prec=prec)
+    lv = iblog(val, **val.kwargs)
+    half = R((5, 1), **val.kwargs)
+    return ibexp(half*lv)
 
 from .ibreal import IBReal as R
 
