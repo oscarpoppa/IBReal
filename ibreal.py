@@ -51,7 +51,7 @@ class IBReal:
                 tval = tval[1:]
                 neg = -1
             tlen = len(tval)
-            return type(self)(Ival(neg*int(tval[:prec]), self.ival.off-tlen+prec))
+            return type(self)(Ival(neg*int(tval[:prec]), self.ival.off-tlen+prec), **self.kwargs)
         return self
 
     def trim(self, prec=None):
@@ -206,7 +206,7 @@ class IBReal:
 
     def __rpow__(self, oint):
         if not isinstance(oint, type(self)):
-            oint = type(self)(oint)
+            oint = type(self)(oint, **self.kwargs)
         return oint.__pow__(self)
 
     def __ipow__(self, oint):
