@@ -10,9 +10,9 @@ def ibexp(val):
     if not isinstance(val, R):
         val = R(val)
     rsum = R((0, 0), **val.kwargs)
-    fac = fact_gen()
     one = R((1, 0), **val.kwargs)
     small = one / 10**(val.prec+1)
+    fac = fact_gen()
     idx = 0
     while True:
         term = val**idx / next(fac)
