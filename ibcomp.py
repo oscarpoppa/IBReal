@@ -13,17 +13,17 @@ class IBComp:
         self.trim_on = trim_on
         try:
             if isinstance(raw, tuple):
-                self.rcomp = raw[0] if isinstance(raw[0], IBReal) else IBReal(raw[0], **self.kwargs)
-                self.icomp = raw[1] if isinstance(raw[1], IBReal) else IBReal(raw[1], **self.kwargs)
+                self.rcomp = raw[0] if isinstance(raw[0], R) else R(raw[0], **self.kwargs)
+                self.icomp = raw[1] if isinstance(raw[1], R) else R(raw[1], **self.kwargs)
             elif isinstance(raw, type(self)):
                 self.rcomp = raw.rcomp
                 self.icomp = raw.icomp
             elif isinstance(raw, int):
-                self.rcomp = IBReal(raw, **self.kwargs)
-                self.icomp = IBReal((0, 0), **self.kwargs)
-            elif isinstance(raw, IBReal):
+                self.rcomp = R(raw, **self.kwargs)
+                self.icomp = R((0, 0), **self.kwargs)
+            elif isinstance(raw, R):
                 self.rcomp = raw
-                self.icomp = IBReal((0, 0), **raw.kwargs)
+                self.icomp = R((0, 0), **raw.kwargs)
             else:
                 (self.rcomp, self.icomp) = self._from_raw(str(raw))
         except Exception as e:
@@ -59,29 +59,29 @@ class IBComp:
         plus = val.find('+')
         eye = val.find('i')
         if plus == -1 and eye == -1: #real number
-            return (IBReal(val, **self.kwargs), IBReal((0, 0), **self.kwargs))
+            return (R(val, **self.kwargs), R((0, 0), **self.kwargs))
         elif plus == -1 and eye != -1: #imag number
             if val in ('i', '-i'): #allow bare-i notation
                 val = val.replace('i', '1')
             else:
                 val = val[:eye]
-            return (IBReal((0, 0), **self.kwargs), IBReal(val, **self.kwargs))
+            return (R((0, 0), **self.kwargs), R(val, **self.kwargs))
         elif plus != -1 and eye != -1: #comp number
-            return (IBReal(val[:plus], **self.kwargs), IBReal(val[plus+1:eye], **self.kwargs))
+            return (R(val[:plus], **self.kwargs), R(val[plus+1:eye], **self.kwargs))
 
     def __mul__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
-        rcmp = IBReal(self.rcomp*other.rcomp-self.icomp*other.icomp, **self.rcomp.kwargs)
-        icmp = IBReal(self.rcomp*other.icomp+self.icomp*other.rcomp, **self.icomp.kwargs)
+        rcmp = R(self.rcomp*other.rcomp-self.icomp*other.icomp, **self.rcomp.kwargs)
+        icmp = R(self.rcomp*other.icomp+self.icomp*other.rcomp, **self.icomp.kwargs)
         return type(self)((rcmp, icmp), **self.kwargs)
 
     def __rmul__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         return other.__mul__(self)
 
@@ -92,8 +92,8 @@ class IBComp:
 
     def __truediv__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         numer = self * other.conj
         denom = (other * other.conj).rcomp
@@ -108,22 +108,22 @@ class IBComp:
 
     def __rtruediv__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         return other.__truediv__(self)
 
     def __add__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         return type(self)((self.rcomp+other.rcomp, self.icomp+other.icomp), **self.kwargs)
 
     def __radd__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         return other.__add__(self)
 
@@ -134,15 +134,15 @@ class IBComp:
 
     def __sub__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         return type(self)((self.rcomp-other.rcomp, self.icomp-other.icomp), **self.kwargs)
 
     def __rsub__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         return other.__sub__(self)
 
@@ -156,14 +156,14 @@ class IBComp:
             raise ValueError('Only integers allowed')
         tmp = type(self)((self.rcomp, self.icomp))
         if oint == 0:
-            tmp.rcomp = IBReal((1, 0), **self.rcomp.kwargs)
-            tmp.icomp = IBReal((0, 0), **self.icomp.kwargs)
+            tmp.rcomp = R((1, 0), **self.rcomp.kwargs)
+            tmp.icomp = R((0, 0), **self.icomp.kwargs)
         else:
             for _ in range(1, abs(oint)):
                 tmp *= self
             if oint < 0:
-                rcmp = IBReal((1, 0), **self.rcomp.kwargs)
-                icmp = IBReal((0, 0), **self.icomp.kwargs)
+                rcmp = R((1, 0), **self.rcomp.kwargs)
+                icmp = R((0, 0), **self.icomp.kwargs)
                 return type(self)((rcmp, icmp), **self.kwargs).__truediv__(tmp)
         return tmp
 
@@ -174,8 +174,8 @@ class IBComp:
 
     def __eq__(self, other):
         if not isinstance(other, type(self)):
-            rcmp = IBReal(other, **self.rcomp.kwargs)
-            icmp = IBReal((0, 0), **self.icomp.kwargs)
+            rcmp = R(other, **self.rcomp.kwargs)
+            icmp = R((0, 0), **self.icomp.kwargs)
             other = type(self)((rcmp, icmp), **self.kwargs)
         return self.rcomp == other.rcomp and self.icomp == other.icomp
 
@@ -188,5 +188,5 @@ class IBComp:
     def __repr__(self):
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
-from .ibreal import IBReal
+from .ibreal import IBReal as R
 from .ibfuncs import ibsqrt
