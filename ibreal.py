@@ -190,27 +190,27 @@ class IBReal:
         self.ival = self.__sub__(other).ival
         return self.trim()
 
-    def __pow__(self, oint):
+    def __pow__(self, other):
         tmp = type(self)(self.ival, **self.kwargs)
-        if oint == 0:
+        if other == 0:
             tmp.ival = Ival(1, 0)
-        elif isinstance(oint, int):
-            for _ in range(1, abs(oint)):
+        elif isinstance(other, int):
+            for _ in range(1, abs(other)):
                 tmp *= self
-            if oint < 0:
+            if other < 0:
                 tmp = type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
         else:
             ltmp = iblog(self)
-            tmp = ibexp(ltmp*oint)
+            tmp = ibexp(ltmp*other)
         return tmp.trim(self.prec)
 
-    def __rpow__(self, oint):
-        if not isinstance(oint, type(self)):
-            oint = type(self)(oint, **self.kwargs)
-        return oint.__pow__(self)
+    def __rpow__(self, other):
+        if not isinstance(other, type(self)):
+            other = type(self)(other, **self.kwargs)
+        return other.__pow__(self)
 
-    def __ipow__(self, oint):
-        self.ival = self.__pow__(oint).ival
+    def __ipow__(self, other):
+        self.ival = self.__pow__(other).ival
         return self.trim()
 
     def __int__(self):
