@@ -49,8 +49,10 @@ def iblog(val):
 def ibsqrt(val):
     if not isinstance(val, R):
         val = R(val)
-    if val <= 0:
-        raise ValueError('Positive numbers only')
+    if val < 0:
+        raise ValueError('Non-negative numbers only')
+    if val == 0:
+        return val
     lv = iblog(val)
     half = R((5, 1), **val.kwargs)
     return ibexp(half*lv)
