@@ -33,7 +33,7 @@ class IBComp:
     def kwargs(self):
         return {'prec':self.prec, 'trim_on':self.trim_on}
 
-    @property #Chops off to fit float precision
+    @property
     def length(self):
         slen = self.rcomp**2 + self.icomp**2
         return ibsqrt(slen)
