@@ -33,7 +33,7 @@ def iblog(val):
     neg1 = R((-1, 0), **val.kwargs)
     rsum = R((0, 0), **val.kwargs)
     if val > 1:
-        neg = R((-1, 0), **val.kwargs)
+        neg = -neg
         val = one / val
     val = one - val
     small = one / 10**(val.prec+1)
