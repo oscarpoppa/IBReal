@@ -1,3 +1,22 @@
+from collections import namedtuple
+
+Memo = namedtuple('Memo','ival prec trim_on')
+
+class MemoizeOneVal:
+    def __init__(self):
+        self.tbl = dict()
+
+    def __call__(self, func):
+        def inner(*args):
+            tmp = args[0] if isinstance(args[0], R) else R(args[0])
+            key = Memo(tmp.ival, **tmp.kwargs)
+            if key in self.tbl:
+                return self.tbl[key]
+            ret = func(tmp)
+            self.tbl[key] = ret
+            return ret
+        return inner
+
 def _fact_gen():
     # 1,1,2,6,...
     cnt = 0
@@ -81,8 +100,10 @@ def pi(**kwargs):
         idx += one 
     return rsum
 
+ibarctanmemo = MemoizeOneVal()
+
 # callable
-ibarctan = IBArcTan()
+ibarctan = ibarctanmemo(IBArcTan())
 
 def ibexp(val):
     if not isinstance(val, R):
@@ -101,6 +122,9 @@ def ibexp(val):
     fac.close()
     return rsum
 
+iblogmemo = MemoizeOneVal()
+
+@iblogmemo
 def iblog(val):
     # can be SLOW
     if not isinstance(val, R):
@@ -125,6 +149,9 @@ def iblog(val):
         idx += one 
     return neg * rsum
 
+ibsqrtmemo = MemoizeOneVal()
+
+@ibsqrtmemo
 def ibsqrt(val):
     # can be SLOW
     if not isinstance(val, R):
@@ -138,4 +165,3 @@ def ibsqrt(val):
     return ibexp(half*lv)
 
 from .ibreal import IBReal as R
-
