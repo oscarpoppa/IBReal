@@ -94,6 +94,7 @@ def ibexp(val):
     return rsum
 
 def iblog(val):
+    # can be SLOW
     if not isinstance(val, R):
         val = R(val)
     if val <= 0:
@@ -117,6 +118,7 @@ def iblog(val):
     return neg * rsum
 
 def ibsqrt(val):
+    # can be SLOW
     if not isinstance(val, R):
         val = R(val)
     if val < 0:
