@@ -5,6 +5,30 @@ def fact_gen():
         yield val
         cnt += 1
         val *= cnt
+
+def pi(**kwargs):
+    one = R((1, 0), **kwargs)
+    two = R((2, 0), **kwargs)
+    four = R((4, 0), **kwargs)
+    five = R((5, 0), **kwargs)
+    six = R((6, 0), **kwargs)
+    eight = R((8, 0), **kwargs)
+    sixteen = R((16, 0), **kwargs)
+    rsum = R((0, 0), **kwargs)
+    small = one / 10**(one.prec+1)
+    idx = 0
+    while True:
+        a = one / (sixteen**idx)
+        b = four / (eight * idx + one)
+        c = two / (eight * idx + four)
+        d = one / (eight * idx + five)
+        e = one / (eight * idx + six)
+        term = a * (b - c - d - e)
+        if abs(term) < small:
+            break
+        rsum += term
+        idx += 1
+    return rsum
     
 def ibexp(val):
     if not isinstance(val, R):
