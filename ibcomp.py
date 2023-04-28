@@ -40,7 +40,10 @@ class IBComp:
 
     @property
     def theta(self):
-        return ibarctan(self.icomp/self.rcomp)
+        th = ibarctan(self.icomp/self.rcomp)
+        if self.rcomp > 0:
+            return th
+        return th + pi(**self.kwargs) 
 
     @property
     def conj(self):
@@ -193,4 +196,4 @@ class IBComp:
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
 from .ibreal import IBReal as R
-from .ibfuncs import ibsqrt, ibarctan
+from .ibfuncs import ibsqrt, ibarctan, pi

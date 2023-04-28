@@ -71,10 +71,14 @@ def pi(**kwargs):
 def ibarctan(val):
     if not isinstance(val, R):
         val = R(val)
+    neg = R((1, 0), **val.kwargs)
+    if val < 0:
+        val = abs(val)
+        neg = -neg
     if abs(val) < 1:
-        return _arctan_i(val)
+        return neg*_arctan_i(val)
     else:
-        return _arctan_o(val)
+        return neg*_arctan_o(val)
     
 def ibexp(val):
     if not isinstance(val, R):
