@@ -107,6 +107,9 @@ ibarctanmemo = MemoizeIBRCall()
 # callable
 ibarctan = ibarctanmemo(IBArcTan())
 
+ibexpmemo = MemoizeIBRCall()
+
+@ibexpmemo
 def ibexp(val):
     if not isinstance(val, R):
         val = R(val)
