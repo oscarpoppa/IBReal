@@ -56,11 +56,11 @@ def pi(**kwargs):
     small = one / 10**(one.prec+1)
     idx = 0
     while True:
-        a = one / (sixteen**idx)
-        b = four / (eight * idx + one)
-        c = two / (eight * idx + four)
-        d = one / (eight * idx + five)
-        e = one / (eight * idx + six)
+        a = one/(sixteen**idx)
+        b = four/(eight*idx+one)
+        c = two/(eight*idx+four)
+        d = one/(eight*idx+five)
+        e = one/(eight*idx+six)
         term = a * (b - c - d - e)
         if abs(term) < small:
             break
