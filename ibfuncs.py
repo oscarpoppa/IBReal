@@ -87,7 +87,13 @@ class IBArcTan:
             idx += one
         return rsum
 
+# quick memoize
+_pitbl = dict()
+
 def pi(**kwargs):
+    kwargs = kwargs if kwargs else R(0).kwargs
+    if kwargs['prec'] in _pitbl:
+        return _pitbl[kwargs['prec']]
     one = R((1, 0), **kwargs)
     two = R((2, 0), **kwargs)
     four = R((4, 0), **kwargs)
@@ -109,11 +115,12 @@ def pi(**kwargs):
             break
         rsum += term
         idx += one 
+    _pitbl[kwargs['prec']] = rsum
     return rsum
 
 ibarctanmemo = MemoizeIBRCall()
 
-# callable
+# memoized callable
 ibarctan = ibarctanmemo(IBArcTan())
 
 ibexpmemo = MemoizeIBRCall()
