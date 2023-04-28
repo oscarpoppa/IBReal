@@ -19,12 +19,21 @@ class MemoizeIBRCall:
             return ret
         return inner
 
-def _fact_gen():
+#par = off, odd,even
+def _fact_gen(par='off'):
     # 1,1,2,6,...
     cnt = 0
+    def mpar():
+        if par == 'off':
+            return True
+        elif par == 'even':
+            return True if cnt%2 == 0 else False
+        else:
+            return False if cnt%2 == 0 else True
     val = 1
     while True:
-        yield val
+        if mpar():
+            yield R(val)
         cnt += 1
         val *= cnt
 
@@ -168,5 +177,55 @@ def ibsqrt(val):
     lv = iblog(val)
     half = R((5, 1), **val.kwargs)
     return ibexp(half*lv)
+
+ibsinmemo = MemoizeIBRCall()
+
+@ibsinmemo
+def ibsin(val):
+    #x-x3/3!+x5/5!
+    if not isinstance(val, R):
+        val = R(val)
+    neg1 = R((-1, 0), **val.kwargs)
+    one = R((1, 0), **val.kwargs)
+    two = R((2, 0), **val.kwargs)
+    small = one / 10**(val.prec+1)
+    fac = _fact_gen('odd')
+    rsum = R((0, 0), **val.kwargs)
+    idx = R((1, 0), **val.kwargs)
+    seq = R((0, 0), **val.kwargs)
+    while True:
+        term = neg1**(seq) * val**idx / next(fac)
+        if abs(term) < small:
+            break
+        rsum += term
+        idx += two
+        seq += one
+    fac.close()
+    return rsum
+
+ibcosmemo = MemoizeIBRCall()
+
+@ibcosmemo
+def ibcos(val):
+    #1-x2/2!+x4/4!
+    if not isinstance(val, R):
+        val = R(val)
+    neg1 = R((-1, 0), **val.kwargs)
+    one = R((1, 0), **val.kwargs)
+    two = R((2, 0), **val.kwargs)
+    small = one / 10**(val.prec+1)
+    fac = _fact_gen('even')
+    rsum = R((0, 0), **val.kwargs)
+    idx = R((0, 0), **val.kwargs)
+    seq = R((0, 0), **val.kwargs)
+    while True:
+        term = neg1**(seq) * val**idx / next(fac)
+        if abs(term) < small:
+            break
+        rsum += term
+        idx += two
+        seq += one
+    fac.close()
+    return rsum
 
 from .ibreal import IBReal as R
