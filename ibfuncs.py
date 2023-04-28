@@ -7,42 +7,55 @@ def _fact_gen():
         cnt += 1
         val *= cnt
 
-def _arctan_o(val):
-    # for val >= 1 or <= -1
-    one = R((1, 0), **val.kwargs)
-    two = R((2, 0), **val.kwargs)
-    halfpi = pi(**val.kwargs) / two
-    neg1 = R((-1, 0), **val.kwargs)
-    small = one / 10**(val.prec+1)
-    rsum = R((0, 0), **val.kwargs)
-    idx = R((0, 0), **val.kwargs)
-    while True:
-        a = neg1**idx
-        b = one / ((two*idx+one)*(val**(two*idx+one)))
-        term = a * b
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += one
-    return halfpi-rsum if val > 0 else -halfpi-rsum
+class IBArcTan:
+    def __call__(self, val):
+        if not isinstance(val, R):
+            val = R(val)
+        neg = R((1, 0), **val.kwargs)
+        if val < 0:
+            val = abs(val)
+            neg = -neg
+        if abs(val) < 1:
+            return neg*self._arctan_i(val)
+        else:
+            return neg*self._arctan_o(val)
     
-def _arctan_i(val):
-    # for -1 <= val <= 1
-    one = R((1, 0), **val.kwargs)
-    two = R((2, 0), **val.kwargs)
-    neg1 = R((-1, 0), **val.kwargs)
-    small = one / 10**(val.prec+1)
-    rsum = R((0, 0), **val.kwargs)
-    idx = R((0, 0), **val.kwargs)
-    while True:
-        a = neg1**idx
-        b = (val**(two*idx+one))/(two*idx+one)
-        term = a * b
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += one
-    return rsum
+    def _arctan_o(self, val):
+        # for val >= 1 or <= -1
+        one = R((1, 0), **val.kwargs)
+        two = R((2, 0), **val.kwargs)
+        halfpi = pi(**val.kwargs) / two
+        neg1 = R((-1, 0), **val.kwargs)
+        small = one / 10**(val.prec+1)
+        rsum = R((0, 0), **val.kwargs)
+        idx = R((0, 0), **val.kwargs)
+        while True:
+            a = neg1**idx
+            b = one / ((two*idx+one)*(val**(two*idx+one)))
+            term = a * b
+            if abs(term) < small:
+                break
+            rsum += term
+            idx += one
+        return halfpi-rsum if val > 0 else -halfpi-rsum
+        
+    def _arctan_i(self, val):
+        # for -1 <= val <= 1
+        one = R((1, 0), **val.kwargs)
+        two = R((2, 0), **val.kwargs)
+        neg1 = R((-1, 0), **val.kwargs)
+        small = one / 10**(val.prec+1)
+        rsum = R((0, 0), **val.kwargs)
+        idx = R((0, 0), **val.kwargs)
+        while True:
+            a = neg1**idx
+            b = (val**(two*idx+one))/(two*idx+one)
+            term = a * b
+            if abs(term) < small:
+                break
+            rsum += term
+            idx += one
+        return rsum
 
 def pi(**kwargs):
     one = R((1, 0), **kwargs)
@@ -67,19 +80,10 @@ def pi(**kwargs):
         rsum += term
         idx += one 
     return rsum
-    
-def ibarctan(val):
-    if not isinstance(val, R):
-        val = R(val)
-    neg = R((1, 0), **val.kwargs)
-    if val < 0:
-        val = abs(val)
-        neg = -neg
-    if abs(val) < 1:
-        return neg*_arctan_i(val)
-    else:
-        return neg*_arctan_o(val)
-    
+
+# callable
+ibarctan = IBArcTan()
+
 def ibexp(val):
     if not isinstance(val, R):
         val = R(val)
