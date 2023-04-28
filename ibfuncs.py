@@ -15,7 +15,7 @@ def _arctan_o(val):
     neg1 = R((-1, 0), **val.kwargs)
     small = one / 10**(val.prec+1)
     rsum = R((0, 0), **val.kwargs)
-    idx = 0
+    idx = R((0, 0), **val.kwargs)
     while True:
         a = neg1**idx
         b = one / ((two*idx+one)*(val**(two*idx+one)))
@@ -23,7 +23,7 @@ def _arctan_o(val):
         if abs(term) < small:
             break
         rsum += term
-        idx += 1
+        idx += one
     return halfpi-rsum if val > 0 else -halfpi-rsum
     
 def _arctan_i(val):
@@ -33,7 +33,7 @@ def _arctan_i(val):
     neg1 = R((-1, 0), **val.kwargs)
     small = one / 10**(val.prec+1)
     rsum = R((0, 0), **val.kwargs)
-    idx = 0
+    idx = R((0, 0), **val.kwargs)
     while True:
         a = neg1**idx
         b = (val**(two*idx+one))/(two*idx+one)
@@ -41,7 +41,7 @@ def _arctan_i(val):
         if abs(term) < small:
             break
         rsum += term
-        idx += 1
+        idx += one
     return rsum
 
 def pi(**kwargs):
@@ -54,7 +54,7 @@ def pi(**kwargs):
     sixteen = R((16, 0), **kwargs)
     rsum = R((0, 0), **kwargs)
     small = one / 10**(one.prec+1)
-    idx = 0
+    idx = R((0, 0), **kwargs)
     while True:
         a = one/(sixteen**idx)
         b = four/(eight*idx+one)
@@ -65,7 +65,7 @@ def pi(**kwargs):
         if abs(term) < small:
             break
         rsum += term
-        idx += 1
+        idx += one 
     return rsum
     
 def ibarctan(val):
@@ -83,13 +83,13 @@ def ibexp(val):
     one = R((1, 0), **val.kwargs)
     small = one / 10**(val.prec+1)
     fac = _fact_gen()
-    idx = 0
+    idx = R((0, 0), **val.kwargs)
     while True:
         term = val**idx / next(fac)
         if abs(term) < small:
             break
         rsum += term
-        idx += 1
+        idx += one 
     fac.close()
     return rsum
 
@@ -108,13 +108,13 @@ def iblog(val):
         neg = -neg
         val = one / val
     val = one - val
-    idx = 1 
+    idx = R((1, 0), **val.kwargs) 
     while True:
         term = neg1 * (val)**idx / idx
         if abs(term) < small:
             break
         rsum += term
-        idx += 1
+        idx += one 
     return neg * rsum
 
 def ibsqrt(val):
