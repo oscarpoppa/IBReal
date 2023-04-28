@@ -1,4 +1,5 @@
 from collections import namedtuple
+from functools import wraps
 
 Memo = namedtuple('Memo','ival prec trim_on')
 
@@ -7,6 +8,7 @@ class MemoizeOneVal:
         self.tbl = dict()
 
     def __call__(self, func):
+        @wraps(func)
         def inner(*args):
             tmp = args[0] if isinstance(args[0], R) else R(args[0])
             key = Memo(tmp.ival, **tmp.kwargs)
