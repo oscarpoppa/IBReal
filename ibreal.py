@@ -66,6 +66,10 @@ class IBReal:
         return {'prec':self.prec, 'trim_on':self.trim_on}
 
     @property
+    def isint(self):
+        return self == int(self)
+
+    @property
     def _repr(self):
         neg = '-' if self.ival.num < 0 else ''
         txt = str(abs(self.ival.num))
@@ -119,7 +123,7 @@ class IBReal:
         oiv = other.ival
         siv = self.ival
         ival = Ival(siv.num*oiv.num, siv.off+oiv.off)
-        return type(self)(ival, **self.kwargs)
+        return type(self)(ival, **self.kwargs).trim()
 
     def __rmul__(self, other):
         if not isinstance(other, type(self)):
@@ -128,7 +132,7 @@ class IBReal:
 
     def __imul__(self, other):
         self.ival = self.__mul__(other).ival
-        return self.trim()
+        return self
 
     def __truediv__(self, other):
         try:
@@ -150,7 +154,7 @@ class IBReal:
 
     def __itruediv__(self, other):
         self.ival = self.__truediv__(other).ival
-        return self.trim()
+        return self
 
     def __add__(self, other):
         try:
@@ -160,7 +164,7 @@ class IBReal:
             return other.__radd__(self)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num+oiv.num, siv.off)
-        return type(self)(ival, **self.kwargs)
+        return type(self)(ival, **self.kwargs).trim()
 
     def __radd__(self, other):
         if not isinstance(other, type(self)):
@@ -169,7 +173,7 @@ class IBReal:
 
     def __iadd__(self, other):
         self.ival = self.__add__(other).ival
-        return self.trim()
+        return self
 
     def __sub__(self, other):
         try:
@@ -179,7 +183,7 @@ class IBReal:
             return other.__rsub__(self)
         (siv, oiv) = self._align(self.ival, other.ival)
         ival = Ival(siv.num-oiv.num, siv.off)
-        return type(self)(ival, **self.kwargs)
+        return type(self)(ival, **self.kwargs).trim()
 
     def __rsub__(self, other):
         if not isinstance(other, type(self)):
@@ -188,13 +192,17 @@ class IBReal:
 
     def __isub__(self, other):
         self.ival = self.__sub__(other).ival
-        return self.trim()
+        return self
 
     def __pow__(self, other):
         tmp = type(self)(self.ival, **self.kwargs)
         if other == 0:
             tmp.ival = Ival(1, 0)
-        elif isinstance(other, int):
+            return tmp.trim()
+        elif isinstance(other, type(self)):
+            if other.isint:
+                other = int(other)
+        if isinstance(other, int):
             for _ in range(1, abs(other)):
                 tmp *= self
             if other < 0:
@@ -202,7 +210,7 @@ class IBReal:
         else:
             ltmp = iblog(self)
             tmp = ibexp(ltmp*other)
-        return tmp.trim(self.prec)
+        return tmp.trim()
 
     def __rpow__(self, other):
         if not isinstance(other, type(self)):
@@ -211,7 +219,7 @@ class IBReal:
 
     def __ipow__(self, other):
         self.ival = self.__pow__(other).ival
-        return self.trim()
+        return self
 
     def __int__(self):
         return int(self.__float__())
