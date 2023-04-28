@@ -44,7 +44,7 @@ class IBReal:
         prec = self.prec if prec is None else prec
         if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
-        if  self._ilength > prec:
+        if  self.ilength > prec:
             neg = 1
             tval = str(self.ival.num)
             if tval[0] == '-':
@@ -79,7 +79,7 @@ class IBReal:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
 
     @property
-    def _ilength(self):
+    def ilength(self):
         if self.ival.num == 0:
             return 1
         return int(log(abs(self.ival.num), 10)) + 1
@@ -142,7 +142,7 @@ class IBReal:
             return other.__rtruediv__(self)
         siv = self.ival
         oiv = other.ival
-        mlen = self.prec + other._ilength - self._ilength
+        mlen = self.prec + other.ilength - self.ilength
         num = siv.num * 10**mlen  // oiv.num
         off = mlen + siv.off - oiv.off
         return type(self)(Ival(num, off), **self.kwargs).trim()
