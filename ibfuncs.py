@@ -3,7 +3,7 @@ from functools import wraps
 
 Memo = namedtuple('Memo','ival prec trim_on')
 
-class MemoizeOneVal:
+class MemoizeIBRCall:
     def __init__(self):
         self.tbl = dict()
 
@@ -102,7 +102,7 @@ def pi(**kwargs):
         idx += one 
     return rsum
 
-ibarctanmemo = MemoizeOneVal()
+ibarctanmemo = MemoizeIBRCall()
 
 # callable
 ibarctan = ibarctanmemo(IBArcTan())
@@ -124,7 +124,7 @@ def ibexp(val):
     fac.close()
     return rsum
 
-iblogmemo = MemoizeOneVal()
+iblogmemo = MemoizeIBRCall()
 
 @iblogmemo
 def iblog(val):
@@ -151,7 +151,7 @@ def iblog(val):
         idx += one 
     return neg * rsum
 
-ibsqrtmemo = MemoizeOneVal()
+ibsqrtmemo = MemoizeIBRCall()
 
 @ibsqrtmemo
 def ibsqrt(val):
