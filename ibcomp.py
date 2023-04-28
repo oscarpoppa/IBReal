@@ -39,6 +39,10 @@ class IBComp:
         return ibsqrt(slen)
 
     @property
+    def theta(self):
+        return ibarctan(self.icomp/self.rcomp)
+
+    @property
     def conj(self):
         return type(self)((self.rcomp, -self.icomp), **self.kwargs)
 
@@ -189,4 +193,4 @@ class IBComp:
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
 from .ibreal import IBReal as R
-from .ibfuncs import ibsqrt
+from .ibfuncs import ibsqrt, ibarctan
