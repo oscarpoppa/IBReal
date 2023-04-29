@@ -158,24 +158,29 @@ class IBComp:
         (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
         return self
 
-    def __pow__(self, oint):
-        if not isinstance(oint, int):
-            raise ValueError('Only integers allowed')
+    def __pow__(self, val):
+        if not isinstance(val, R):
+            val = R(val, **self.kwargs)
         tmp = type(self)((self.rcomp, self.icomp))
-        if oint == 0:
+        if val == 0:
             tmp.rcomp = R((1, 0), **self.rcomp.kwargs)
             tmp.icomp = R((0, 0), **self.icomp.kwargs)
-        else:
-            for _ in range(1, abs(oint)):
+        elif val.isint:
+            for _ in range(1, abs(int(val))):
                 tmp *= self
-            if oint < 0:
+            if val < 0:
                 rcmp = R((1, 0), **self.rcomp.kwargs)
                 icmp = R((0, 0), **self.icomp.kwargs)
                 return type(self)((rcmp, icmp), **self.kwargs).__truediv__(tmp)
+        else:
+            r = tmp.length ** val
+            th = tmp.theta * val
+            tmp.rcomp = r * ibcos(th)
+            tmp.icomp = r * ibsin(th)
         return tmp
 
-    def __ipow__(self, oint):
-        other = self.__pow__(oint)
+    def __ipow__(self, val):
+        other = self.__pow__(val)
         (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
         return self
 
@@ -196,4 +201,4 @@ class IBComp:
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
 from .ibreal import IBReal as R
-from .ibfuncs import ibsqrt, ibarctan, pi
+from .ibfuncs import ibsqrt, ibarctan, pi, ibsin, ibcos
