@@ -145,30 +145,48 @@ def ibexp(val):
 
 iblogmemo = MemoizeIBRCall()
 
-@iblogmemo
-def iblog(val):
-    # can be SLOW
-    if not isinstance(val, R):
-        val = R(val)
-    if val <= 0:
-        raise ValueError('Positive numbers only')
-    one = R((1, 0), **val.kwargs)
-    neg = R((1, 0), **val.kwargs)
-    neg1 = R((-1, 0), **val.kwargs)
-    rsum = R((0, 0), **val.kwargs)
-    small = one / 10**(val.prec+1)
-    if val > 1:
-        neg = -neg
-        val = one / val
-    val = one - val
-    idx = R((1, 0), **val.kwargs) 
-    while True:
-        term = neg1 * (val)**idx / idx
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += one 
-    return neg * rsum
+class IBLog:
+    def __call__(self, val):
+        if not isinstance(val, R):
+            val = R(val)
+        zero = R((0, 0), **val.kwargs)
+        if val <= zero:
+            raise ValueError('Positive numbers only')
+        log2 = self._iblog(2)
+        cnt = R((0, 0), **val.kwargs)
+        one = R((1, 0), **val.kwargs)
+        two = R((2, 0), **val.kwargs)
+        while True:
+            if val <= two:
+                break
+            val /= two
+            cnt += one
+        return self._iblog(val) + (cnt * log2)
+
+    def _iblog(self, val):
+        # can be SLOW
+        one = R((1, 0), **val.kwargs)
+        neg = R((1, 0), **val.kwargs)
+        neg1 = R((-1, 0), **val.kwargs)
+        rsum = R((0, 0), **val.kwargs)
+        small = one / 10**(val.prec+1)
+        if val > 1:
+            neg = -neg
+            val = one / val
+        val = one - val
+        idx = R((1, 0), **val.kwargs) 
+        while True:
+            term = neg1 * (val)**idx / idx
+            if abs(term) < small:
+                break
+            rsum += term
+            idx += one 
+        return neg * rsum
+
+iblogmemo = MemoizeIBRCall()
+
+# memoized callable
+iblog = iblogmemo(IBLog())
 
 ibsqrtmemo = MemoizeIBRCall()
 
@@ -235,4 +253,4 @@ def ibcos(val):
     fac.close()
     return rsum
 
-from .ibreal import IBReal as R
+from .ibreal import Ival, IBReal as R
