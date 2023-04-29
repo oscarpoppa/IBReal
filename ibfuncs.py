@@ -19,7 +19,7 @@ class MemoizeIBRCall:
             return ret
         return inner
 
-#par = off, odd,even
+#par = off, odd, even
 def _fact_gen(par='off'):
     # 1,1,2,6,...
     cnt = 0
