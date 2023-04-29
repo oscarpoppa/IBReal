@@ -1,7 +1,11 @@
 from collections import namedtuple
 from functools import wraps
+from os import environ
 
 Memo = namedtuple('Memo','ival prec trim_on')
+
+def set_global_prec(num):
+    environ['IBR_DEF_PREC'] = str(num)
 
 class MemoizeIBRCall:
     def __init__(self):
