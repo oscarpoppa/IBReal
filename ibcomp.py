@@ -172,7 +172,7 @@ class IBComp:
                 rcmp = R((1, 0), **self.rcomp.kwargs)
                 icmp = R((0, 0), **self.icomp.kwargs)
                 return type(self)((rcmp, icmp), **self.kwargs).__truediv__(tmp)
-        else:
+        else: # DREADFULLAY SLOW:
             r = tmp.length ** val
             th = tmp.theta * val
             tmp.rcomp = r * ibcos(th)
