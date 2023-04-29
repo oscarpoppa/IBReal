@@ -51,7 +51,7 @@ class IBReal:
         prec = self.prec if prec is None else prec
         if not isinstance(prec, int) or prec <= 0:
             raise ValueError('Only positive integers allowed')
-        if  self.ilength > prec:
+        if  self.ilength > prec+1:
             neg = 1
             tval = str(self.ival.num)
             if tval[0] == '-':

@@ -2,7 +2,7 @@ from collections import namedtuple
 from functools import wraps
 from os import environ
 
-Memo = namedtuple('Memo','ival prec trim_on')
+Memo = namedtuple('Memo','id prec trim_on')
 
 def set_global_prec(num):
     environ['IBR_DEF_PREC'] = str(num)
@@ -14,8 +14,11 @@ class MemoizeIBRCall:
     def __call__(self, func):
         @wraps(func)
         def inner(*args):
-            tmp = args[0] if isinstance(args[0], R) else R(args[0])
-            key = Memo(tmp.ival, **tmp.kwargs)
+            if isinstance(args[0], C) or isinstance(args[0], R):
+                tmp = args[0]
+            else:
+                tmp = R(args[0])
+            key = Memo(tmp.__repr__(), **tmp.kwargs)
             if key in self.tbl:
                 return self.tbl[key]
             ret = func(tmp)
@@ -127,27 +130,50 @@ ibarctanmemo = MemoizeIBRCall()
 # memoized callable
 ibarctan = ibarctanmemo(IBArcTan())
 
+
+class IBExp:
+    def __call__(self, val):
+        if isinstance(val, C):
+            return self._ibexpc(val)
+        else:
+             if not isinstance(val, R):
+                 val = R(val, **self.kwargs)
+             return self._ibexpr(val)
+    
+    def _ibexpr(self, val):
+        rsum = R((0, 0), **val.kwargs)
+        one = R((1, 0), **val.kwargs)
+        small = one / 10**(val.prec+1)
+        fac = _fact_gen()
+        idx = R((0, 0), **val.kwargs)
+        while True:
+            term = val**idx / next(fac)
+            if abs(term) < small:
+                break
+            rsum += term
+            idx += one 
+        fac.close()
+        return rsum
+    
+    def _ibexpc(self, val):
+        rsum = C((0, 0), **val.kwargs)
+        one = R((1, 0), **val.kwargs)
+        small = one / 10**(val.prec+1)
+        fac = _fact_gen()
+        idx = R((0, 0), **val.kwargs)
+        while True:
+            term = val**idx / next(fac)
+            if abs(term.rcomp) < small and abs(term.icomp) < small:
+                break
+            rsum += term
+            idx += one 
+        fac.close()
+        return rsum
+
 ibexpmemo = MemoizeIBRCall()
 
-@ibexpmemo
-def ibexp(val):
-    if not isinstance(val, R):
-        val = R(val)
-    rsum = R((0, 0), **val.kwargs)
-    one = R((1, 0), **val.kwargs)
-    small = one / 10**(val.prec+1)
-    fac = _fact_gen()
-    idx = R((0, 0), **val.kwargs)
-    while True:
-        term = val**idx / next(fac)
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += one 
-    fac.close()
-    return rsum
-
-iblogmemo = MemoizeIBRCall()
+# memoized callable
+ibexp = ibexpmemo(IBExp())
 
 class IBLog:
     def __init__(self):
@@ -275,3 +301,4 @@ def ibcos(val):
     return rsum
 
 from .ibreal import Ival, IBReal as R
+from .ibcomp import IBComp as C
