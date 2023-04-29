@@ -1,5 +1,6 @@
 from collections import namedtuple
 from math import log
+from os import environ
 
 Ival = namedtuple('Ival', 'num off')
 
@@ -19,10 +20,16 @@ class IBReal:
 
     trim_on: allow trimming or not
 
+    $export IBR_DEF_PREC=450 :: set environment var to pick up global precision
     """
-    def __init__(self, raw, prec=300, trim_on=True):
+    def __init__(self, raw, prec=None, trim_on=True):
+        if prec is not None:
+            self.prec = prec
+        elif 'IBR_DEF_PREC' in environ:
+            self.prec = int(environ['IBR_DEF_PREC'])
+        else:
+            self.prec = 100 
         self.trim_on = trim_on
-        self.prec = prec
         try:
             if isinstance(raw, Ival):
                 self.ival = raw

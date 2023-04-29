@@ -1,15 +1,24 @@
+from os import environ
+
 class IBComp:
     """
     IBComp is a complex number that uses the precision of IBReal numbers. The math interface offers the 
     same ioperations IBReal offers.
 
     Usage:
-    comp = IBComp(rcomp, icomp)
+    comp = IBComp(raw, prec=None, trim_on=True)
 
-    rcomp & icomp: IBReal object, Ival object, number, string, or 2-tuple
+    raw: tuple of rcomp & icomp, IBReal object, Ival object, number, string, or 2-tuple
+
+    $export IBR_DEF_PREC=450 :: set environment var to pick up global precision
     """
-    def __init__(self, raw, prec=300, trim_on=True):
-        self.prec = prec
+    def __init__(self, raw, prec=None, trim_on=True):
+        if prec is not None:
+            self.prec = prec
+        elif 'IBR_DEF_PREC' in environ:
+            self.prec = int(environ['IBR_DEF_PREC'])
+        else:
+            self.prec = 100 
         self.trim_on = trim_on
         try:
             if isinstance(raw, tuple):
