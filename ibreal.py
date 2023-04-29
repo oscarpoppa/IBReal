@@ -92,7 +92,8 @@ class IBReal:
         return int(log(abs(self.ival.num), 10)) + 1
 
     def _from_raw(self, raw):
-        straw = str(raw.rcomp) if hasattr(raw, 'rcomp') else str(raw)
+        #straw = str(raw.rcomp) if hasattr(raw, 'rcomp') else str(raw)
+        straw = str(raw)
         straw = straw.replace(' ', '')
         if straw[0] == '-':
             neg = -1
@@ -202,22 +203,21 @@ class IBReal:
         return self
 
     def __pow__(self, other):
+        if not isinstance(other, type(self)):
+            other = type(self)(other, **self.kwargs)
         tmp = type(self)(self.ival, **self.kwargs)
         if other == 0:
             tmp.ival = Ival(1, 0)
             return tmp.trim()
-        elif isinstance(other, type(self)):
-            if other.isint:
-                other = int(other)
-        # !! Leave int section alone -- needed for series expansions
-        if isinstance(other, int):
-            for _ in range(1, abs(other)):
+        if isinstance(other, type(self)) and other.isint:
+            # !! Leave int section alone -- needed for series expansions
+            for _ in range(1, abs(int(other))):
                 tmp *= self
             if other < 0:
                 tmp = type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
         else:
-            ltmp = iblog(self)
-            tmp = ibexp(ltmp*other)
+            sl = iblog(self)
+            tmp = ibexp(sl*other)
         return tmp.trim()
 
     def __rpow__(self, other):

@@ -167,27 +167,27 @@ class IBComp:
         (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
         return self
 
-    def __pow__(self, val):
-        if isinstance(val, type(self)):
-            val = val
+    def __pow__(self, other):
+        if isinstance(other, type(self)):
+            other = other
         else:
-            val = R(val, **self.kwargs)
+            other = R(other, **self.kwargs)
         tmp = type(self)((self.rcomp, self.icomp))
-        if val == 0:
+        if other == 0:
             tmp.rcomp = R((1, 0), **self.rcomp.kwargs)
             tmp.icomp = R((0, 0), **self.icomp.kwargs)
             return tmp
-        elif isinstance(val, R) and val.isint:
+        if isinstance(other, R) and other.isint:
             # !! Leave int section alone -- needed for series expansions
-            for _ in range(1, abs(int(val))):
+            for _ in range(1, abs(int(other))):
                 tmp *= self
-            if val < 0:
+            if other < 0:
                 rcmp = R((1, 0), **self.rcomp.kwargs)
                 icmp = R((0, 0), **self.icomp.kwargs)
                 return type(self)((rcmp, icmp), **self.kwargs).__truediv__(tmp)
         else:
             sl = iblog(tmp)
-            tmp = ibexp(sl*val)
+            tmp = ibexp(sl*other)
         return tmp
 
     def __ipow__(self, val):
