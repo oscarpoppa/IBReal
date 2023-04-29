@@ -204,6 +204,10 @@ ibsqrtmemo = MemoizeIBRCall()
 
 @ibsqrtmemo
 def ibsqrt(val):
+    two = R((2, 0), **val.kwargs)
+    return ibgenrt(val, two)
+
+def ibgenrt(val, root):
     # can be SLOW
     if not isinstance(val, R):
         val = R(val)
@@ -211,9 +215,10 @@ def ibsqrt(val):
         raise ValueError('Non-negative numbers only')
     if val == 0:
         return val
+    if not isinstance(root, R):
+        root = R(root)
     lv = iblog(val)
-    half = R((5, 1), **val.kwargs)
-    return ibexp(half*lv)
+    return ibexp(lv/root)
 
 ibsinmemo = MemoizeIBRCall()
 
