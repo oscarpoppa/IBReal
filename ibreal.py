@@ -92,7 +92,6 @@ class IBReal:
         return int(log(abs(self.ival.num), 10)) + 1
 
     def _from_raw(self, raw):
-        #straw = str(raw.rcomp) if hasattr(raw, 'rcomp') else str(raw)
         straw = str(raw)
         straw = straw.replace(' ', '')
         if straw[0] == '-':
