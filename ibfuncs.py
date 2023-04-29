@@ -150,12 +150,12 @@ class IBLog:
         if not isinstance(val, R):
             val = R(val)
         zero = R((0, 0), **val.kwargs)
+        two = R((2, 0), **val.kwargs)
         if val <= zero:
             raise ValueError('Positive numbers only')
-        log2 = self._iblog(2)
+        log2 = self._iblog(two)
         cnt = R((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
-        two = R((2, 0), **val.kwargs)
         while True:
             if val <= two:
                 break
