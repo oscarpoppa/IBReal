@@ -160,12 +160,20 @@ class IBLog:
             self._log2 = self._iblog(two)
         cnt = R((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
-        while True:
-            if val <= two:
-                break
-            val /= two
-            cnt += one
-        return self._iblog(val) + (cnt * self._log2)
+        if val > 1:
+            while True:
+                if val <= two:
+                    break
+                val /= two
+                cnt += one
+            return self._iblog(val) + (cnt * self._log2)
+        else:
+            while True:
+                if val >= one:
+                    break
+                val *= two
+                cnt += one
+            return self._iblog(val) - (cnt * self._log2)
 
     def _iblog(self, val):
         # can be SLOW
