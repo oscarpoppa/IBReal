@@ -146,6 +146,9 @@ def ibexp(val):
 iblogmemo = MemoizeIBRCall()
 
 class IBLog:
+    def __init__(self):
+        self._log2 = None
+
     def __call__(self, val):
         if not isinstance(val, R):
             val = R(val)
@@ -153,7 +156,8 @@ class IBLog:
         two = R((2, 0), **val.kwargs)
         if val <= zero:
             raise ValueError('Positive numbers only')
-        log2 = self._iblog(two)
+        if self._log2 is None:
+            self._log2 = self._iblog(two)
         cnt = R((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
         while True:
@@ -161,7 +165,7 @@ class IBLog:
                 break
             val /= two
             cnt += one
-        return self._iblog(val) + (cnt * log2)
+        return self._iblog(val) + (cnt * self._log2)
 
     def _iblog(self, val):
         # can be SLOW
