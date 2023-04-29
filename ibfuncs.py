@@ -27,9 +27,9 @@ def _fact_gen(par='off'):
         if par == 'off':
             return True
         elif par == 'even':
-            return True if cnt%2 == 0 else False
+            return False if cnt%2 else True
         else:
-            return False if cnt%2 == 0 else True
+            return True if cnt%2 else False
     val = 1
     while True:
         if mpar():
