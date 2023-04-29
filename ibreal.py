@@ -202,6 +202,7 @@ class IBReal:
         elif isinstance(other, type(self)):
             if other.isint:
                 other = int(other)
+        # !! Leave int section alone -- needed for series expansions
         if isinstance(other, int):
             for _ in range(1, abs(other)):
                 tmp *= self

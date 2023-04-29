@@ -166,6 +166,7 @@ class IBComp:
             tmp.rcomp = R((1, 0), **self.rcomp.kwargs)
             tmp.icomp = R((0, 0), **self.icomp.kwargs)
         elif val.isint:
+            # !! Leave int section alone -- needed for series expansions
             for _ in range(1, abs(int(val))):
                 tmp *= self
             if val < 0:
