@@ -168,13 +168,16 @@ class IBComp:
         return self
 
     def __pow__(self, val):
-        if not isinstance(val, R):
+        if isinstance(val, type(self)):
+            val = val
+        else:
             val = R(val, **self.kwargs)
         tmp = type(self)((self.rcomp, self.icomp))
         if val == 0:
             tmp.rcomp = R((1, 0), **self.rcomp.kwargs)
             tmp.icomp = R((0, 0), **self.icomp.kwargs)
-        elif val.isint:
+            return tmp
+        elif isinstance(val, R) and val.isint:
             # !! Leave int section alone -- needed for series expansions
             for _ in range(1, abs(int(val))):
                 tmp *= self
@@ -182,11 +185,9 @@ class IBComp:
                 rcmp = R((1, 0), **self.rcomp.kwargs)
                 icmp = R((0, 0), **self.icomp.kwargs)
                 return type(self)((rcmp, icmp), **self.kwargs).__truediv__(tmp)
-        else: # DREADFULLAY SLOW:
-            r = tmp.length ** val
-            th = tmp.theta * val
-            tmp.rcomp = r * ibcos(th)
-            tmp.icomp = r * ibsin(th)
+        else:
+            sl = iblog(tmp)
+            tmp = ibexp(sl*val)
         return tmp
 
     def __ipow__(self, val):
@@ -211,4 +212,4 @@ class IBComp:
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
 from .ibreal import IBReal as R
-from .ibfuncs import ibsqrt, ibarctan, pi, ibsin, ibcos
+from .ibfuncs import ibsqrt, ibarctan, pi, ibsin, ibcos, iblog, ibexp
