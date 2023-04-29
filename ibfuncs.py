@@ -156,7 +156,7 @@ class IBLog:
         two = R((2, 0), **val.kwargs)
         if val <= zero:
             raise ValueError('Positive numbers only')
-        if self._log2 is None:
+        if self._log2 is None or self._log2.prec < val.prec:
             self._log2 = self._iblog(two)
         cnt = R((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
