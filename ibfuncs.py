@@ -18,7 +18,7 @@ class MemoizeIBRCall:
                 tmp = args[0]
             else:
                 tmp = R(args[0])
-            key = Memo(tmp.__repr__(), **tmp.kwargs)
+            key = Memo(repr(tmp), **tmp.kwargs)
             if key in self.tbl:
                 return self.tbl[key]
             ret = func(tmp)
@@ -180,6 +180,9 @@ class IBLog:
         self._log2 = None
 
     def __call__(self, val):
+        if isinstance(val, C):
+            lr = iblog(val.length)
+            return C((0, val.theta), **val.kwargs) + lr
         if not isinstance(val, R):
             val = R(val)
         zero = R((0, 0), **val.kwargs)
