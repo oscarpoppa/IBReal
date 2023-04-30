@@ -186,8 +186,8 @@ class IBLog:
         lr = iblog(val.length)
         cm = C((0, val.theta), **val.kwargs) + lr
         # get principal value
-        while abs(cm.icomp) > mypi:
-            cm.icomp += (mypi if cm.icomp < zero else -mypi)
+        sub = abs(cm.icomp) // mypi
+        cm.icomp += sub * (mypi if cm.icomp < zero else -mypi)
         return cm
 
     def _real_log(self, val):

@@ -163,6 +163,18 @@ class IBReal:
         self.ival = self.__truediv__(other).ival
         return self
 
+    def __floordiv__(self, other):
+        return type(self)(int(self.__truediv__(other)))
+
+    def __rfloordiv__(self, other):
+        if not isinstance(other, type(self)):
+            other = type(self)(other, **self.kwargs)
+        return other.__floordiv__(self)
+
+    def __ifloordiv__(self, other):
+        self.ival = self.__floordiv__(other).ival
+        return self
+
     def __add__(self, other):
         try:
             if not isinstance(other, type(self)):
