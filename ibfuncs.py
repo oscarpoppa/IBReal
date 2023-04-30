@@ -191,8 +191,6 @@ class IBLog:
             return C((0, val.theta), **val.kwargs) + lr
         zero = R((0, 0), **val.kwargs)
         two = R((2, 0), **val.kwargs)
-        if val <= zero:
-            raise ValueError('Positive numbers only')
         if self._log2 is None or self._log2.prec < val.prec:
             self._log2 = self._iblog(two)
         cnt = R((0, 0), **val.kwargs)
