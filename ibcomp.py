@@ -56,7 +56,7 @@ class IBComp:
         if self.rcomp == zero:
             return mypi/two if self.icomp > zero else -mypi/two
         th = ibarctan(self.icomp/self.rcomp)
-        if self.rcomp > zero:
+        if self.rcomp < zero:
             return th + mypi
         return th
 
