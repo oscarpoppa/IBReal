@@ -44,7 +44,8 @@ class IBComp:
 
     @property
     def length(self):
-        slen = self.rcomp**2 + self.icomp**2
+        two = R((2, 0), **self.kwargs)
+        slen = self.rcomp**two + self.icomp**two
         return ibsqrt(slen)
 
     @property
@@ -55,7 +56,7 @@ class IBComp:
         if self.rcomp == zero:
             return mypi/two if self.icomp > zero else -mypi/two
         th = ibarctan(self.icomp/self.rcomp)
-        if self.rcomp > 0:
+        if self.rcomp > zero:
             return th + mypi
         return th
 
