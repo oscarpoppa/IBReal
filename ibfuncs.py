@@ -135,13 +135,13 @@ ibarctan = ibarctanmemo(IBArcTan())
 class IBExp:
     def __call__(self, val):
         if isinstance(val, C):
-            return self._ibexpc(val)
+            return self._exp_comp(val)
         else:
              if not isinstance(val, R):
                  val = R(val, **self.kwargs)
-             return self._ibexpr(val)
+             return self._exp_real(val)
     
-    def _ibexpr(self, val):
+    def _exp_real(self, val):
         rsum = R((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
         small = one / 10**(val.prec+1)
@@ -156,7 +156,7 @@ class IBExp:
         fac.close()
         return rsum
     
-    def _ibexpc(self, val):
+    def _exp_comp(self, val):
         rsum = C((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
         small = one / 10**(val.prec+1)
