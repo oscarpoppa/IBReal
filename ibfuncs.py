@@ -45,6 +45,7 @@ def _fact_gen(par='off'):
         val *= cnt
 
 class IBArcTan:
+    #!! Very slow to converge near 1
     def __call__(self, val):
         if not isinstance(val, R):
             val = R(val)
