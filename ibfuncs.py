@@ -181,13 +181,15 @@ class IBLog:
         self._log2 = None
 
     def _comp_log(self, val):
+        two = R((2, 0), **val.kwargs)
         mypi = pi()
+        my2pi = two * mypi
         zero = R((0, 0), **val.kwargs)
         lr = iblog(val.length)
         cm = C((0, val.theta), **val.kwargs) + lr
         # get principal value
         sub = abs(cm.icomp) // mypi
-        cm.icomp += sub * (mypi if cm.icomp < zero else -mypi)
+        cm.icomp += sub * (my2pi if cm.icomp < zero else -my2pi)
         return cm
 
     def _real_log(self, val):
