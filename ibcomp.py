@@ -49,10 +49,15 @@ class IBComp:
 
     @property
     def theta(self):
+        zero = R((0, 0), **self.kwargs)
+        two = R((2, 0), **self.kwargs)
+        mypi = pi(**self.kwargs)
+        if self.rcomp == zero:
+            return mypi/two if self.icomp > zero else -mypi/two
         th = ibarctan(self.icomp/self.rcomp)
         if self.rcomp > 0:
-            return th
-        return th + pi(**self.kwargs) 
+            return th + mypi
+        return th
 
     @property
     def conj(self):
