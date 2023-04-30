@@ -1,9 +1,10 @@
 # IBReal
-Messing with extended precision using Python integers.
+Exploring extended precision using Python 3 integers in a 100% Python library.
 
-IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
-It is naturally slow. All math operations are available in in-line mode (i.e. +=).
+IBReal represents a fully functional, memory-only-limited, arbitrary precision real number. Under the hood,
+it is 100% integer-based. It is naturally slow. All math operations are available in in-line mode (i.e. +=).
 
+its counterpart, IBComp, is an equally robust complex formulation based on IBReal.
 
     >>> from ibreal import IBReal, Ival
     >>> 
