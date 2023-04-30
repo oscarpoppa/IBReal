@@ -243,15 +243,12 @@ def ibsqrt(val):
     return ibgenrt(val, two)
 
 def ibgenrt(val, root):
-    # can be SLOW
-    if not isinstance(val, R):
+    if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
-    if val < 0:
-        raise ValueError('Non-negative numbers only')
+    if not isinstance(root, R) and not isinstance(root, C):
+        root = R(root)
     if val == 0:
         return val
-    if not isinstance(root, R):
-        root = R(root)
     lv = iblog(val)
     return ibexp(lv/root)
 
