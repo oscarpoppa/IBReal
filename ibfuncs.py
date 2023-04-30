@@ -101,38 +101,6 @@ ibarctanmemo = MemoizeIBRCall()
 # memoized callable
 ibarctan = ibarctanmemo(IBArcTan())
 
-# quick memoize
-_pitbl = dict()
-
-def pi(**kwargs):
-    kwargs = kwargs if kwargs else R(0).kwargs
-    if kwargs['prec'] in _pitbl:
-        return _pitbl[kwargs['prec']]
-    one = R((1, 0), **kwargs)
-    two = R((2, 0), **kwargs)
-    four = R((4, 0), **kwargs)
-    five = R((5, 0), **kwargs)
-    six = R((6, 0), **kwargs)
-    eight = R((8, 0), **kwargs)
-    ten = R((10, 0), **kwargs)
-    sixteen = R((16, 0), **kwargs)
-    idx = R((0, 0), **kwargs)
-    rsum = R((0, 0), **kwargs)
-    small = one / ten**(one.prec+one)
-    while True:
-        a = one/(sixteen**idx)
-        b = four/(eight*idx+one)
-        c = two/(eight*idx+four)
-        d = one/(eight*idx+five)
-        e = one/(eight*idx+six)
-        term = a * (b - c - d - e)
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += one 
-    _pitbl[kwargs['prec']] = rsum
-    return rsum
-
 class IBExp:
     def __call__(self, val):
         if isinstance(val, C):
@@ -247,6 +215,37 @@ class IBLog:
 iblogmemo = MemoizeIBRCall()
 # memoized callable
 iblog = iblogmemo(IBLog())
+
+# quick memoize
+_pitbl = dict()
+def pi(**kwargs):
+    kwargs = kwargs if kwargs else R(0).kwargs
+    if kwargs['prec'] in _pitbl:
+        return _pitbl[kwargs['prec']]
+    one = R((1, 0), **kwargs)
+    two = R((2, 0), **kwargs)
+    four = R((4, 0), **kwargs)
+    five = R((5, 0), **kwargs)
+    six = R((6, 0), **kwargs)
+    eight = R((8, 0), **kwargs)
+    ten = R((10, 0), **kwargs)
+    sixteen = R((16, 0), **kwargs)
+    idx = R((0, 0), **kwargs)
+    rsum = R((0, 0), **kwargs)
+    small = one / ten**(one.prec+one)
+    while True:
+        a = one/(sixteen**idx)
+        b = four/(eight*idx+one)
+        c = two/(eight*idx+four)
+        d = one/(eight*idx+five)
+        e = one/(eight*idx+six)
+        term = a * (b - c - d - e)
+        if abs(term) < small:
+            break
+        rsum += term
+        idx += one 
+    _pitbl[kwargs['prec']] = rsum
+    return rsum
 
 ibsqrtmemo = MemoizeIBRCall()
 @ibsqrtmemo
