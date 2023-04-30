@@ -97,6 +97,10 @@ class IBArcTan:
             idx += one
         return rsum
 
+ibarctanmemo = MemoizeIBRCall()
+# memoized callable
+ibarctan = ibarctanmemo(IBArcTan())
+
 # quick memoize
 _pitbl = dict()
 
@@ -128,12 +132,6 @@ def pi(**kwargs):
         idx += one 
     _pitbl[kwargs['prec']] = rsum
     return rsum
-
-ibarctanmemo = MemoizeIBRCall()
-
-# memoized callable
-ibarctan = ibarctanmemo(IBArcTan())
-
 
 class IBExp:
     def __call__(self, val):
@@ -177,7 +175,6 @@ class IBExp:
         return rsum
 
 ibexpmemo = MemoizeIBRCall()
-
 # memoized callable
 ibexp = ibexpmemo(IBExp())
 
@@ -248,12 +245,10 @@ class IBLog:
             return self._log_real(val) - (cnt * self._log2)
 
 iblogmemo = MemoizeIBRCall()
-
 # memoized callable
 iblog = iblogmemo(IBLog())
 
 ibsqrtmemo = MemoizeIBRCall()
-
 @ibsqrtmemo
 def ibsqrt(val):
     two = R((2, 0), **val.kwargs)
@@ -270,10 +265,8 @@ def ibgenrt(val, root):
     return ibexp(lv/root)
 
 ibsinmemo = MemoizeIBRCall()
-
 @ibsinmemo
 def ibsin(theta):
-    #x-x3/3!+x5/5!
     if not isinstance(theta, R):
         theta = R(theta)
     neg1 = R((-1, 0), **theta.kwargs)
@@ -296,10 +289,8 @@ def ibsin(theta):
     return rsum
 
 ibcosmemo = MemoizeIBRCall()
-
 @ibcosmemo
 def ibcos(theta):
-    #1-x2/2!+x4/4!
     if not isinstance(theta, R):
         theta = R(theta)
     neg1 = R((-1, 0), **theta.kwargs)
