@@ -202,8 +202,11 @@ class IBReal:
         return self
 
     def __pow__(self, other):
-        if not isinstance(other, type(self)):
-            other = type(self)(other, **self.kwargs)
+        try:
+            if not isinstance(other, type(self)):
+                other = type(self)(other, **self.kwargs)
+        except Exception:
+            return other.__rpow__(self)
         tmp = type(self)(self.ival, **self.kwargs)
         if other == 0:
             tmp.ival = Ival(1, 0)
@@ -217,7 +220,7 @@ class IBReal:
         else:
             sl = iblog(self)
             tmp = ibexp(sl*other)
-        return tmp.trim()
+        return tmp.trim(other.prec)
 
     def __rpow__(self, other):
         if not isinstance(other, type(self)):
