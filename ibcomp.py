@@ -188,6 +188,11 @@ class IBComp:
             tmp = ibexp(sl*other)
         return tmp
 
+    def __rpow__(self, val):
+        if not isinstance(val, type(self)):
+            val = type(self)(val, **self.kwargs)
+        return val.__pow__(self)
+
     def __ipow__(self, val):
         other = self.__pow__(val)
         (self.rcomp, self.icomp) = (other.rcomp, other.icomp)
