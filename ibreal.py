@@ -297,4 +297,5 @@ class IBReal:
     def __repr__(self):
         return self.trim()._repr
 
+# here to prevent circular import
 from .ibfuncs import ibexp, iblog

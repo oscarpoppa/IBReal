@@ -220,5 +220,6 @@ class IBComp:
     def __repr__(self):
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
+# here to prevent circular import
 from .ibreal import IBReal as R
 from .ibfuncs import ibsqrt, ibarctan, pi, ibsin, ibcos, iblog, ibexp

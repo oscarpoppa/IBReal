@@ -311,5 +311,6 @@ def ibcos(theta):
     fac.close()
     return rsum
 
+# here to prevent circular import
 from .ibreal import Ival, IBReal as R
 from .ibcomp import IBComp as C
