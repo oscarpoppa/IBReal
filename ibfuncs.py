@@ -180,38 +180,17 @@ class IBLog:
     def __init__(self):
         self._log2 = None
 
-    def __call__(self, val):
-        if isinstance(val, C):
-            lr = iblog(val.length)
-            return C((0, val.theta), **val.kwargs) + lr
-        if not isinstance(val, R):
-            val = R(val)
-        if val < R((0, 0), **val.kwargs):
-            val = C(val)
-            lr = iblog(val.length)
-            return C((0, val.theta), **val.kwargs) + lr
+    def _comp_log(self, val):
+        mypi = pi()
         zero = R((0, 0), **val.kwargs)
-        two = R((2, 0), **val.kwargs)
-        if self._log2 is None or self._log2.prec < val.prec:
-            self._log2 = self._iblog(two)
-        cnt = R((0, 0), **val.kwargs)
-        one = R((1, 0), **val.kwargs)
-        if val > 1:
-            while True:
-                if val <= two:
-                    break
-                val /= two
-                cnt += one
-            return self._iblog(val) + (cnt * self._log2)
-        else:
-            while True:
-                if val >= one:
-                    break
-                val *= two
-                cnt += one
-            return self._iblog(val) - (cnt * self._log2)
+        lr = iblog(val.length)
+        cm = C((0, val.theta), **val.kwargs) + lr
+        # get principal value
+        while abs(cm.icomp) > mypi:
+            cm.icomp += (mypi if cm.icomp < zero else -mypi)
+        return cm
 
-    def _iblog(self, val):
+    def _real_log(self, val):
         # can be SLOW
         one = R((1, 0), **val.kwargs)
         neg = R((1, 0), **val.kwargs)
@@ -230,6 +209,35 @@ class IBLog:
             rsum += term
             idx += one 
         return neg * rsum
+
+    def __call__(self, val):
+        if isinstance(val, C):
+            return self._comp_log(val)
+        if not isinstance(val, R):
+            val = R(val)
+        if val < R((0, 0), **val.kwargs):
+            val = C(val)
+            return self._comp_log(val)
+        zero = R((0, 0), **val.kwargs)
+        two = R((2, 0), **val.kwargs)
+        if self._log2 is None or self._log2.prec < val.prec:
+            self._log2 = self._real_log(two)
+        cnt = R((0, 0), **val.kwargs)
+        one = R((1, 0), **val.kwargs)
+        if val > 1:
+            while True:
+                if val <= two:
+                    break
+                val /= two
+                cnt += one
+            return self._real_log(val) + (cnt * self._log2)
+        else:
+            while True:
+                if val >= one:
+                    break
+                val *= two
+                cnt += one
+            return self._real_log(val) - (cnt * self._log2)
 
 iblogmemo = MemoizeIBRCall()
 
