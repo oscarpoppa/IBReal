@@ -189,7 +189,7 @@ class IBLog:
             return self._log_comp(val)
         if not isinstance(val, R):
             val = R(val)
-        if val < zero
+        if val < zero:
             val = C(val)
             return self._log_comp(val)
         zero = R((0, 0), **val.kwargs)
