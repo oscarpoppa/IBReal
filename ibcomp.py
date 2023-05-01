@@ -46,16 +46,16 @@ class IBComp:
     def length(self):
         two = R((2, 0), **self.kwargs)
         slen = self.rcomp**two + self.icomp**two
-        return ibsqrt(slen)
+        return ib_sqrt(slen)
 
     @property
     def theta(self):
         zero = R((0, 0), **self.kwargs)
         two = R((2, 0), **self.kwargs)
-        mypi = pi(**self.kwargs)
+        mypi = ib_pi(**self.kwargs)
         if self.rcomp == zero:
             return mypi/two if self.icomp > zero else -mypi/two
-        th = ibarctan(self.icomp/self.rcomp)
+        th = ib_arctan(self.icomp/self.rcomp)
         if self.rcomp < zero:
             return th + mypi
         return th
@@ -190,8 +190,8 @@ class IBComp:
                 icmp = R((0, 0), **self.icomp.kwargs)
                 return type(self)((rcmp, icmp), **self.kwargs).__truediv__(tmp)
         else:
-            sl = iblog(tmp)
-            tmp = ibexp(sl*other)
+            sl = ib_log(tmp)
+            tmp = ib_exp(sl*other)
         return tmp
 
     def __rpow__(self, val):
@@ -222,4 +222,4 @@ class IBComp:
 
 # here to prevent circular import
 from .ibreal import IBReal as R
-from .ibfuncs import ibsqrt, ibarctan, pi, ibsin, ibcos, iblog, ibexp
+from .ibfuncs import ib_sqrt, ib_arctan, ib_pi, ib_sin, ib_cos, ib_log, ib_exp

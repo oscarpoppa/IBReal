@@ -230,8 +230,8 @@ class IBReal:
             if other < 0:
                 tmp = type(self)(Ival(1, 0), **self.kwargs).__truediv__(tmp)
         else:
-            sl = iblog(self)
-            tmp = ibexp(sl*other)
+            sl = ib_log(self)
+            tmp = ib_exp(sl*other)
         return tmp.trim(other.prec)
 
     def __rpow__(self, other):
@@ -298,4 +298,4 @@ class IBReal:
         return self.trim()._repr
 
 # here to prevent circular import
-from .ibfuncs import ibexp, iblog
+from .ibfuncs import ib_exp, ib_log

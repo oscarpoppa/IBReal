@@ -45,7 +45,7 @@ def _fact_gen(parity='off'):
         val *= cnt
 
 # i times val
-def i(val):
+def ib_i(val):
     return val * C((0, 1)) 
 
 class IBArcTan:
@@ -71,7 +71,7 @@ class IBArcTan:
         rsum = R((0, 0), **tan.kwargs)
         idx = R((0, 0), **tan.kwargs)
         small = one / ten**(tan.prec+one)
-        halfpi = pi(**tan.kwargs) / two
+        halfpi = ib_pi(**tan.kwargs) / two
         while True:
             a = neg1**idx
             b = one / ((two*idx+one)*(tan**(two*idx+one)))
@@ -103,7 +103,7 @@ class IBArcTan:
 
 ibarctanmemo = MemoizeIBRCall()
 # memoized callable
-ibarctan = ibarctanmemo(IBArcTan())
+ib_arctan = ibarctanmemo(IBArcTan())
 
 class IBExp:
     def __call__(self, val):
@@ -148,7 +148,7 @@ class IBExp:
 
 ibexpmemo = MemoizeIBRCall()
 # memoized callable
-ibexp = ibexpmemo(IBExp())
+ib_exp = ibexpmemo(IBExp())
 
 class IBLog:
     def __init__(self):
@@ -157,9 +157,9 @@ class IBLog:
     def _log_comp(self, val):
         zero = R((0, 0), **val.kwargs)
         two = R((2, 0), **val.kwargs)
-        mypi = pi()
+        mypi = ib_pi()
         my2pi = two * mypi
-        lr = iblog(val.length)
+        lr = ib_log(val.length)
         cm = C((0, val.theta), **val.kwargs) + lr
         # get principal value
         while abs(cm.icomp) > mypi:
@@ -219,11 +219,11 @@ class IBLog:
 
 iblogmemo = MemoizeIBRCall()
 # memoized callable
-iblog = iblogmemo(IBLog())
+ib_log = iblogmemo(IBLog())
 
 # quick memoize
 _pitbl = dict()
-def pi(**kwargs):
+def ib_pi(**kwargs):
     kwargs = kwargs if kwargs else R(0).kwargs
     if kwargs['prec'] in _pitbl:
         return _pitbl[kwargs['prec']]
@@ -254,11 +254,11 @@ def pi(**kwargs):
 
 ibsqrtmemo = MemoizeIBRCall()
 @ibsqrtmemo
-def ibsqrt(val):
+def ib_sqrt(val):
     two = R((2, 0), **val.kwargs)
-    return ibgenrt(val, two)
+    return ib_genrt(val, two)
 
-def ibgenrt(val, root):
+def ib_genrt(val, root):
     zero = R((0, 0), **val.kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
@@ -266,12 +266,12 @@ def ibgenrt(val, root):
         root = R(root)
     if val == zero:
         return val
-    lv = iblog(val)
-    return ibexp(lv/root)
+    lv = ib_log(val)
+    return ib_exp(lv/root)
 
 ibsinmemo = MemoizeIBRCall()
 @ibsinmemo
-def ibsin(theta):
+def ib_sin(theta):
     if not isinstance(theta, R):
         theta = R(theta)
     neg1 = R((-1, 0), **theta.kwargs)
@@ -295,7 +295,7 @@ def ibsin(theta):
 
 ibcosmemo = MemoizeIBRCall()
 @ibcosmemo
-def ibcos(theta):
+def ib_cos(theta):
     if not isinstance(theta, R):
         theta = R(theta)
     neg1 = R((-1, 0), **theta.kwargs)
