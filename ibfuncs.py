@@ -44,6 +44,10 @@ def _fact_gen(parity='off'):
         cnt += 1
         val *= cnt
 
+# i times val
+def i(val):
+    return val * C((0, 1)) 
+
 class IBArcTan:
     #!! Very slow to converge near 1
     def __call__(self, tan):
