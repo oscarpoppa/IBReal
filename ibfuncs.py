@@ -171,7 +171,7 @@ class IBLog:
         rsum = R((0, 0), **val.kwargs)
         small = one / ten**(val.prec+one)
         idx = R((1, 0), **val.kwargs) 
-        if val > 1:
+        if val > one:
             neg = -neg
             val = one / val
         val = one - val
@@ -184,11 +184,12 @@ class IBLog:
         return neg * rsum
 
     def __call__(self, val):
+        zero = R((0, 0), **val.kwargs)
         if isinstance(val, C):
             return self._log_comp(val)
         if not isinstance(val, R):
             val = R(val)
-        if val < R((0, 0), **val.kwargs):
+        if val < zero
             val = C(val)
             return self._log_comp(val)
         zero = R((0, 0), **val.kwargs)
@@ -197,7 +198,7 @@ class IBLog:
         one = R((1, 0), **val.kwargs)
         if self._log2 is None or self._log2.prec < val.prec:
             self._log2 = self._log_real(two)
-        if val > 1:
+        if val > one:
             while True:
                 if val <= two:
                     break
@@ -254,11 +255,12 @@ def ibsqrt(val):
     return ibgenrt(val, two)
 
 def ibgenrt(val, root):
+    zero = R((0, 0), **val.kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
     if not isinstance(root, R) and not isinstance(root, C):
         root = R(root)
-    if val == 0:
+    if val == zero:
         return val
     lv = iblog(val)
     return ibexp(lv/root)
