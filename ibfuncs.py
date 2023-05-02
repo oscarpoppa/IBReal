@@ -272,9 +272,10 @@ ibsqrtmemo = MemoizeIBRCall()
 @ibsqrtmemo
 def ib_sqrt(val):
     two = R((2, 0), **val.kwargs)
-    return ib_genrt(val, two)
+    return ib_root(val, two)
 
-def ib_genrt(val, root):
+# uses principal branch of log for a single root
+def ib_root(val, root):
     zero = R((0, 0), **val.kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
@@ -284,6 +285,23 @@ def ib_genrt(val, root):
         return val
     lv = ib_log(val)
     return ib_exp(lv/root)
+
+# returns a function to return values by log branch
+def ib_roots(val, root):
+    zero = R((0, 0), **val.kwargs)
+    if not isinstance(val, R) and not isinstance(val, C):
+        val = R(val)
+    if not isinstance(root, R) and not isinstance(root, C):
+        root = R(root)
+    if val == zero:
+        def inner(num):
+            return zero
+        return inner
+    lv = ib_logs(val)
+    def inner(num):
+        num = R(int(R(num)))
+        return ib_exp(lv(num)/root)
+    return inner
 
 ibsinmemo = MemoizeIBRCall()
 @ibsinmemo
