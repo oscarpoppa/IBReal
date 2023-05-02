@@ -258,12 +258,15 @@ iblogmemo = MemoizeIBRCall()
 # memoized callable
 ib_log = iblogmemo(IBLog())
 
-#closure to allow access to any branch  -- ib_logs(C('1+2i'))(3) for third branch
+# returns a closure to allow access to any branch 
+# (i.e. ib_logs(C('1+2i'))(3) for third branch)
 def ib_logs(val):
     val = C(val)
     two = R((2, 0), **val.kwargs)
     my2pi = two * ib_pi()
     princ_log = ib_log(val)
+
+    @wraps(ib_logs)
     def inner(branch):
         # chop off any garbage
         branch = R(int(R(branch)))
@@ -290,7 +293,8 @@ def ib_root(val, root):
     lv = ib_log(val)
     return ib_exp(lv/root)
 
-# returns a closure to return values by log branch
+# returns a closure to allow access to any root, specified by corresponding 
+# log branch (i.e. ib_roots(C('1+2i'),5)(3) for root corresponding to third branch)
 def ib_roots(val, root):
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
@@ -298,10 +302,12 @@ def ib_roots(val, root):
         root = R(root)
     zero = R((0, 0), **val.kwargs)
     if val == zero:
+        @wraps(ib_roots)
         def inner(num):
             return zero
         return inner
     lv = ib_logs(val)
+    @wraps(ib_roots)
     def inner(num):
         num = R(int(R(num)))
         return ib_exp(lv(num)/root)
