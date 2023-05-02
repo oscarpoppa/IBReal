@@ -286,7 +286,7 @@ def ib_root(val, root):
     lv = ib_log(val)
     return ib_exp(lv/root)
 
-# returns a function to return values by log branch
+# returns a closure to return values by log branch
 def ib_roots(val, root):
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
