@@ -138,10 +138,9 @@ class IBArcTan:
             idx += one
         return rsum
 
+# memoized callable
 ibarctanmemo = MemoizeIBRCall()
-@ibarctanmemo
-def ib_arctan(*args, **kwargs):
-    return IBArcTan()(*args, **kwargs)
+ib_arctan = ibarctanmemo(IBArcTan())
 
 class IBExp:
     def __call__(self, val):
@@ -184,10 +183,9 @@ class IBExp:
         fac.close()
         return rsum
 
+# memoized callable
 ibexpmemo = MemoizeIBRCall()
-@ibexpmemo
-def ib_exp(*args, **kwargs):
-    return IBExp()(*args, **kwargs)
+ib_exp = ibexpmemo(IBExp())
 
 class IBLog:
     def __init__(self):
@@ -256,10 +254,9 @@ class IBLog:
                 cnt += one
             return self._log_real(val) - (cnt * self._log2)
 
+# memoized callable
 iblogmemo = MemoizeIBRCall()
-@iblogmemo
-def ib_log(*args, **kwargs):
-    return IBLog()(*args, **kwargs)
+ib_log = iblogmemo(IBLog())
 
 # returns a closure to allow access to any branch 
 # (i.e. ib_logs(C('1+2i'))(3) for third branch)
