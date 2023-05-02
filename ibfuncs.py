@@ -288,11 +288,11 @@ def ib_root(val, root):
 
 # returns a function to return values by log branch
 def ib_roots(val, root):
-    zero = R((0, 0), **val.kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
     if not isinstance(root, R) and not isinstance(root, C):
         root = R(root)
+    zero = R((0, 0), **val.kwargs)
     if val == zero:
         def inner(num):
             return zero
