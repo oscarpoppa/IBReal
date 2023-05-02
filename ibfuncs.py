@@ -13,7 +13,8 @@ class MemoizeIBRCall:
 
     def __call__(self, func):
         @wraps(func)
-        def inner(*args):
+        def inner(*args, **kwargs):
+            # must call with positional primary arg
             if isinstance(args[0], C) or isinstance(args[0], R):
                 tmp = args[0]
             else:
@@ -21,7 +22,7 @@ class MemoizeIBRCall:
             key = Memo(repr(tmp), **tmp.kwargs)
             if key in self.tbl:
                 return self.tbl[key]
-            ret = func(tmp)
+            ret = func(*args, **kwargs)
             self.tbl[key] = ret
             return ret
         return inner
