@@ -303,6 +303,7 @@ def ib_roots(val, root):
         return ib_exp(lv(num)/root)
     return inner
 
+# reals only
 ibsinmemo = MemoizeIBRCall()
 @ibsinmemo
 def ib_sin(theta):
@@ -327,6 +328,7 @@ def ib_sin(theta):
     fac.close()
     return rsum
 
+# reals only
 ibcosmemo = MemoizeIBRCall()
 @ibcosmemo
 def ib_cos(theta):
