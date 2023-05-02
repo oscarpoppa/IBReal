@@ -48,6 +48,37 @@ def _fact_gen(parity='off'):
 def ib_i(val):
     return val * C((0, 1)) 
 
+# quick memoize
+_pitbl = dict()
+def ib_pi(**kwargs):
+    kwargs = kwargs if kwargs else R(0).kwargs
+    if kwargs['prec'] in _pitbl:
+        return _pitbl[kwargs['prec']]
+    one = R((1, 0), **kwargs)
+    two = R((2, 0), **kwargs)
+    four = R((4, 0), **kwargs)
+    five = R((5, 0), **kwargs)
+    six = R((6, 0), **kwargs)
+    eight = R((8, 0), **kwargs)
+    ten = R((10, 0), **kwargs)
+    sixteen = R((16, 0), **kwargs)
+    idx = R((0, 0), **kwargs)
+    rsum = R((0, 0), **kwargs)
+    small = one / ten**(one.prec+one)
+    while True:
+        a = one/(sixteen**idx)
+        b = four/(eight*idx+one)
+        c = two/(eight*idx+four)
+        d = one/(eight*idx+five)
+        e = one/(eight*idx+six)
+        term = a * (b - c - d - e)
+        if abs(term) < small:
+            break
+        rsum += term
+        idx += one
+    _pitbl[kwargs['prec']] = rsum
+    return rsum
+
 class IBArcTan:
     #!! Very slow to converge near 1
     def __call__(self, tan):
@@ -232,37 +263,6 @@ def ib_logs(val):
         branch = R(int(R(branch)))
         return princ_log + ib_i(branch*my2pi)
     return inner
-
-# quick memoize
-_pitbl = dict()
-def ib_pi(**kwargs):
-    kwargs = kwargs if kwargs else R(0).kwargs
-    if kwargs['prec'] in _pitbl:
-        return _pitbl[kwargs['prec']]
-    one = R((1, 0), **kwargs)
-    two = R((2, 0), **kwargs)
-    four = R((4, 0), **kwargs)
-    five = R((5, 0), **kwargs)
-    six = R((6, 0), **kwargs)
-    eight = R((8, 0), **kwargs)
-    ten = R((10, 0), **kwargs)
-    sixteen = R((16, 0), **kwargs)
-    idx = R((0, 0), **kwargs)
-    rsum = R((0, 0), **kwargs)
-    small = one / ten**(one.prec+one)
-    while True:
-        a = one/(sixteen**idx)
-        b = four/(eight*idx+one)
-        c = two/(eight*idx+four)
-        d = one/(eight*idx+five)
-        e = one/(eight*idx+six)
-        term = a * (b - c - d - e)
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += one 
-    _pitbl[kwargs['prec']] = rsum
-    return rsum
 
 ibsqrtmemo = MemoizeIBRCall()
 @ibsqrtmemo
