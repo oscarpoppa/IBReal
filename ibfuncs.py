@@ -149,7 +149,7 @@ class IBExp:
             return self._exp_comp(val)
         else:
              if not isinstance(val, R):
-                 val = R(val, **self.kwargs)
+                 val = R(val)
              return self._exp_real(val)
     
     def _exp_real(self, val):
