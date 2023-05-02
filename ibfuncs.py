@@ -15,11 +15,15 @@ class MemoizeIBRCall:
         @wraps(func)
         def inner(*args, **kwargs):
             # must call with positional primary arg
-            if isinstance(args[0], C) or isinstance(args[0], R):
-                tmp = args[0]
+            if len(args):
+                if isinstance(args[0], C) or isinstance(args[0], R):
+                    tmp = args[0]
+                else:
+                    tmp = R(args[0])
             else:
-                tmp = R(args[0])
-            key = Memo(repr(tmp), **tmp.kwargs)
+                tmp = None
+            skw = R((0, 0)).kwargs if tmp is None else tmp.kwargs
+            key = Memo(repr(tmp)+repr(args[1:])+repr(kwargs), **skw)
             if key in self.tbl:
                 return self.tbl[key]
             ret = func(*args, **kwargs)
@@ -53,12 +57,10 @@ def ib_i(val=None):
         val = R(val)
     return val * C((0, 1)) 
 
-# quick memoize
-_pitbl = dict()
+ibpimemo = MemoizeIBRCall()
+@ibpimemo
 def ib_pi(**kwargs):
     kwargs = kwargs if kwargs else R(0).kwargs
-    if kwargs['prec'] in _pitbl:
-        return _pitbl[kwargs['prec']]
     one = R((1, 0), **kwargs)
     two = R((2, 0), **kwargs)
     four = R((4, 0), **kwargs)
@@ -81,7 +83,6 @@ def ib_pi(**kwargs):
             break
         rsum += term
         idx += one
-    _pitbl[kwargs['prec']] = rsum
     return rsum
 
 class IBArcTan:
@@ -276,6 +277,8 @@ def ib_sqrt(val):
     return ib_root(val, two)
 
 # uses principal branch of log for a single root
+ibrootmemo = MemoizeIBRCall()
+@ibrootmemo
 def ib_root(val, root):
     zero = R((0, 0), **val.kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
