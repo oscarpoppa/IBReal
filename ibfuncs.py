@@ -221,6 +221,18 @@ iblogmemo = MemoizeIBRCall()
 # memoized callable
 ib_log = iblogmemo(IBLog())
 
+#closure to allow access to any branch  -- ib_logs(C('1+2i'))(3) for third branch
+def ib_logs(val):
+    val = C(val)
+    two = R((2, 0), **val.kwargs)
+    my2pi = two * ib_pi()
+    princ_log = ib_log(val)
+    def inner(branch):
+        # chop off any garbage
+        branch = R(int(R(branch)))
+        return princ_log + ib_i(branch*my2pi)
+    return inner
+
 # quick memoize
 _pitbl = dict()
 def ib_pi(**kwargs):
