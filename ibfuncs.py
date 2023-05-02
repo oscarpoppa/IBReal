@@ -45,7 +45,11 @@ def _fact_gen(parity='off'):
         val *= cnt
 
 # i times val
-def ib_i(val):
+def ib_i(val=None):
+    if val is None:
+        val = C((1, 0))
+    if not isinstance(val, R) and not isinstance(val, C):
+        val = R(val)
     return val * C((0, 1)) 
 
 # quick memoize
