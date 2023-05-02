@@ -298,7 +298,7 @@ def ib_sin(theta):
     idx = R((1, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
     small = one / ten**(theta.prec+one)
-    fac = _fact_gen('odd')
+    fac = _fact_gen(parity='odd')
     while True:
         term = neg1**(seq) * theta**idx / next(fac)
         if abs(term) < small:
@@ -322,7 +322,7 @@ def ib_cos(theta):
     idx = R((0, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
     small = one / ten**(theta.prec+one)
-    fac = _fact_gen('even')
+    fac = _fact_gen(parity='even')
     while True:
         term = neg1**(seq) * theta**idx / next(fac)
         if abs(term) < small:
