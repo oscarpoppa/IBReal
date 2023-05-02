@@ -268,7 +268,6 @@ def ib_logs(val):
     two = R((2, 0), **val.kwargs)
     my2pi = two * ib_pi()
     princ_log = ib_log(val)
-
     @wraps(ib_logs)
     def inner(branch):
         # chop off any garbage
