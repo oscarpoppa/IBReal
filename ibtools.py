@@ -15,7 +15,7 @@ def num_roots(root):
         if isint(num/a):
             if isint(denom/a):
                 tn = num/a
-    return tn
+    return int(tn)
 
 def set_global_prec(num):
     environ['IBR_DEF_PREC'] = str(num)
