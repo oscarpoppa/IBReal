@@ -53,11 +53,15 @@ class IBComp:
         zero = R((0, 0), **self.kwargs)
         two = R((2, 0), **self.kwargs)
         mypi = ib_pi(**self.kwargs)
+        my2pi = two * mypi
         if self.rcomp == zero:
             return mypi/two if self.icomp > zero else -mypi/two
         th = ib_arctan(self.icomp/self.rcomp)
         if self.rcomp < zero:
-            return th + mypi
+            th = th + mypi
+        while abs(th) > mypi:
+            # return canonical form
+            th += (my2pi if th < 0 else -my2pi)
         return th
 
     @property
