@@ -1,2 +1,2 @@
-from . import ibfuncs, ibreal, ibcomp
-__all__ = ['ibfuncs', 'ibreal', 'ibcomp']
+from . import ibfuncs, ibreal, ibcomp, ibtools
+__all__ = ['ibfuncs', 'ibreal', 'ibcomp','ibtools']
