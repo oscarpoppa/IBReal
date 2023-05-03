@@ -221,11 +221,11 @@ class IBLog:
         return neg * rsum
 
     def __call__(self, val):
-        zero = R((0, 0), **val.kwargs)
         if isinstance(val, C):
             return self._log_comp(val)
         if not isinstance(val, R):
             val = R(val)
+        zero = R((0, 0), **val.kwargs)
         if val < zero:
             val = C(val)
             return self._log_comp(val)
@@ -271,6 +271,8 @@ def ib_logs(val):
 ibsqrtmemo = MemoizeIBRCall()
 @ibsqrtmemo
 def ib_sqrt(val):
+    if not isinstance(val, R) and not isinstance(val, C):
+        val = R(val)
     two = R((2, 0), **val.kwargs)
     return ib_root(val, two)
 
@@ -278,11 +280,11 @@ def ib_sqrt(val):
 ibrootmemo = MemoizeIBRCall()
 @ibrootmemo
 def ib_root(val, root):
-    zero = R((0, 0), **val.kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
     if not isinstance(root, R) and not isinstance(root, C):
         root = R(root)
+    zero = R((0, 0), **val.kwargs)
     if val == zero:
         return val
     lv = ib_log(val)
