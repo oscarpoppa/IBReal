@@ -67,16 +67,21 @@ def eff_int(val, limit=None):
         if dot < 0:
             st = '0'*abs(dot) + st
             dot = 0
-        patt = '9'*int(limit)
+        patt9 = '9'*int(limit)
         wh = st[:dot] or '0'
         fr = st[dot:] or ''
-        idx = fr.find(patt)
+        add = one
+        idx = fr.find(patt9)
         if idx == -1:
-            return rval
+            patt0 = '0'*int(limit)
+            add = zero
+            idx = fr.find(patt0)
+            if idx == -1:
+                return rval
         if idx == 0:
-            return neg * (R(wh, **rval.kwargs) + one)
+            return neg * (R(wh, **rval.kwargs) + add)
         else:
-            nu = str(int(fr[idx-1]) + 1)
+            nu = str(int(fr[idx-1]) + int(add))
             fr = fr[:idx-1] + nu
             return neg * R('{}.{}'.format(wh, fr), **rval.kwargs)
     if isinstance(val, C):
