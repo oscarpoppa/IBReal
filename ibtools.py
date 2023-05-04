@@ -65,7 +65,8 @@ def eff_int(val, limit=None):
         off = rval.ival.off
         dot = ln - off
         if dot < 0:
-            return rval
+            st = '0'*abs(dot) + st
+            dot = 0
         patt = '9'*int(limit)
         wh = st[:dot] or '0'
         fr = st[dot:] or ''
