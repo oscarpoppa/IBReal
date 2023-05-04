@@ -31,7 +31,7 @@ class MemoizeIBRCall:
 def _fact_gen(parity='off'):
     # 1,1,2,6,...
     cnt = 0
-    def mparity():
+    def _mparity():
         if parity == 'off':
             return True
         elif parity == 'even':
@@ -40,7 +40,7 @@ def _fact_gen(parity='off'):
             return True if cnt%2 else False
     val = 1
     while True:
-        if mparity():
+        if _mparity():
             yield R(val)
         cnt += 1
         val *= cnt

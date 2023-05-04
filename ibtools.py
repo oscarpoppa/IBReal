@@ -11,7 +11,7 @@ def set_global_prec(num):
 # expected roots given degree of real root
 # effectively, just makes a reduced fraction
 def num_roots(root):
-    def isint(num):
+    def _isint(num):
         return int(num) == num 
     if not isinstance(root, R): 
         root = R(root)
@@ -20,8 +20,8 @@ def num_roots(root):
     index = sorted([num, denom])[0] + 1
     tn = num 
     for a in range(1, int(index)):
-        if isint(num/a):
-            if isint(denom/a):
+        if _isint(num/a):
+            if _isint(denom/a):
                 tn = num/a
     return int(tn)
 
@@ -38,12 +38,12 @@ def eff_0(val, limit=None):
         limit = R(limit, **val.kwargs)
     one = R((1, 0), **val.kwargs)
     lowval = one / 10**limit
-    def tform(num):
+    def _tform(num):
         return R((0, 0), **num.kwargs) if abs(num) < lowval else num
     if isinstance(val, C):
-        return C((tform(val.rcomp), tform(val.icomp)), **val.kwargs)
+        return C((_tform(val.rcomp), _tform(val.icomp)), **val.kwargs)
     else:
-        return tform(val)
+        return _tform(val)
 
 # prettifies output by rounding off .XYZ99999999999999... 
 # numbers and .XYZ000000000000000... numbers specified 
@@ -56,7 +56,7 @@ def eff_int(val, limit=None):
         limit = pt9 * val.prec
     if not isinstance(limit, R):
         limit = R(limit, **val.kwargs)
-    def getint(rval):
+    def _getint(rval):
         st = str(abs(rval.ival.num))
         ln = len(st)
         one = R((1, 0), **rval.kwargs)
@@ -86,9 +86,9 @@ def eff_int(val, limit=None):
             fr = fr[:idx-1] + nu
             return neg * R('{}.{}'.format(wh, fr), **rval.kwargs)
     if isinstance(val, C):
-        return C((getint(val.rcomp), getint(val.icomp)), **val.kwargs) 
+        return C((_getint(val.rcomp), _getint(val.icomp)), **val.kwargs) 
     else:
-        return getint(val) 
+        return _getint(val) 
 
 # applies both eff_int and eff_0
 # specified by limit of decimal places
