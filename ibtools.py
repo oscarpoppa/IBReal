@@ -48,6 +48,7 @@ def eff_0(val, limit=None):
 # prettifies output by rounding off .XYZ99999999999999... 
 # numbers and .XYZ000000000000000... numbers specified 
 # by limit of decimal places
+# text-based :(
 def eff_int(val, limit=None):
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
