@@ -29,15 +29,15 @@ def num_roots(root):
 # return chopped off values if effectivel zero.
 # specified by limit of decimal places
 def eff_0(val, limit=None):
+    if not isinstance(val, R) and not isinstance(val, C):
+        val = R(val)
     if limit is None:
         pt9 = R((9, 1))
-        limit = pt9 * pt9.prec
+        limit = pt9 * val.prec
     if not isinstance(limit, R):
         limit = R(limit)
     one = R((1, 0), **limit.kwargs)
     lowval = one / 10**limit
-    if not isinstance(val, R) and not isinstance(val, C):
-        val = R(val)
     def tform(num):
         return R((0, 0), **num.kwargs) if abs(num) < lowval else num
     if isinstance(val, C):
@@ -52,7 +52,7 @@ def eff_int(val, limit=None):
         val = R(val)
     if limit is None:
         pt9 = R((9, 1))
-        limit = pt9 * pt9.prec
+        limit = pt9 * val.prec
     if not isinstance(limit, R):
         limit = R(limit)
     def getint(rval):
