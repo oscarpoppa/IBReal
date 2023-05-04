@@ -32,11 +32,11 @@ def eff_0(val, limit=None):
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
     if limit is None:
-        pt9 = R((9, 1))
+        pt9 = R((9, 1), **val.kwargs)
         limit = pt9 * val.prec
     if not isinstance(limit, R):
-        limit = R(limit)
-    one = R((1, 0), **limit.kwargs)
+        limit = R(limit, **val.kwargs)
+    one = R((1, 0), **val.kwargs)
     lowval = one / 10**limit
     def tform(num):
         return R((0, 0), **num.kwargs) if abs(num) < lowval else num
@@ -51,10 +51,10 @@ def eff_int(val, limit=None):
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
     if limit is None:
-        pt9 = R((9, 1))
+        pt9 = R((9, 1), **val.kwargs)
         limit = pt9 * val.prec
     if not isinstance(limit, R):
-        limit = R(limit)
+        limit = R(limit, **val.kwargs)
     def getint(rval):
         st = str(abs(rval.ival.num))
         ln = len(st)
@@ -74,11 +74,11 @@ def eff_int(val, limit=None):
         if idx == -1:
             return rval
         if idx == 0:
-            return neg * (R(wh) + one)
+            return neg * (R(wh, **rval.kwargs) + one)
         else:
             nu = str(int(fr[idx-1]) + 1)
             fr = fr[:idx-1] + nu
-            return neg * R('{}.{}'.format(wh, fr))
+            return neg * R('{}.{}'.format(wh, fr), **rval.kwargs)
     if isinstance(val, C):
         return C((getint(val.rcomp), getint(val.icomp)), **val.kwargs) 
     else:
