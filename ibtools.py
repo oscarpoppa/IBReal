@@ -81,3 +81,12 @@ def eff_int(val, limit=None):
 def clean(val, limit=None):
     return eff_int(eff_0(val, limit), limit)
 
+# decorator to return clean numbers
+def ret_clean(limit=None):
+    def inner1(func):
+        def inner2(*args, **kwargs):
+            ret = func(*args, **kwargs)
+            return clean(ret, limit)
+        return inner2
+    return inner1
+
