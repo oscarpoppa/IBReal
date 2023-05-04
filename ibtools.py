@@ -25,7 +25,7 @@ def num_roots(root):
                 tn = num/a
     return int(tn)
 
-# prettifies output by zeroing out small numbers
+# prettifies output by zeroing out very low order numbers
 # return chopped off values if effectivel zero.
 # specified by limit of decimal places
 def eff_0(val, limit=None):
