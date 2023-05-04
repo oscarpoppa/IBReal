@@ -69,12 +69,12 @@ def eff_int(val, limit=None):
             st = '0'*abs(dot) + st
             dot = 0
         patt9 = '9'*int(limit)
+        patt0 = '0'*int(limit)
         wh = st[:dot] or '0'
         fr = st[dot:] or ''
         add = one
         idx = fr.find(patt9)
         if idx == -1:
-            patt0 = '0'*int(limit)
             add = zero
             idx = fr.find(patt0)
             if idx == -1:
