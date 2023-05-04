@@ -36,10 +36,11 @@ def eff_0(val, limit=None):
         limit = pt9 * val.prec
     if not isinstance(limit, R):
         limit = R(limit, **val.kwargs)
+    zero = R((0, 0), **val.kwargs)
     one = R((1, 0), **val.kwargs)
     lowval = one / 10**limit
     def _tform(num):
-        return R((0, 0), **num.kwargs) if abs(num) < lowval else num
+        return zero if abs(num) < lowval else num
     if isinstance(val, C):
         return C((_tform(val.rcomp), _tform(val.icomp)), **val.kwargs)
     else:
