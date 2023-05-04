@@ -1,6 +1,7 @@
 from .ibreal import IBReal as R
 from .ibcomp import IBComp as C
 from os import environ
+from functools import wraps
 
 # set global percision (internal integer length)
 def set_global_prec(num):
@@ -84,6 +85,7 @@ def clean(val, limit=None):
 # decorator to return clean numbers
 def ret_clean(limit=None):
     def inner1(func):
+        @wraps(func)
         def inner2(*args, **kwargs):
             ret = func(*args, **kwargs)
             return clean(ret, limit)
