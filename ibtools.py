@@ -67,11 +67,17 @@ def eff_int(val, limit=None):
         if dot < 0:
             return rval
         patt = '9'*int(limit)
-        wh = st[:dot] or zero
+        wh = st[:dot] or '0'
         fr = st[dot:] or ''
-        if fr.find(patt) == 0:
+        idx = fr.find(patt)
+        if idx == -1:
+            return rval
+        if idx == 0:
             return neg * (R(wh) + one)
-        return rval
+        else:
+            nu = str(int(fr[idx-1]) + 1)
+            fr = fr[:idx-1] + nu
+            return neg * R('{}.{}'.format(wh, fr))
     if isinstance(val, C):
         return C((getint(val.rcomp), getint(val.icomp)), **val.kwargs) 
     else:
