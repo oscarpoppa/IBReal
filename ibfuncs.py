@@ -201,7 +201,7 @@ class IBLog:
     def _log_comp(self, val):
         zero = R((0, 0), **val.kwargs)
         two = R((2, 0), **val.kwargs)
-        mypi = ib_pi()
+        mypi = ib_pi(**val.kwargs)
         my2pi = two * mypi
         lr = ib_log(val.length)
         cm = C((0, val.theta), **val.kwargs) + lr
@@ -274,7 +274,7 @@ def ib_log(val):
 def ib_logs(val):
     val = C(val)
     two = R((2, 0), **val.kwargs)
-    my2pi = two * ib_pi()
+    my2pi = two * ib_pi(**val.kwargs)
     princ_log = ib_log(val)
     @wraps(ib_logs)
     def inner(branch):
