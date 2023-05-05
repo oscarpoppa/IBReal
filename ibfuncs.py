@@ -51,7 +51,7 @@ def ib_i(val=None):
         val = C((1, 0))
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
-    return val * C((0, 1)) 
+    return val * C((0, 1), **val.kwargs) 
 
 ibpimemo = MemoizeIBRCall()
 @ibpimemo
