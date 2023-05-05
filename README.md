@@ -70,11 +70,9 @@ its counterpart, IBComp, is an equally robust complex formulation based on IBRea
     >>> from ibfuncs import ib_roots
     >>> from ibtools import clean, ret_clean
     >>>
-    >>> # twelfth root of one
+    >>> # "clean" twelfth root of one
     >>> one = IBReal(1)
     >>> z = ret_clean()(ib_roots(one, 12))
-    >>> z(0)
-    1.0 + 0.0i
     >>>
     >>> examine any of the roots
     >>> z(0)
