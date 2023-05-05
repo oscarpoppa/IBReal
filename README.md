@@ -2,7 +2,7 @@
 Exploring extended precision using Python 3 integers in a 100% Python library.
 
 IBReal represents a fully functional, memory-only-limited, arbitrary precision real number. Under the hood,
-it is 100% integer-based. It is naturally slow.
+it is 100% integer-based. It is naturally slow, although caching is used throughout.
 
 its counterpart, IBComp, is an equally robust complex formulation based on IBReal.
 
