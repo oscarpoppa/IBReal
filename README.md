@@ -63,14 +63,20 @@ its counterpart, IBComp, is an equally robust complex formulation based on IBRea
     >>> cm * 6
     -6.6000000000000000000 + 6.6052734e-12i
     >>> 
-    >>> cm * 0.00000000000000000000000000000000000000000012212
+    >>> cm * IBReal('0.00000000000000000000000000000000000000000012212')
     -1.34332e-43 + 1.34439331268e-55i
     >>>
+    >>> # functions and utilities to support IBReal and IBComp types
     >>> from ibfuncs import ib_roots
     >>> from ibtools import clean, ret_clean
     >>>
+    >>> # twelfth root of one
     >>> one = IBReal(1)
     >>> z = ret_clean()(ib_roots(one, 12))
+    >>> z(0)
+    1.0 + 0.0i
+    >>>
+    >>> examine any of the roots
     >>> z(0)
     1.0 + 0.0i
     >>> z(1)
@@ -81,4 +87,9 @@ its counterpart, IBComp, is an equally robust complex formulation based on IBRea
     9.999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999041e-1 + -5.505e-98i
     >>> clean(_)
     1.0 + 0.0i
+    >>> z(9)
+    0.0 + -1.0i
+    >>> z(11)
+    8.660254037844386467637231707529361834714026269051903140279034897259665084544000185405730933786242177e-1 + -5.0e-1i
     >>>
+
