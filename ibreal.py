@@ -37,8 +37,7 @@ class IBReal:
                 self.ival = Ival(*raw)
             elif isinstance(raw, type(self)):
                 self.ival = raw.ival
-                self.prec = raw.prec #override arg
-                self.trim_on = raw.trim_on
+                self.prec = prec or raw.prec
             elif isinstance(raw, int):
                 self.ival = Ival(raw, 0)
             else: # coerce text or floats to IBReal

@@ -65,9 +65,10 @@ def ib_pi(**kwargs):
     eight = R((8, 0), **kwargs)
     ten = R((10, 0), **kwargs)
     sixteen = R((16, 0), **kwargs)
+    overshoot = one
     idx = R((0, 0), **kwargs)
     rsum = R((0, 0), **kwargs)
-    small = one / ten**(one.prec+one)
+    small = one / ten**(one.prec+overshoot)
     while True:
         a = one/(sixteen**idx)
         b = four/(eight*idx+one)
@@ -97,13 +98,14 @@ class IBArcTan:
     
     def _arctan_gt1(self, tan):
         # for tan >= 1 or <= -1
+        neg1 = R((-1, 0), **tan.kwargs)
         one = R((1, 0), **tan.kwargs)
         two = R((2, 0), **tan.kwargs)
         ten = R((10, 0), **tan.kwargs)
-        neg1 = R((-1, 0), **tan.kwargs)
-        rsum = R((0, 0), **tan.kwargs)
+        overshoot = one
         idx = R((0, 0), **tan.kwargs)
-        small = one / ten**(tan.prec+one)
+        rsum = R((0, 0), **tan.kwargs)
+        small = one / ten**(tan.prec+overshoot)
         halfpi = ib_pi(**tan.kwargs) / two
         while True:
             a = neg1**idx
@@ -117,13 +119,14 @@ class IBArcTan:
         
     def _arctan_lt1(self, tan):
         # for -1 <= tan <= 1
+        neg1 = R((-1, 0), **tan.kwargs)
         one = R((1, 0), **tan.kwargs)
         two = R((2, 0), **tan.kwargs)
         ten = R((10, 0), **tan.kwargs)
-        neg1 = R((-1, 0), **tan.kwargs)
-        rsum = R((0, 0), **tan.kwargs)
+        overshoot = one
         idx = R((0, 0), **tan.kwargs)
-        small = one / ten**(tan.prec+one)
+        rsum = R((0, 0), **tan.kwargs)
+        small = one / ten**(tan.prec+overshoot)
         while True:
             a = neg1**idx
             b = (tan**(two*idx+one))/(two*idx+one)
@@ -151,11 +154,12 @@ class IBExp:
              return self._exp_real(val)
     
     def _exp_real(self, val):
-        rsum = R((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
         ten = R((10, 0), **val.kwargs)
+        overshoot = one
         idx = R((0, 0), **val.kwargs)
-        small = one / ten**(val.prec+one)
+        rsum = R((0, 0), **val.kwargs)
+        small = one / ten**(val.prec+overshoot)
         fac = _fact_gen()
         while True:
             term = val**idx / next(fac)
@@ -167,11 +171,12 @@ class IBExp:
         return rsum
     
     def _exp_comp(self, val):
-        rsum = C((0, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
         ten = R((10, 0), **val.kwargs)
+        overshoot = one
         idx = R((0, 0), **val.kwargs)
-        small = one / ten**(val.prec+one)
+        rsum = C((0, 0), **val.kwargs)
+        small = one / ten**(val.prec+overshoot)
         fac = _fact_gen()
         while True:
             term = val**idx / next(fac)
@@ -207,13 +212,14 @@ class IBLog:
 
     def _log_real(self, val):
         # can be SLOW
+        neg1 = R((-1, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
         ten = R((10, 0), **val.kwargs)
+        overshoot = one
         neg = R((1, 0), **val.kwargs)
-        neg1 = R((-1, 0), **val.kwargs)
-        rsum = R((0, 0), **val.kwargs)
-        small = one / ten**(val.prec+one)
         idx = R((1, 0), **val.kwargs) 
+        rsum = R((0, 0), **val.kwargs)
+        small = one / ten**(val.prec+overshoot)
         if val > one:
             neg = -neg
             val = one / val
@@ -329,10 +335,11 @@ def ib_sin(theta):
     one = R((1, 0), **theta.kwargs)
     two = R((2, 0), **theta.kwargs)
     ten = R((10, 0), **theta.kwargs)
-    rsum = R((0, 0), **theta.kwargs)
+    overshoot = one
     idx = R((1, 0), **theta.kwargs)
+    rsum = R((0, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
-    small = one / ten**(theta.prec+one)
+    small = one / ten**(theta.prec+overshoot)
     fac = _fact_gen(parity='odd')
     while True:
         term = neg1**(seq) * theta**idx / next(fac)
@@ -354,10 +361,11 @@ def ib_cos(theta):
     one = R((1, 0), **theta.kwargs)
     two = R((2, 0), **theta.kwargs)
     ten = R((10, 0), **theta.kwargs)
+    overshoot = one
     rsum = R((0, 0), **theta.kwargs)
     idx = R((0, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
-    small = one / ten**(theta.prec+one)
+    small = one / ten**(theta.prec+overshoot)
     fac = _fact_gen(parity='even')
     while True:
         term = neg1**(seq) * theta**idx / next(fac)
