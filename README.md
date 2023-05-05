@@ -92,4 +92,6 @@ its counterpart, IBComp, is an equally robust complex formulation based on IBRea
     >>> z(11)
     8.660254037844386467637231707529361834714026269051903140279034897259665084544000185405730933786242177e-1 + -5.0e-1i
     >>>
-
+    >>> _.dtrim(20)
+    8.6602540378443864676e-1 + -5.0e-1i
+    >>> 
