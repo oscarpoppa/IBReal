@@ -69,8 +69,8 @@ its counterpart, IBComp, is an equally robust complex formulation based on IBRea
     >>> from ibfuncs import ib_roots
     >>> from ibtools import clean, ret_clean
     >>>
-    >>> a = R(1)
-    >>> z = ret_clean()(ib_roots(a,12))
+    >>> one = IBReal(1)
+    >>> z = ret_clean()(ib_roots(one, 12))
     >>> z(0)
     1.0 + 0.0i
     >>> z(1)
