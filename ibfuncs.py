@@ -198,6 +198,36 @@ class IBLog:
     def __init__(self):
         self._log2 = None
 
+    def __call__(self, val):
+        if isinstance(val, C):
+            return self._log_comp(val)
+        if not isinstance(val, R):
+            val = R(val)
+        zero = R((0, 0), **val.kwargs)
+        if val < zero:
+            val = C(val)
+            return self._log_comp(val)
+        zero = R((0, 0), **val.kwargs)
+        two = R((2, 0), **val.kwargs)
+        cnt = R((0, 0), **val.kwargs)
+        one = R((1, 0), **val.kwargs)
+        if self._log2 is None or self._log2.prec < val.prec:
+            self._log2 = self._log_real(two)
+        if val > one:
+            while True:
+                if val <= two:
+                    break
+                val /= two
+                cnt += one
+            return self._log_real(val) + (cnt * self._log2)
+        else:
+            while True:
+                if val >= one:
+                    break
+                val *= two
+                cnt += one
+            return self._log_real(val) - (cnt * self._log2)
+
     def _log_comp(self, val):
         zero = R((0, 0), **val.kwargs)
         two = R((2, 0), **val.kwargs)
@@ -231,36 +261,6 @@ class IBLog:
             rsum += term
             idx += one 
         return neg * rsum
-
-    def __call__(self, val):
-        if isinstance(val, C):
-            return self._log_comp(val)
-        if not isinstance(val, R):
-            val = R(val)
-        zero = R((0, 0), **val.kwargs)
-        if val < zero:
-            val = C(val)
-            return self._log_comp(val)
-        zero = R((0, 0), **val.kwargs)
-        two = R((2, 0), **val.kwargs)
-        cnt = R((0, 0), **val.kwargs)
-        one = R((1, 0), **val.kwargs)
-        if self._log2 is None or self._log2.prec < val.prec:
-            self._log2 = self._log_real(two)
-        if val > one:
-            while True:
-                if val <= two:
-                    break
-                val /= two
-                cnt += one
-            return self._log_real(val) + (cnt * self._log2)
-        else:
-            while True:
-                if val >= one:
-                    break
-                val *= two
-                cnt += one
-            return self._log_real(val) - (cnt * self._log2)
 
 # singleton and memoized callable
 _iblog_sing = IBLog()
