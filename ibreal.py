@@ -10,7 +10,7 @@ class IBReal:
     it is probably slow. All math operations are available in in-line mode (i.e. +=).
 
     Usage:
-    realnum = IBReal(raw, prec=300, trim_on=True)
+    realnum = IBReal(raw, prec=300, trim_on=True, rep=None)
 
     raw: IBReal object, number, Ival object, ascii repr of a real number, or tuple (integer, offset) -- where integer 
          is the integer after multiplying the real number by 10^offset. If using an IBReal instance, the precision
@@ -20,9 +20,11 @@ class IBReal:
 
     trim_on: allow trimming or not
 
+    rep: any special name for this number
+
     $export IBR_DEF_PREC=450 :: set environment var to pick up global precision
     """
-    def __init__(self, raw, prec=None, trim_on=True):
+    def __init__(self, raw, prec=None, trim_on=True, rep=None):
         if prec is not None:
             self.prec = prec
         elif 'IBR_DEF_PREC' in environ:
@@ -30,6 +32,7 @@ class IBReal:
         else:
             self.prec = 100 
         self.trim_on = trim_on
+        self.rep = rep
         try:
             if isinstance(raw, Ival):
                 self.ival = raw
@@ -77,6 +80,8 @@ class IBReal:
 
     @property
     def _repr(self):
+        if self.rep is not None:
+            return self.rep
         neg = '-' if self.ival.num < 0 else ''
         txt = str(abs(self.ival.num))
         if len(txt) > self.ival.off:
