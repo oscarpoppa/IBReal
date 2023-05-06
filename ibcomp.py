@@ -68,6 +68,12 @@ class IBComp:
         return th
 
     @property
+    def _repr(self):
+        if self.rep is not None:
+            return self.rep
+        return '{} + {}i'.format(self.rcomp, self.icomp)
+
+    @property
     def conj(self):
         return type(self)((self.rcomp, -self.icomp), **self.kwargs)
 
@@ -82,11 +88,6 @@ class IBComp:
         trm = self.dtrim(prec=prec)
         (self.rcomp, self.icomp) = (trm.rcomp, trm.icomp)
         return self
-
-    def _repr(self):
-        if self.rep is not None:
-            return self.rep
-        return '{} + {}i'.format(self.rcomp, self.icomp)
 
     def _from_raw(self, val): #looking for a+bi
         val = val.replace(' ', '')
@@ -227,10 +228,10 @@ class IBComp:
         return type(self)((-self.rcomp, -self.icomp), **self.kwargs)
 
     def __str__(self):
-        return  self._repr()
+        return  self._repr
 
     def __repr__(self):
-        return  self._repr()
+        return  self._repr
 
 # here to prevent circular import
 from .ibreal import IBReal as R
