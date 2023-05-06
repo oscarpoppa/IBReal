@@ -12,7 +12,7 @@ class IBComp:
 
     $export IBR_DEF_PREC=450 :: set environment var to pick up global precision
     """
-    def __init__(self, raw, prec=None, trim_on=True):
+    def __init__(self, raw, prec=None, trim_on=True, rep=None):
         if prec is not None:
             self.prec = prec
         elif 'IBR_DEF_PREC' in environ:
@@ -20,6 +20,7 @@ class IBComp:
         else:
             self.prec = 100 
         self.trim_on = trim_on
+        self.rep = rep
         try:
             if isinstance(raw, tuple):
                 self.rcomp = raw[0] if isinstance(raw[0], R) else R(raw[0], **self.kwargs)
@@ -79,6 +80,11 @@ class IBComp:
         trm = self.dtrim(prec=prec)
         (self.rcomp, self.icomp) = (trm.rcomp, trm.icomp)
         return self
+
+    def _repr(self):
+        if self.rep is not None:
+            return self.rep
+        return '{} + {}i'.format(self.rcomp, self.icomp)
 
     def _from_raw(self, val): #looking for a+bi
         val = val.replace(' ', '')
@@ -219,10 +225,10 @@ class IBComp:
         return type(self)((-self.rcomp, -self.icomp), **self.kwargs)
 
     def __str__(self):
-        return '{} + {}i'.format(self.rcomp, self.icomp)
+        return  self._repr()
 
     def __repr__(self):
-        return '{} + {}i'.format(self.rcomp, self.icomp)
+        return  self._repr()
 
 # here to prevent circular import
 from .ibreal import IBReal as R
