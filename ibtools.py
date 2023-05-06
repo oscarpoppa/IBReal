@@ -96,6 +96,8 @@ def eff_int(val, limit=None):
         return _getint(val) 
 
 # more presentation tidiness...
+# looks for numbers that are an integer multiple of pi and 
+# creates a special __repr__ for the result -- eye candy
 # not for "production"
 def eff_pi(num):
     if not isinstance(num, R) and not isinstance(num, C):
@@ -125,7 +127,7 @@ def eff_pi(num):
     else:
         return _tform(num) 
 
-# applies both eff_int and eff_0
+# applies eff_pi, eff_int and eff_0
 # specified by limit of decimal places
 # not for "production"
 def clean(val, limit=None):
