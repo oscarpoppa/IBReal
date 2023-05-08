@@ -109,7 +109,7 @@ class IBArcTan:
         halfpi = ib_pi(**tan.kwargs) / two
         while True:
             a = neg1**idx
-            b = one / ((two*idx+one)*(tan**(two*idx+one)))
+            b = one / (two*idx+one) / tan**(two*idx+one)
             term = a * b
             if abs(term) < small:
                 break
@@ -129,7 +129,7 @@ class IBArcTan:
         small = one / ten**(tan.prec+overshoot)
         while True:
             a = neg1**idx
-            b = (tan**(two*idx+one))/(two*idx+one)
+            b = tan**(two*idx+one) / (two*idx+one)
             term = a * b
             if abs(term) < small:
                 break
