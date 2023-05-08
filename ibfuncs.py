@@ -255,7 +255,7 @@ class IBLog:
             val = one / val
         val = one - val
         while True:
-            term = neg1 * (val)**idx / idx
+            term = neg1 * val**idx / idx
             if abs(term) < small:
                 break
             rsum += term
@@ -342,7 +342,7 @@ def ib_sin(theta):
     small = one / ten**(theta.prec+overshoot)
     fac = _fact_gen(parity='odd')
     while True:
-        term = neg1**(seq) * theta**idx / next(fac)
+        term = neg1**seq * theta**idx / next(fac)
         if abs(term) < small:
             break
         rsum += term
@@ -368,7 +368,7 @@ def ib_cos(theta):
     small = one / ten**(theta.prec+overshoot)
     fac = _fact_gen(parity='even')
     while True:
-        term = neg1**(seq) * theta**idx / next(fac)
+        term = neg1**seq * theta**idx / next(fac)
         if abs(term) < small:
             break
         rsum += term
