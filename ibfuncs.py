@@ -277,7 +277,7 @@ def ib_log(val, base='e'):
     if base == 'e':
         return _iblog_sing(val)
     else:
-        return _iblog_sing(val) / ib_log(base)
+        return _iblog_sing(val) / _iblog_sing(base)
 
 # returns a closure to allow access to any branch 
 # (i.e. ib_logs(C('1+2i'))(3) for third branch)
