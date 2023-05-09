@@ -52,7 +52,7 @@ class IBReal:
     def dtrim(self, prec=None):
         prec = self.prec if prec is None else prec
         if not isinstance(prec, int) or prec <= 0:
-            raise ValueError('Only positive integers allowed')
+            raise TypeError('Only positive integers allowed')
         if  self.ilength > prec+1:
             neg = 1
             tval = str(self.ival.num)

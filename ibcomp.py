@@ -79,7 +79,7 @@ class IBComp:
 
     def dtrim(self, prec):
         if not isinstance(prec, int) or prec <= 0:
-            raise ValueError('Only positive integers allowed')
+            raise TypeError('Only positive integers allowed')
         rcmp = self.rcomp.dtrim(prec)
         icmp = self.icomp.dtrim(prec)
         return type(self)((rcmp, icmp), **self.kwargs)
