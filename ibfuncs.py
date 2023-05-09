@@ -195,11 +195,8 @@ class IBExp:
 _ibexp_sing = IBExp()
 ibexpmemo = MemoizeIBRCall()
 @ibexpmemo
-def ib_exp(val, base='e'):
-    if base == 'e':
-        return _ibexp_sing(val)
-    else:
-        return _ibexp_sing(val*ib_log(base))
+def ib_exp(val):
+    return _ibexp_sing(val)
 
 class IBLog:
     def __init__(self):
@@ -273,30 +270,23 @@ class IBLog:
 _iblog_sing = IBLog()
 iblogmemo = MemoizeIBRCall()
 @iblogmemo
-def ib_log(val, base='e'):
-    if base == 'e':
-        return _iblog_sing(val)
-    else:
-        return _iblog_sing(val) / _iblog_sing(base)
+def ib_log(val):
+    return _iblog_sing(val)
 
 # returns a closure to allow access to any branch 
 # (i.e. ib_logs(C('1+2i'))(3) for third branch)
-def ib_logs(val, base='e'):
+def ib_logs(val):
     val = C(val)
     one = R((1, 0), **val.kwargs)
     two = R((2, 0), **val.kwargs)
     my2pi = ib_pi(two, **val.kwargs)
-    princ_log = ib_log(val, base)
-    if base == 'e':
-        lnb = one
-    else:
-        lnb = ib_log(base)
+    princ_log = ib_log(val)
     @wraps(ib_logs)
     def inner(branch):
         branch = R(branch)
         if not branch.isint:
             raise TypeError('Only integers allowed')
-        return princ_log + ib_i(branch*my2pi/lnb)
+        return princ_log + ib_i(branch*my2pi)
     return inner
 
 ibsqrtmemo = MemoizeIBRCall()
