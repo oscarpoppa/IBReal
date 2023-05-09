@@ -277,16 +277,21 @@ def ib_log(val, base='e'):
 
 # returns a closure to allow access to any branch 
 # (i.e. ib_logs(C('1+2i'))(3) for third branch)
-def ib_logs(val):
+def ib_logs(val, base='e'):
     val = C(val)
+    one = R((1, 0), **val.kwargs)
     two = R((2, 0), **val.kwargs)
     my2pi = two * ib_pi(**val.kwargs)
-    princ_log = ib_log(val)
+    princ_log = ib_log(val, base)
+    if base == 'e':
+        lnb = one
+    else:
+        lnb = ib_log(base)
     @wraps(ib_logs)
     def inner(branch):
         # chop off any garbage
         branch = R(int(R(branch)))
-        return princ_log + ib_i(branch*my2pi)
+        return princ_log + ib_i(branch*my2pi/lnb)
     return inner
 
 ibsqrtmemo = MemoizeIBRCall()
