@@ -53,6 +53,7 @@ def ib_i(val=None, **kwargs):
         val = R(val, **kwargs)
     return val * C((0, 1), **val.kwargs) 
 
+# pi times val
 ibpimemo = MemoizeIBRCall()
 @ibpimemo
 def ib_pi(val=None, **kwargs):
