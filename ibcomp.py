@@ -20,7 +20,7 @@ class IBComp:
         elif 'IBR_DEF_PREC' in environ:
             self.prec = int(environ['IBR_DEF_PREC'])
         else:
-            self.prec = 100 
+            self.prec = 50 
         self.trim_on = trim_on
         self.rep = rep
         try:
