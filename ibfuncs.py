@@ -285,7 +285,7 @@ def ib_logs(val, base='e'):
     val = C(val)
     one = R((1, 0), **val.kwargs)
     two = R((2, 0), **val.kwargs)
-    my2pi = two * ib_pi(**val.kwargs)
+    my2pi = ib_pi(two, **val.kwargs)
     princ_log = ib_log(val, base)
     if base == 'e':
         lnb = one
