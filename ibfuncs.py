@@ -46,28 +46,31 @@ def _fact_gen(parity='off'):
         val *= cnt
 
 # i times val
-def ib_i(val=None):
+def ib_i(val=None, **kwargs):
     if val is None:
-        val = C((1, 0))
+        val = C((1, 0), **kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
-        val = R(val)
+        val = R(val, **kwargs)
     return val * C((0, 1), **val.kwargs) 
 
 ibpimemo = MemoizeIBRCall()
 @ibpimemo
-def ib_pi(**kwargs):
-    kwargs = kwargs if kwargs else R(0).kwargs
-    one = R((1, 0), **kwargs)
-    two = R((2, 0), **kwargs)
-    four = R((4, 0), **kwargs)
-    five = R((5, 0), **kwargs)
-    six = R((6, 0), **kwargs)
-    eight = R((8, 0), **kwargs)
-    ten = R((10, 0), **kwargs)
-    sixteen = R((16, 0), **kwargs)
+def ib_pi(val=None, **kwargs):
+    if val is None:
+        val = R((1, 0), **kwargs)
+    if not isinstance(val, R) and not isinstance(val, C):
+        val = R(val, **kwargs)
+    one = R((1, 0), **val.kwargs)
+    two = R((2, 0), **val.kwargs)
+    four = R((4, 0), **val.kwargs)
+    five = R((5, 0), **val.kwargs)
+    six = R((6, 0), **val.kwargs)
+    eight = R((8, 0), **val.kwargs)
+    ten = R((10, 0), **val.kwargs)
+    sixteen = R((16, 0), **val.kwargs)
     overshoot = one
-    idx = R((0, 0), **kwargs)
-    rsum = R((0, 0), **kwargs)
+    idx = R((0, 0), **val.kwargs)
+    rsum = R((0, 0), **val.kwargs)
     small = one / ten**(one.prec+overshoot)
     while True:
         a = one / sixteen**idx
@@ -80,7 +83,7 @@ def ib_pi(**kwargs):
             break
         rsum += term
         idx += one
-    return rsum
+    return val * rsum
 
 class IBArcTan:
     #!! Very slow to converge near 1
@@ -332,6 +335,7 @@ def ib_roots(val, root):
     lv = ib_logs(val)
     @wraps(ib_roots)
     def inner(num):
+        # chop off any garbage
         num = R(int(R(num)))
         return ib_exp(lv(num)/root)
     return inner
