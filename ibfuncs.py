@@ -293,8 +293,9 @@ def ib_logs(val, base='e'):
         lnb = ib_log(base)
     @wraps(ib_logs)
     def inner(branch):
-        # chop off any garbage
-        branch = R(int(R(branch)))
+        branch = R(branch)
+        if not branch.isint:
+            raise ValueError('Integers only')
         return princ_log + ib_i(branch*my2pi/lnb)
     return inner
 
@@ -335,10 +336,11 @@ def ib_roots(val, root):
         return inner
     lv = ib_logs(val)
     @wraps(ib_roots)
-    def inner(num):
-        # chop off any garbage
-        num = R(int(R(num)))
-        return ib_exp(lv(num)/root)
+    def inner(branch):
+        branch = R(branch)
+        if not branch.isint:
+            raise ValueError('Integers only')
+        return ib_exp(lv(branch)/root)
     return inner
 
 # reals only
