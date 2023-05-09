@@ -295,7 +295,7 @@ def ib_logs(val, base='e'):
     def inner(branch):
         branch = R(branch)
         if not branch.isint:
-            raise TypeError('Only positive integers allowed')
+            raise TypeError('Only integers allowed')
         return princ_log + ib_i(branch*my2pi/lnb)
     return inner
 
@@ -339,7 +339,7 @@ def ib_roots(val, root):
     def inner(branch):
         branch = R(branch)
         if not branch.isint:
-            raise TypeError('Only positive integers allowed')
+            raise TypeError('Only integers allowed')
         return ib_exp(lv(branch)/root)
     return inner
 
