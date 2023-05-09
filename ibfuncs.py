@@ -191,8 +191,12 @@ class IBExp:
 _ibexp_sing = IBExp()
 ibexpmemo = MemoizeIBRCall()
 @ibexpmemo
-def ib_exp(val):
-    return _ibexp_sing(val)
+def ib_exp(val, base='e'):
+    if base == 'e':
+        lnb = R((1, 0), **val.kwargs)
+    else:
+        lnb = ib_log(base)
+    return _ibexp_sing(val*lnb)
 
 class IBLog:
     def __init__(self):
@@ -266,8 +270,12 @@ class IBLog:
 _iblog_sing = IBLog()
 iblogmemo = MemoizeIBRCall()
 @iblogmemo
-def ib_log(val):
-    return _iblog_sing(val)
+def ib_log(val, base='e'):
+    if base == 'e':
+        lnb = R((1, 0), **val.kwargs)
+    else:
+        lnb = ib_log(base)
+    return _iblog_sing(val) / lnb
 
 # returns a closure to allow access to any branch 
 # (i.e. ib_logs(C('1+2i'))(3) for third branch)
