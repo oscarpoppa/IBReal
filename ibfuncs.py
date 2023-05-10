@@ -4,8 +4,20 @@ from functools import wraps
 Memo = namedtuple('Memo','id prec trim_on')
 
 class MemoizeIBRCall:
+    _instances = list()
+
+    @classmethod
+    def instances(cls):
+        return cls._instances
+
+    @classmethod
+    def clearall(cls):
+        for i in cls._instances:
+            i.tbl.clear()
+
     def __init__(self):
         self.tbl = dict()
+        type(self)._instances.append(self)
 
     def __call__(self, func):
         @wraps(func)

@@ -1,12 +1,16 @@
 from .ibreal import IBReal as R
 from .ibcomp import IBComp as C
-from .ibfuncs import ib_pi
+from .ibfuncs import ib_pi, MemoizeIBRCall as M
 from os import environ
 from functools import wraps
 
 # set global percision (internal integer length)
 def set_global_prec(num):
     environ['IBR_DEF_PREC'] = str(num)
+
+# clear all caches
+def clear_caches():
+    M.clearall()
 
 # tool to check out number of
 # expected roots given degree of real root
