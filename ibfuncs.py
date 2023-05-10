@@ -41,23 +41,42 @@ class MemoizeIBRCall:
     def __repr__(self):
         return self._repr
 
-#parity = off, odd, even
-def _fact_gen(parity='off'):
-    # 1,1,2,6,...
-    cnt = 0
-    def _mparity():
-        if parity == 'off':
+class FactGen:
+    def __init__(self, parity='off'):
+        if parity not in ('off', 'even', 'odd'):
+            raise ValueError('Only (off, odd, even) allowed')
+        self.parity = parity
+        self.gen = self._gen()
+
+    def close(self):
+        self.gen.close()
+
+    def _mparity(self, cnt):
+        if self.parity == 'off':
             return True
-        elif parity == 'even':
+        elif self.parity == 'even':
             return False if cnt%2 else True
         else:
             return True if cnt%2 else False
-    val = 1
-    while True:
-        if _mparity():
-            yield R(val)
-        cnt += 1
-        val *= cnt
+
+    def _gen(self):
+        # 1,1,2,6,...
+        cnt = 0
+        val = R(1, trim_on=False)
+        while True:
+            if self._mparity(cnt):
+                yield val
+            cnt += 1
+            val *= cnt
+
+    def __next__(self):
+        return next(self.gen)
+
+    def __enter__(self, *args, **kwargs):
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        self.close()
 
 # i times val
 def ib_i(val=None, **kwargs):
@@ -178,14 +197,13 @@ class IBExp:
         idx = R((0, 0), **val.kwargs)
         rsum = R((0, 0), **val.kwargs)
         small = one / ten**(val.prec+overshoot)
-        fac = _fact_gen()
-        while True:
-            term = val**idx / next(fac)
-            if abs(term) < small:
-                break
-            rsum += term
-            idx += one 
-        fac.close()
+        with FactGen() as fac:
+            while True:
+                term = val**idx / next(fac)
+                if abs(term) < small:
+                    break
+                rsum += term
+                idx += one 
         return rsum
     
     def _exp_comp(self, val):
@@ -195,14 +213,13 @@ class IBExp:
         idx = R((0, 0), **val.kwargs)
         rsum = C((0, 0), **val.kwargs)
         small = one / ten**(val.prec+overshoot)
-        fac = _fact_gen()
-        while True:
-            term = val**idx / next(fac)
-            if abs(term.rcomp) < small and abs(term.icomp) < small:
-                break
-            rsum += term
-            idx += one 
-        fac.close()
+        with FactGen() as fac:
+            while True:
+                term = val**idx / next(fac)
+                if abs(term.rcomp) < small and abs(term.icomp) < small:
+                    break
+                rsum += term
+                idx += one 
         return rsum
 
 # singleton and memoized callable
@@ -362,15 +379,14 @@ def ib_sin(theta):
     rsum = R((0, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
     small = one / ten**(theta.prec+overshoot)
-    fac = _fact_gen(parity='odd')
-    while True:
-        term = neg1**seq * theta**idx / next(fac)
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += two
-        seq += one
-    fac.close()
+    with FactGen('odd') as fac:
+        while True:
+            term = neg1**seq * theta**idx / next(fac)
+            if abs(term) < small:
+                break
+            rsum += term
+            idx += two
+            seq += one
     return rsum
 
 # reals only
