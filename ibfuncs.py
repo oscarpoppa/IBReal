@@ -404,15 +404,14 @@ def ib_cos(theta):
     idx = R((0, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
     small = one / ten**(theta.prec+overshoot)
-    fac = _fact_gen(parity='even')
-    while True:
-        term = neg1**seq * theta**idx / next(fac)
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += two
-        seq += one
-    fac.close()
+    with FactGen('even') as fac:
+        while True:
+            term = neg1**seq * theta**idx / next(fac)
+            if abs(term) < small:
+                break
+            rsum += term
+            idx += two
+            seq += one
     return rsum
 
 # here to prevent circular import
