@@ -7,19 +7,18 @@ class MemoizeIBRCall:
     _instances = list()
 
     @classmethod
-    def instances(cls):
-        return cls._instances
-
-    @classmethod
     def clearall(cls):
         for i in cls._instances:
+            print('{}: removing {}'.format(repr(i), len(i.tbl)))
             i.tbl.clear()
 
     def __init__(self):
         self.tbl = dict()
+        self._repr = None
         type(self)._instances.append(self)
 
     def __call__(self, func):
+        self._repr = 'Memoizer for {}'.format(func.__name__)
         @wraps(func)
         def inner(*args, **kwargs):
             # must call with positional primary arg
@@ -38,6 +37,9 @@ class MemoizeIBRCall:
             self.tbl[key] = ret
             return ret
         return inner
+
+    def __repr__(self):
+        return self._repr
 
 #parity = off, odd, even
 def _fact_gen(parity='off'):
