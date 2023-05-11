@@ -280,10 +280,10 @@ def ib_logs(val):
 # i times val
 def ib_i(val=None, **kwargs):
     if val is None:
-        val = C((1, 0), **kwargs)
+        return C((0, 1), **kwargs)
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val, **kwargs)
-    return val * C((0, 1), **val.kwargs) 
+    return C((0, val), **val.kwargs) 
 
 # pi times val
 ibpimemo = MemoizeIBRCall()
