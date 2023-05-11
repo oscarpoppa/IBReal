@@ -58,13 +58,13 @@ class IBComp:
         mypi = ib_pi(**self.kwargs)
         my2pi = two * mypi
         if self.rcomp == zero:
-            return mypi/two if self.icomp > zero else -mypi/two
+            return ib_sgn(self.ibcomp)*mypi/two
         th = ib_arctan(self.icomp/self.rcomp)
         if self.rcomp < zero:
             th = th + mypi
         while abs(th) > mypi:
             # return canonical form
-            th += (my2pi if th < 0 else -my2pi)
+            th -= ib_sgn(th)*my2pi
         return th
 
     @property
@@ -235,4 +235,4 @@ class IBComp:
 
 # here to prevent circular import
 from .ibreal import IBReal as R
-from .ibfuncs import ib_sqrt, ib_arctan, ib_pi, ib_sin, ib_cos, ib_log, ib_exp
+from .ibfuncs import ib_sqrt, ib_arctan, ib_pi, ib_sin, ib_cos, ib_log, ib_exp, ib_sgn

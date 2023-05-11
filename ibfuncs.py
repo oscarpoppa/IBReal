@@ -109,7 +109,7 @@ class IBArcTan:
                 break
             rsum += term
             idx += one
-        return halfpi-rsum if tan > 0 else -halfpi-rsum
+        return ib_sgn(tan)*halfpi-rsum
         
     def _arctan_lt1(self, tan):
         # for -1 <= tan <= 1
@@ -229,7 +229,7 @@ class IBLog:
         cm = C((0, val.theta), **val.kwargs) + lr
         # get principal value
         while abs(cm.icomp) > mypi:
-            cm.icomp += (my2pi if cm.icomp < zero else -my2pi)
+            cm.icomp -= ib_sgn(cm.icomp)*my2pi
         return cm
 
     def _log_real(self, val):

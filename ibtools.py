@@ -117,7 +117,7 @@ def eff_pi(num):
         cnt = 0
         tmp = R(val)
         while (abs(tmp) >= pi):
-            tmp += (-pi if tmp > zero else pi)
+            tmp -= ib_sgn(tmp)*pi
             cnt += 1 
             if abs(tmp) < lowval:
                 neg = '' if val > zero else '-'
