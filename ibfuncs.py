@@ -83,14 +83,12 @@ class IBArcTan:
     def __call__(self, tan):
         if not isinstance(tan, R):
             tan = R(tan)
-        neg = R((1, 0), **tan.kwargs)
         if tan < 0:
             tan = abs(tan)
-            neg = -neg
         if abs(tan) < 1:
-            return neg*self._arctan_lt1(tan)
+            return ib_sgn(tan)*self._arctan_lt1(tan)
         else:
-            return neg*self._arctan_gt1(tan)
+            return ib_sgn(tan)*self._arctan_gt1(tan)
     
     def _arctan_gt1(self, tan):
         # for tan >= 1 or <= -1
@@ -240,12 +238,11 @@ class IBLog:
         one = R((1, 0), **val.kwargs)
         ten = R((10, 0), **val.kwargs)
         overshoot = one
-        neg = R((1, 0), **val.kwargs)
         idx = R((1, 0), **val.kwargs) 
         rsum = R((0, 0), **val.kwargs)
         small = one / ten**(val.prec+overshoot)
+        neg = ib_sgn(one-val)
         if val > one:
-            neg = -neg
             val = one / val
         val = one - val
         while True:
@@ -413,6 +410,11 @@ def ib_cos(theta):
             idx += two
             seq += one
     return rsum
+
+def ib_sgn(num=1):
+    if num < 0:
+        return -1
+    return 1
 
 # here to prevent circular import
 from .ibreal import Ival, IBReal as R

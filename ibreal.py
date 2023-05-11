@@ -54,13 +54,11 @@ class IBReal:
         if not isinstance(prec, int) or prec <= 0:
             raise TypeError('Only positive integers allowed')
         if  self.ilength > prec+1:
-            neg = 1
             tval = str(self.ival.num)
             if tval[0] == '-':
                 tval = tval[1:]
-                neg = -1
             tlen = len(tval)
-            return type(self)(Ival(neg*int(tval[:prec]), self.ival.off-tlen+prec), **self.kwargs)
+            return type(self)(Ival(ib_sgn(self.ival.num)*int(tval[:prec]), self.ival.off-tlen+prec), **self.kwargs)
         return self
 
     def trim(self, prec=None):
@@ -302,4 +300,4 @@ class IBReal:
         return self.trim()._repr
 
 # here to prevent circular import
-from .ibfuncs import ib_exp, ib_log
+from .ibfuncs import ib_exp, ib_log, ib_sgn

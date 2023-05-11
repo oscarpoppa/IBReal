@@ -1,6 +1,6 @@
 from .ibreal import IBReal as R
 from .ibcomp import IBComp as C
-from .ibfuncs import ib_pi, MemoizeIBRCall as M
+from .ibfuncs import ib_pi, ib_sgn, MemoizeIBRCall as M
 from os import environ
 from functools import wraps
 
@@ -71,7 +71,6 @@ def eff_int(val, limit=None):
         one = R((1, 0), **rval.kwargs)
         zero = R((0, 0), **rval.kwargs)
         neg1 = R((-1, 0), **rval.kwargs)
-        neg = one if rval.ival.num > zero else neg1 
         off = rval.ival.off
         dot = ln - off
         if dot < 0:
@@ -89,11 +88,11 @@ def eff_int(val, limit=None):
             if idx == -1:
                 return rval
         if idx == 0:
-            return neg * (R(wh, **rval.kwargs) + add)
+            return ib_sgn(rval.ival.num) * (R(wh, **rval.kwargs) + add)
         else:
             nu = str(int(fr[idx-1]) + int(add))
             fr = fr[:idx-1] + nu
-            return neg * R('{}.{}'.format(wh, fr), **rval.kwargs)
+            return ib_sgn(rval.ival.num) * R('{}.{}'.format(wh, fr), **rval.kwargs)
     if isinstance(val, C):
         return C((_getint(val.rcomp), _getint(val.icomp)), **val.kwargs) 
     else:
