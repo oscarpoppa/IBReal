@@ -106,9 +106,9 @@ class IBArcTan:
             a = neg1**idx
             b = one / (two*idx+one) / tan**(two*idx+one)
             term = a * b
+            rsum += term
             if abs(term) < small:
                 break
-            rsum += term
             idx += one
         return ib_sgn(tan)*halfpi-rsum
         
@@ -126,9 +126,9 @@ class IBArcTan:
             a = neg1**idx
             b = tan**(two*idx+one) / (two*idx+one)
             term = a * b
+            rsum += term
             if abs(term) < small:
                 break
-            rsum += term
             idx += one
         return rsum
 
@@ -158,9 +158,9 @@ class IBExp:
         with FactGen() as fac:
             while True:
                 term = val**idx / next(fac)
+                rsum += term
                 if abs(term) < small:
                     break
-                rsum += term
                 idx += one 
         return rsum
     
@@ -174,9 +174,9 @@ class IBExp:
         with FactGen() as fac:
             while True:
                 term = val**idx / next(fac)
+                rsum += term
                 if abs(term.rcomp) < small and abs(term.icomp) < small:
                     break
-                rsum += term
                 idx += one 
         return rsum
 
@@ -248,9 +248,9 @@ class IBLog:
         val = one - val
         while True:
             term = neg1 * val**idx / idx
+            rsum += term
             if abs(term) < small:
                 break
-            rsum += term
             idx += one 
         return neg * rsum
 
@@ -312,9 +312,9 @@ def ib_pi(val=None, **kwargs):
         d = one / (eight*idx+five)
         e = one / (eight*idx+six)
         term = a * (b - c - d - e)
+        rsum += term
         if abs(term) < small:
             break
-        rsum += term
         idx += one
     return val * rsum
 
@@ -380,9 +380,9 @@ def ib_sin(theta):
     with FactGen('odd') as fac:
         while True:
             term = neg1**seq * theta**idx / next(fac)
+            rsum += term
             if abs(term) < small:
                 break
-            rsum += term
             idx += two
             seq += one
     return rsum
@@ -405,9 +405,9 @@ def ib_cos(theta):
     with FactGen('even') as fac:
         while True:
             term = neg1**seq * theta**idx / next(fac)
+            rsum += term
             if abs(term) < small:
                 break
-            rsum += term
             idx += two
             seq += one
     return rsum
