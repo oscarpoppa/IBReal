@@ -83,12 +83,13 @@ class IBArcTan:
     def __call__(self, tan):
         if not isinstance(tan, R):
             tan = R(tan)
+        sgn = ib_sgn(tan)
         if tan < 0:
             tan = abs(tan)
         if abs(tan) < 1:
-            return ib_sgn(tan)*self._arctan_lt1(tan)
+            return sgn*self._arctan_lt1(tan)
         else:
-            return ib_sgn(tan)*self._arctan_gt1(tan)
+            return sgn*self._arctan_gt1(tan)
     
     def _arctan_gt1(self, tan):
         # for tan >= 1 or <= -1
