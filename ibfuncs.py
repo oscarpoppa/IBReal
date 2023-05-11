@@ -78,47 +78,6 @@ class FactGen:
     def __exit__(self, *args, **kwargs):
         self.close()
 
-# i times val
-def ib_i(val=None, **kwargs):
-    if val is None:
-        val = C((1, 0), **kwargs)
-    if not isinstance(val, R) and not isinstance(val, C):
-        val = R(val, **kwargs)
-    return val * C((0, 1), **val.kwargs) 
-
-# pi times val
-ibpimemo = MemoizeIBRCall()
-@ibpimemo
-def ib_pi(val=None, **kwargs):
-    if val is None:
-        val = R((1, 0), **kwargs)
-    if not isinstance(val, R) and not isinstance(val, C):
-        val = R(val, **kwargs)
-    one = R((1, 0), **val.kwargs)
-    two = R((2, 0), **val.kwargs)
-    four = R((4, 0), **val.kwargs)
-    five = R((5, 0), **val.kwargs)
-    six = R((6, 0), **val.kwargs)
-    eight = R((8, 0), **val.kwargs)
-    ten = R((10, 0), **val.kwargs)
-    sixteen = R((16, 0), **val.kwargs)
-    overshoot = one
-    idx = R((0, 0), **val.kwargs)
-    rsum = R((0, 0), **val.kwargs)
-    small = one / ten**(one.prec+overshoot)
-    while True:
-        a = one / sixteen**idx
-        b = four / (eight*idx+one)
-        c = two / (eight*idx+four)
-        d = one / (eight*idx+five)
-        e = one / (eight*idx+six)
-        term = a * (b - c - d - e)
-        if abs(term) < small:
-            break
-        rsum += term
-        idx += one
-    return val * rsum
-
 class IBArcTan:
     #!! Very slow to converge near 1
     def __call__(self, tan):
@@ -319,6 +278,47 @@ def ib_logs(val):
             raise TypeError('Only integers allowed')
         return princ_log + ib_i(branch*my2pi)
     return inner
+
+# i times val
+def ib_i(val=None, **kwargs):
+    if val is None:
+        val = C((1, 0), **kwargs)
+    if not isinstance(val, R) and not isinstance(val, C):
+        val = R(val, **kwargs)
+    return val * C((0, 1), **val.kwargs) 
+
+# pi times val
+ibpimemo = MemoizeIBRCall()
+@ibpimemo
+def ib_pi(val=None, **kwargs):
+    if val is None:
+        val = R((1, 0), **kwargs)
+    if not isinstance(val, R) and not isinstance(val, C):
+        val = R(val, **kwargs)
+    one = R((1, 0), **val.kwargs)
+    two = R((2, 0), **val.kwargs)
+    four = R((4, 0), **val.kwargs)
+    five = R((5, 0), **val.kwargs)
+    six = R((6, 0), **val.kwargs)
+    eight = R((8, 0), **val.kwargs)
+    ten = R((10, 0), **val.kwargs)
+    sixteen = R((16, 0), **val.kwargs)
+    overshoot = one
+    idx = R((0, 0), **val.kwargs)
+    rsum = R((0, 0), **val.kwargs)
+    small = one / ten**(one.prec+overshoot)
+    while True:
+        a = one / sixteen**idx
+        b = four / (eight*idx+one)
+        c = two / (eight*idx+four)
+        d = one / (eight*idx+five)
+        e = one / (eight*idx+six)
+        term = a * (b - c - d - e)
+        if abs(term) < small:
+            break
+        rsum += term
+        idx += one
+    return val * rsum
 
 ibsqrtmemo = MemoizeIBRCall()
 @ibsqrtmemo
