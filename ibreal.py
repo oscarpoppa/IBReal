@@ -36,7 +36,7 @@ class IBReal:
             # precision from environment
             self.prec = int(environ['IBR_DEF_PREC'])
         else:
-            # default without environment va
+            # default without environment var
             self.prec = 50 
         self.trim_on = trim_on
         self.rep = rep
