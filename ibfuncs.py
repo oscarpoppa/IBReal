@@ -1,8 +1,11 @@
 from collections import namedtuple
 from functools import wraps
 
+# key for memoizing -- may be over-specifying key
 Memo = namedtuple('Memo','id prec trim_on')
 
+# memoize a decorated function's output by input
+# clear all with ibtools.clear_caches()
 class MemoizeIBRCall:
     _instances = list()
 
@@ -41,6 +44,7 @@ class MemoizeIBRCall:
     def __repr__(self):
         return self._repr
 
+# factorial generator
 class FactGen:
     def __init__(self, parity='off'):
         if parity not in ('off', 'even', 'odd'):
@@ -60,7 +64,6 @@ class FactGen:
             return True if cnt%2 else False
 
     def _gen(self):
-        # 1,1,2,6,...
         cnt = 0
         val = R(1, trim_on=False)
         while True:
@@ -72,6 +75,7 @@ class FactGen:
     def __next__(self):
         return next(self.gen)
 
+    # context management
     def __enter__(self, *args, **kwargs):
         return self
 
@@ -79,7 +83,8 @@ class FactGen:
         self.close()
 
 class IBArcTan:
-    #!! Very slow to converge near 1
+    #!! Very slow to converge near one
+    # need a good algorithm for near one
     def __call__(self, tan):
         if not isinstance(tan, R):
             tan = R(tan)
@@ -91,6 +96,7 @@ class IBArcTan:
         else:
             return sgn*self._arctan_gt1(tan)
     
+    # for abs(tan) greater than or equal to one
     def _arctan_gt1(self, tan):
         # for tan >= 1 or <= -1
         neg1 = R((-1, 0), **tan.kwargs)
@@ -112,6 +118,7 @@ class IBArcTan:
             idx += one
         return ib_sgn(tan)*halfpi-rsum
         
+    # for abs(tan) less than one    
     def _arctan_lt1(self, tan):
         # for -1 <= tan <= 1
         neg1 = R((-1, 0), **tan.kwargs)
@@ -139,6 +146,7 @@ ibarctanmemo = MemoizeIBRCall()
 def ib_arctan(tan):
     return _arctan_sing(tan)
 
+# only base e for now
 class IBExp:
     def __call__(self, val):
         if isinstance(val, C):
@@ -175,6 +183,7 @@ class IBExp:
             while True:
                 term = val**idx / next(fac)
                 rsum += term
+                # right way to do this??
                 if abs(term.rcomp) < small and abs(term.icomp) < small:
                     break
                 idx += one 
@@ -187,6 +196,7 @@ ibexpmemo = MemoizeIBRCall()
 def ib_exp(val):
     return _ibexp_sing(val)
 
+# only base e for now
 class IBLog:
     def __init__(self):
         self._log2 = None
@@ -197,7 +207,7 @@ class IBLog:
         if not isinstance(val, R):
             val = R(val)
         zero = R((0, 0), **val.kwargs)
-        if val < zero:
+        if val < zero: # need to use complex
             val = C(val)
             return self._log_comp(val)
         zero = R((0, 0), **val.kwargs)
@@ -206,6 +216,7 @@ class IBLog:
         one = R((1, 0), **val.kwargs)
         if self._log2 is None or self._log2.prec < val.prec:
             self._log2 = self._log_real(two)
+        # nudge value towards one by successively dividing by two
         if val > one:
             while True:
                 if val <= two:
@@ -213,6 +224,7 @@ class IBLog:
                 val /= two
                 cnt += one
             return self._log_real(val) + (cnt * self._log2)
+        # nudge value towards one by successively multiplying by two
         else:
             while True:
                 if val >= one:
@@ -362,7 +374,7 @@ def ib_roots(val, root):
         return ib_exp(lv(branch)/root)
     return inner
 
-# reals only
+# real arguments only
 ibsinmemo = MemoizeIBRCall()
 @ibsinmemo
 def ib_sin(theta):
@@ -387,7 +399,7 @@ def ib_sin(theta):
             seq += one
     return rsum
 
-# reals only
+# real arguments only
 ibcosmemo = MemoizeIBRCall()
 @ibcosmemo
 def ib_cos(theta):
@@ -412,6 +424,8 @@ def ib_cos(theta):
             seq += one
     return rsum
 
+# return sign of arg
+# needs to be ints
 def ib_sgn(num=1):
     if num < 0:
         return -1
