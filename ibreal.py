@@ -41,16 +41,21 @@ class IBReal:
         self.trim_on = trim_on
         self.rep = rep
         try:
+            # Ival instance
             if isinstance(raw, Ival):
                 self.ival = raw
+            # 2-tuple representing ival members
             elif isinstance(raw, tuple):
                 self.ival = Ival(*raw)
+            # another IBReal instance
             elif isinstance(raw, type(self)):
                 self.ival = raw.ival
                 self.prec = prec or raw.prec
+            # an integer
             elif isinstance(raw, int):
                 self.ival = Ival(raw, 0)
-            else: # coerce text or floats to IBReal
+            # something else -- text or float
+            else:
                 self.ival = self._from_raw(raw)
             self.trim()
         except Exception as e:
