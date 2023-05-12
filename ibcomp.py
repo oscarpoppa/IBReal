@@ -27,7 +27,7 @@ class IBComp:
         self.trim_on = trim_on
         self.rep = rep
         try:
-            # real and imaginary components. each coerced into IBReal
+            # 2-tuple representing real and imaginary components. each coerced into IBReal
             if isinstance(raw, tuple):
                 self.rcomp = raw[0] if isinstance(raw[0], R) else R(raw[0], **self.kwargs)
                 self.icomp = raw[1] if isinstance(raw[1], R) else R(raw[1], **self.kwargs)
