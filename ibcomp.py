@@ -27,18 +27,23 @@ class IBComp:
         self.trim_on = trim_on
         self.rep = rep
         try:
+            # real and imaginary components. each coerced into IBReal
             if isinstance(raw, tuple):
                 self.rcomp = raw[0] if isinstance(raw[0], R) else R(raw[0], **self.kwargs)
                 self.icomp = raw[1] if isinstance(raw[1], R) else R(raw[1], **self.kwargs)
+            # another IBComp instance
             elif isinstance(raw, type(self)):
                 self.rcomp = raw.rcomp
                 self.icomp = raw.icomp
+            # an integer
             elif isinstance(raw, int):
                 self.rcomp = R(raw, **self.kwargs)
                 self.icomp = R((0, 0), **self.kwargs)
+            # an IBReal instance
             elif isinstance(raw, R):
                 self.rcomp = raw
                 self.icomp = R((0, 0), **raw.kwargs)
+            # something else -- text or float
             else:
                 (self.rcomp, self.icomp) = self._from_raw(str(raw))
         except Exception as e:
