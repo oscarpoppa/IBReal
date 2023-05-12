@@ -330,6 +330,7 @@ def ib_pi(val=None, **kwargs):
         idx += one
     return val * rsum
 
+# regular square root
 ibsqrtmemo = MemoizeIBRCall()
 @ibsqrtmemo
 def ib_sqrt(val):
@@ -338,6 +339,7 @@ def ib_sqrt(val):
     two = R((2, 0), **val.kwargs)
     return ib_root(val, two)
 
+# single, arbitrary root
 # uses principal branch of log for a single root
 ibrootmemo = MemoizeIBRCall()
 @ibrootmemo
@@ -352,6 +354,7 @@ def ib_root(val, root):
     lv = ib_log(val)
     return ib_exp(lv/root)
 
+# multiple arbitrary roots
 # returns a closure to allow access to any root, specified by corresponding 
 # log branch (i.e. ib_roots(C('1+2i'),5)(3) for root corresponding to third branch)
 def ib_roots(val, root):
