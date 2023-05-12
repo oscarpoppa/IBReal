@@ -33,8 +33,10 @@ class IBReal:
         if prec is not None:
             self.prec = prec
         elif 'IBR_DEF_PREC' in environ:
+            # precision from environment
             self.prec = int(environ['IBR_DEF_PREC'])
         else:
+            # default without environment va
             self.prec = 50 
         self.trim_on = trim_on
         self.rep = rep
