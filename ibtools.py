@@ -4,7 +4,7 @@ from .ibfuncs import ib_pi, ib_sgn, MemoizeIBRCall as M
 from os import environ
 from functools import wraps
 
-# set global percision (internal integer length)
+# set global precision (internal integer length)
 def set_global_prec(num):
     environ['IBR_DEF_PREC'] = str(num)
 
@@ -136,7 +136,7 @@ def eff_pi(num):
 def clean(val, limit=None):
     return eff_pi(eff_int(eff_0(val, limit), limit))
 
-# decorator to return clean numbers
+# decorator to return "clean" numbers
 # not for "production"
 def ret_clean(limit=None):
     def inner1(func):
