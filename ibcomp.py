@@ -1,5 +1,6 @@
 from os import environ
 
+# arbitrary-precision complex number
 class IBComp:
     """
     IBComp is a complex number that uses the precision of IBReal numbers. The math interface offers the 
@@ -18,8 +19,10 @@ class IBComp:
         if prec is not None:
             self.prec = prec
         elif 'IBR_DEF_PREC' in environ:
+            # prec from environment
             self.prec = int(environ['IBR_DEF_PREC'])
         else:
+            # default without environment var
             self.prec = 50 
         self.trim_on = trim_on
         self.rep = rep
@@ -45,12 +48,16 @@ class IBComp:
     def kwargs(self):
         return {'prec':self.prec, 'trim_on':self.trim_on}
 
+    # length (in complex plane) of self
     @property
     def length(self):
         two = R((2, 0), **self.kwargs)
         slen = self.rcomp**two + self.icomp**two
         return ib_sqrt(slen)
 
+    # angle (in complex plane) of self
+    # returned in canonical form (-pi < theta < pi)
+    # !!slow near tan(theta) = 1
     @property
     def theta(self):
         zero = R((0, 0), **self.kwargs)
