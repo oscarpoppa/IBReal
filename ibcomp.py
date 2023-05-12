@@ -19,7 +19,7 @@ class IBComp:
         if prec is not None:
             self.prec = prec
         elif 'IBR_DEF_PREC' in environ:
-            # prec from environment
+            # precision from environment
             self.prec = int(environ['IBR_DEF_PREC'])
         else:
             # default without environment var
