@@ -2,8 +2,13 @@ from collections import namedtuple
 from math import log
 from os import environ
 
+# the internal integer pair representing a real by number, offset
+# where number is an integer representing all the digits in a real
+# and offset is the number of places from the right where the decimal
+# point should be i.e (1234, 2) represents 12.34
 Ival = namedtuple('Ival', 'num off')
 
+# arbitrary-precision real number
 class IBReal:
     """
     IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
@@ -49,6 +54,7 @@ class IBReal:
         except Exception as e:
             raise ValueError('Failed to coerce {}:{} to Ival'.format(type(raw), raw)) from e
 
+    # display trim -- no side effects on self
     def dtrim(self, prec=None):
         prec = self.prec if prec is None else prec
         if not isinstance(prec, int) or prec <= 0:
@@ -61,6 +67,7 @@ class IBReal:
             return type(self)(Ival(ib_sgn(self.ival.num)*int(tval[:prec]), self.ival.off-tlen+prec), **self.kwargs)
         return self
 
+    # in-place trim to precision -- side effects
     def trim(self, prec=None):
         if not self.trim_on:
             return self
@@ -72,6 +79,8 @@ class IBReal:
     def kwargs(self):
         return {'prec':self.prec, 'trim_on':self.trim_on}
 
+    # true if self's value is effectively an integer (i.e 2.0000000000000000000)
+    # concerned about int roundoff
     @property
     def isint(self):
         return self == int(self)
@@ -87,12 +96,14 @@ class IBReal:
         else:
             return '{}{}.{}e-{}'.format(neg, txt[0], txt[1:] or '0', self.ival.off-len(txt)+1)
 
+    # length of internal integer
     @property
     def ilength(self):
         if self.ival.num == 0:
             return 1
         return int(log(abs(self.ival.num), 10)) + 1
 
+    # coercion engine
     def _from_raw(self, raw):
         straw = str(raw)
         straw = straw.replace(' ', '')
@@ -114,6 +125,7 @@ class IBReal:
         off = len(straw) - dot + ev
         return Ival(neg*int(straw), off)
 
+    # ensure decimal alignment for addition and subtraction
     def _align(self, siv, oiv):
         if siv.off > oiv.off:
             pad = 10**(siv.off-oiv.off)
