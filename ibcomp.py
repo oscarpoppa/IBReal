@@ -73,10 +73,12 @@ class IBComp:
             return self.rep
         return '{} + {}i'.format(self.rcomp, self.icomp)
 
+    # complex conjugate
     @property
     def conj(self):
         return type(self)((self.rcomp, -self.icomp), **self.kwargs)
 
+    # display trim -- no side effects on self
     def dtrim(self, prec):
         if not isinstance(prec, int) or prec <= 0:
             raise TypeError('Only positive integers allowed')
@@ -84,11 +86,13 @@ class IBComp:
         icmp = self.icomp.dtrim(prec)
         return type(self)((rcmp, icmp), **self.kwargs)
 
+    # in-place trim to precision -- side effects
     def trim(self, prec):
         trm = self.dtrim(prec=prec)
         (self.rcomp, self.icomp) = (trm.rcomp, trm.icomp)
         return self
 
+    # coercion engine
     def _from_raw(self, val): #looking for a+bi
         val = val.replace(' ', '')
         plus = val.find('+')
