@@ -2,7 +2,7 @@ from collections import namedtuple
 from math import log
 from os import environ
 
-# the internal integer pair representing a real by number, offset
+# the internal integer pair representing a real by (number, offset)
 # where number is an integer representing all the digits in a real
 # and offset is the number of places from the right where the decimal
 # point should be i.e (1234, 2) represents 12.34
