@@ -9,6 +9,7 @@ Memo = namedtuple('Memo','id prec trim_on')
 class MemoizeIBRCall:
     _instances = list()
 
+    # wipe all caches
     @classmethod
     def clearall(cls):
         for i in cls._instances:
@@ -44,7 +45,7 @@ class MemoizeIBRCall:
     def __repr__(self):
         return self._repr
 
-# factorial generator
+# factorial generator with parity
 class FactGen:
     def __init__(self, parity='off'):
         if parity not in ('off', 'even', 'odd'):
@@ -139,6 +140,7 @@ class IBArcTan:
             idx += one
         return rsum
 
+# arctangent
 # singleton and memoized callable
 _arctan_sing = IBArcTan()
 ibarctanmemo = MemoizeIBRCall()
@@ -189,6 +191,7 @@ class IBExp:
                 idx += one 
         return rsum
 
+# exponential base e
 # singleton and memoized callable
 _ibexp_sing = IBExp()
 ibexpmemo = MemoizeIBRCall()
@@ -256,6 +259,7 @@ class IBLog:
         small = one / ten**(val.prec+overshoot)
         neg = ib_sgn(one-val)
         if val > one:
+            # log(1/x) = -log(x)
             val = one / val
         val = one - val
         while True:
@@ -266,6 +270,7 @@ class IBLog:
             idx += one 
         return neg * rsum
 
+# log base e
 # singleton and memoized callable
 _iblog_sing = IBLog()
 iblogmemo = MemoizeIBRCall()
@@ -273,6 +278,7 @@ iblogmemo = MemoizeIBRCall()
 def ib_log(val):
     return _iblog_sing(val)
 
+# multi-branch complex log
 # returns a closure to allow access to any branch 
 # (i.e. ib_logs(C('1+2i'))(3) for third branch)
 def ib_logs(val):
@@ -377,6 +383,7 @@ def ib_roots(val, root):
         return ib_exp(lv(branch)/root)
     return inner
 
+# sine
 # real arguments only
 ibsinmemo = MemoizeIBRCall()
 @ibsinmemo
@@ -402,6 +409,7 @@ def ib_sin(theta):
             seq += one
     return rsum
 
+# cosine
 # real arguments only
 ibcosmemo = MemoizeIBRCall()
 @ibcosmemo
@@ -428,7 +436,7 @@ def ib_cos(theta):
     return rsum
 
 # return sign of arg
-# needs to be ints
+# (needs to be ints internally)
 def ib_sgn(num=1):
     if num < 0:
         return -1
