@@ -304,8 +304,6 @@ def ib_i(val=None, **kwargs):
     return val * C((0, 1), **val.kwargs) 
 
 # pi times val
-ibpimemo = MemoizeIBRCall()
-@ibpimemo
 def ib_pi(val=None, **kwargs):
     if val is None:
         val = R((1, 0), **kwargs)
@@ -337,8 +335,6 @@ def ib_pi(val=None, **kwargs):
     return val * rsum
 
 # regular square root
-ibsqrtmemo = MemoizeIBRCall()
-@ibsqrtmemo
 def ib_sqrt(val):
     if not isinstance(val, R) and not isinstance(val, C):
         val = R(val)
