@@ -70,7 +70,7 @@ class IBComp:
         mypi = ib_pi(**self.kwargs)
         my2pi = two * mypi
         if self.rcomp == zero:
-            return ib_sgn(self.ibcomp)*mypi/two
+            return ib_sgn(self.icomp)*mypi/two
         th = ib_arctan(self.icomp/self.rcomp)
         if self.rcomp < zero:
             th = th + mypi
