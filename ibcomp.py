@@ -205,7 +205,7 @@ class IBComp:
     def __pow__(self, other):
         if not isinstance(other, type(self)) and not isinstance(other, R):
             other = R(other, **self.kwargs)
-        tmp = type(self)((self.rcomp, self.icomp))
+        tmp = type(self)((self.rcomp, self.icomp), **self.kwargs)
         if other == 0:
             tmp.rcomp = R((1, 0), **self.rcomp.kwargs)
             tmp.icomp = R((0, 0), **self.icomp.kwargs)
