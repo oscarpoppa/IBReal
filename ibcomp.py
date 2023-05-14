@@ -4,7 +4,7 @@ from os import environ
 class IBComp:
     """
     IBComp is a complex number that uses the precision of IBReal numbers. The math interface offers the 
-    same ioperations IBReal offers.
+    same operations IBReal offers.
 
     Usage:
     comp = IBComp(raw, prec=None, trim_on=True, rep=None)
