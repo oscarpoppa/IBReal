@@ -15,7 +15,7 @@ class IBReal:
     All math operations are available in in-place mode (i.e. +=).
 
     Usage:
-    realnum = IBReal(raw, prec=300, trim_on=True, rep=None)
+    realnum = IBReal(raw, prec=None, trim_on=True, rep=None)
 
     raw: IBReal object, number, Ival object, ascii repr of a real number, or tuple (integer, offset) -- where integer 
          is the integer after multiplying the real number by 10^offset. If using an IBReal instance, the precision
