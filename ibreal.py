@@ -12,7 +12,7 @@ Ival = namedtuple('Ival', 'num off')
 class IBReal:
     """
     IBReal represents a memory-limited, arbitrary precision, integer-based implementation of a real number.
-    it is probably slow. All math operations are available in in-line mode (i.e. +=).
+    All math operations are available in in-line mode (i.e. +=).
 
     Usage:
     realnum = IBReal(raw, prec=300, trim_on=True, rep=None)
