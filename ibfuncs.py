@@ -432,11 +432,11 @@ def ib_cos(theta):
     return rsum
 
 # return sign of arg
-# (needs to be ints internally)
+# (needs to be able to handle python ints too)
 def ib_sgn(num=1):
     if num < 0:
-        return -1
-    return 1
+        return type(num)(-1)
+    return type(num)(1)
 
 # here to prevent circular import
 from .ibreal import Ival, IBReal as R
