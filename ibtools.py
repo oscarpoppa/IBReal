@@ -12,24 +12,6 @@ def set_global_prec(num):
 def clear_caches():
     M.clearall()
 
-# tool to check out number of
-# expected roots given degree of real root
-# effectively, just makes a reduced fraction
-def num_roots(root):
-    def _isint(num):
-        return int(num) == num 
-    if not isinstance(root, R): 
-        root = R(root)
-    (num, sl) = root.ival
-    denom = 10 ** sl
-    index = sorted([num, denom])[0] + 1
-    tn = num 
-    for a in range(1, int(index)):
-        if _isint(num/a):
-            if _isint(denom/a):
-                tn = num/a
-    return int(tn)
-
 # prettifies output by zeroing out very low order numbers
 # return chopped off values if effectivel zero.
 # specified by limit of decimal places
