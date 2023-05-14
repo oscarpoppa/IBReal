@@ -104,9 +104,9 @@ class IBArcTan:
         one = R((1, 0), **tan.kwargs)
         two = R((2, 0), **tan.kwargs)
         ten = R((10, 0), **tan.kwargs)
-        overshoot = one
         idx = R((0, 0), **tan.kwargs)
         rsum = R((0, 0), **tan.kwargs)
+        overshoot = one
         small = one / ten**(tan.prec+overshoot)
         halfpi = ib_pi(**tan.kwargs) / two
         while True:
@@ -126,9 +126,9 @@ class IBArcTan:
         one = R((1, 0), **tan.kwargs)
         two = R((2, 0), **tan.kwargs)
         ten = R((10, 0), **tan.kwargs)
-        overshoot = one
         idx = R((0, 0), **tan.kwargs)
         rsum = R((0, 0), **tan.kwargs)
+        overshoot = one
         small = one / ten**(tan.prec+overshoot)
         while True:
             a = neg1**idx
@@ -161,9 +161,9 @@ class IBExp:
     def _exp_real(self, val):
         one = R((1, 0), **val.kwargs)
         ten = R((10, 0), **val.kwargs)
-        overshoot = one
         idx = R((0, 0), **val.kwargs)
         rsum = R((0, 0), **val.kwargs)
+        overshoot = one
         small = one / ten**(val.prec+overshoot)
         with FactGen() as fac:
             while True:
@@ -177,9 +177,9 @@ class IBExp:
     def _exp_comp(self, val):
         one = R((1, 0), **val.kwargs)
         ten = R((10, 0), **val.kwargs)
-        overshoot = one
         idx = R((0, 0), **val.kwargs)
         rsum = C((0, 0), **val.kwargs)
+        overshoot = one
         small = one / ten**(val.prec+overshoot)
         with FactGen() as fac:
             while True:
@@ -253,9 +253,9 @@ class IBLog:
         neg1 = R((-1, 0), **val.kwargs)
         one = R((1, 0), **val.kwargs)
         ten = R((10, 0), **val.kwargs)
-        overshoot = one
         idx = R((1, 0), **val.kwargs) 
         rsum = R((0, 0), **val.kwargs)
+        overshoot = one
         small = one / ten**(val.prec+overshoot)
         neg = ib_sgn(one-val)
         if val > one:
@@ -317,9 +317,9 @@ def ib_pi(val=None, **kwargs):
     eight = R((8, 0), **val.kwargs)
     ten = R((10, 0), **val.kwargs)
     sixteen = R((16, 0), **val.kwargs)
-    overshoot = one
     idx = R((0, 0), **val.kwargs)
     rsum = R((0, 0), **val.kwargs)
+    overshoot = one
     small = one / ten**(one.prec+overshoot)
     while True:
         a = one / sixteen**idx
@@ -390,10 +390,10 @@ def ib_sin(theta):
     one = R((1, 0), **theta.kwargs)
     two = R((2, 0), **theta.kwargs)
     ten = R((10, 0), **theta.kwargs)
-    overshoot = one
     idx = R((1, 0), **theta.kwargs)
     rsum = R((0, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
+    overshoot = one
     small = one / ten**(theta.prec+overshoot)
     with FactGen('odd') as fac:
         while True:
@@ -416,10 +416,10 @@ def ib_cos(theta):
     one = R((1, 0), **theta.kwargs)
     two = R((2, 0), **theta.kwargs)
     ten = R((10, 0), **theta.kwargs)
-    overshoot = one
     rsum = R((0, 0), **theta.kwargs)
     idx = R((0, 0), **theta.kwargs)
     seq = R((0, 0), **theta.kwargs)
+    overshoot = one
     small = one / ten**(theta.prec+overshoot)
     with FactGen('even') as fac:
         while True:
