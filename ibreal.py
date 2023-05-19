@@ -44,8 +44,8 @@ class IBReal:
             # Ival instance
             if isinstance(raw, Ival):
                 self.ival = raw
-            # 2-tuple representing ival members
-            elif isinstance(raw, tuple):
+            # 2-tuple/list representing ival members
+            elif isinstance(raw, tuple) or isinstance(raw, list):
                 self.ival = Ival(*raw)
             # another IBReal instance
             elif isinstance(raw, type(self)):
