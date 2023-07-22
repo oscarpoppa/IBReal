@@ -13,7 +13,7 @@ def clear_caches():
     M.clearall()
 
 # prettifies output by zeroing out very low order numbers
-# return chopped off values if effectivel zero.
+# return chopped off values if effectively zero.
 # specified by limit of decimal places
 # not for "production"
 def eff_0(val, limit=None):
