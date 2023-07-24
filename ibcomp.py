@@ -13,7 +13,7 @@ class IBComp:
 
     rep: any special name for this number
 
-    $export IBR_DEF_PREC=450 :: set environment var to pick up global precision
+    $ export IBR_DEF_PREC=450 :: set environment var to pick up global precision
     """
     def __init__(self, raw, prec=None, trim_on=True, rep=None):
         if prec is not None:
