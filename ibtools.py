@@ -82,7 +82,7 @@ def eff_int(val, limit=None):
 
 # more presentation tidiness...
 # looks for numbers that are an integer multiple of pi and 
-# creates a special __repr__ for the result -- eye candy
+# creates a special __repr__ for the result -- eye candy ;)
 # not for "production"
 def eff_pi(num):
     if not isinstance(num, R) and not isinstance(num, C):
