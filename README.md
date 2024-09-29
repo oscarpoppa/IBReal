@@ -1,7 +1,7 @@
 # IBReal
 Exploring extended precision using Python 3 integers in a 100% Python library. 
 
-Using regular or double precision C math is fast,but lacks the precision to explore such things as fractals, 
+Using regular or double precision C math is fast, but lacks the precision to explore such things as fractals, 
 which can benefit from arbitrarily precise math. Python integers have no size-limit, so an arbitrary precision 
 decimal can be created by using a python3 integer paired with an offset value to locate the decimal point within 
 the integer. i.e. 13276887645 offset 3 is equivalent to 132.76887645.
