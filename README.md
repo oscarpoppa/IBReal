@@ -4,10 +4,10 @@ but lacks the precision to explore such things as fractals, which can benefit fr
 no size-limit, so an arbitrary prcision decimal can be created by using a python3 integer paired with an offset value to locate the 
 decimal point within the integer. i.e. 13276887645 offset 3 is equivalent to 132.76887645.
 
-IBReal represents a fully functional, memory-only-limited, arbitrary precision real number. Under the hood,
+Class IBReal represents a fully functional, memory-only-limited, arbitrary precision real number. Under the hood,
 it is 100% integer-based. It is naturally slow, although caching is used throughout.
 
-its counterpart, IBComp, is an equally robust complex formulation based on IBReal.
+its counterpart class, IBComp, is an equally robust complex formulation based on IBReal.
 
     >>> from ibreal import IBReal, Ival
     >>> 
