@@ -3,8 +3,8 @@ Exploring extended precision using Python 3 integers in a 100% Python library.
 
 Using regular or double precision C math is fast, but lacks the precision to explore such things as fractals, 
 which can benefit from arbitrarily precise math. Python integers have no size-limit, so an arbitrary precision 
-decimal can be created by using a python3 integer paired with an offset value to locate the decimal point within 
-the integer. i.e. 13276887645 offset 3 is equivalent to 132.76887645.
+decimal can be created by using a Python 3 integer paired with an offset value to place an imaginary decimal point 
+within said integer--i.e. 13276887645 offset 3 is to be treated as equivalent to 132.76887645.
 
 Class IBReal represents a fully functional, memory-only-limited, arbitrary precision real number. Under the hood,
 it is 100% integer-based. It is naturally slow, although caching is used throughout.
